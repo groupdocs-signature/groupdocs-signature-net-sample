@@ -1,0 +1,55 @@
+﻿@using Groupdocs.Web.UI.Signature
+@model MVCDemo.Models.SignDocument
+
+<div style="background-color: silver;">
+    <div id="groupdocs-signature" style="height: 800px; width: 50%; overflow: hidden; position: relative;"></div>
+
+    @*<div id="groupdocs-signature1" style="height: 800px; width: 50%; overflow: hidden; position: relative;"></div>*@
+
+</div>
+
+@(Html.Signature("#groupdocs-signature")
+    .DocumentGuid(@Model.DocumentGuid1)
+    .RecipientGuid(@Model.RecipientGuid1)
+)
+
+@*@(Html.Signature("#groupdocs-signature1")
+    .DocumentGuid(@Model.DocumentGuid2)
+    .RecipientGuid(@Model.RecipientGuid2)
+)*@
+
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var containerElement = $("#groupdocs-signature");
+            containerElement.on("documentSigned.groupdocs",
+                function (e, signedFile) {
+                    //console.log("Document has been signed: " + signedFile);
+                });
+
+            containerElement.on("fieldsLoaded.groupdocs",
+                function (e, fieldsCount) {
+                    //console.log("Document fields loaded: " + fieldsCount);
+                });
+
+            containerElement.on("error.groupdocs",
+                function (e, error) {
+                    //console.log("Error: " + error);
+                });
+
+            containerElement.on("documentPageSet.groupdocs",
+                function (e, pageNumber) {
+                    //console.log("Page number set: " + pageNumber);
+                });
+
+            containerElement.on("documentScrolledToPage.groupdocs",
+                function (e, pageNumber) {
+                    //console.log("Document scrolled to page: " + pageNumber);
+                });
+
+        });
+    </script>
+}
