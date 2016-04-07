@@ -16,11 +16,11 @@ namespace MVCDemo
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            GroupdocsSignature.Init(new GroupdocsSignatureSettings
-            {
-                RootStoragePath = Server.MapPath("~/App_Data/"),
-                DatabaseProvider = new MsSqlProvder(System.Configuration.ConfigurationManager.ConnectionStrings["SignatureDb"].ConnectionString)
-            });
+            //GroupdocsSignature.Init(new GroupdocsSignatureSettings
+            //{
+            //    RootStoragePath = Server.MapPath("~/App_Data/"),
+            //    DatabaseProvider = new MsSqlProvder(System.Configuration.ConfigurationManager.ConnectionStrings["SignatureDb"].ConnectionString)
+            //});
         }
 
     }

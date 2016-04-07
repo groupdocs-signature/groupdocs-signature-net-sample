@@ -1,5 +1,5 @@
 ﻿@using Groupdocs.Web.UI.Signature
-@model MVCDemo.Models.SignDocument
+@*@model MVCDemo.Models.SignDocument*@
 
 <div style="background-color: silver;">
     <div id="groupdocs-signature" style="height: 800px; width: 50%; overflow: hidden; position: relative;"></div>
@@ -9,9 +9,14 @@
 </div>
 
 @(Html.Signature("#groupdocs-signature")
+    .DocumentGuid("123")
+    .RecipientGuid("456")
+)
+
+@*@(Html.Signature("#groupdocs-signature")
     .DocumentGuid(@Model.DocumentGuid1)
     .RecipientGuid(@Model.RecipientGuid1)
-)
+)*@
 
 @*@(Html.Signature("#groupdocs-signature1")
     .DocumentGuid(@Model.DocumentGuid2)

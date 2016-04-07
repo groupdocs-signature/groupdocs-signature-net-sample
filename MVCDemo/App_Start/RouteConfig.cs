@@ -10,6 +10,30 @@ namespace MVCDemo
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: null,
+                url: "gd-signature/signature2/resource/{action}",
+                defaults: new { controller = "Signature" }
+            );
+            
+            routes.MapRoute(
+                name: null,
+                url: "gd-signature/signature2/service/{action}",
+                defaults: new { controller = "Signature" }
+            );
+
+            routes.MapRoute(
+                name: null,
+                url: "gd-signature/signature2/GetDocumentPageImageHandler",
+                defaults: new { controller = "Signature", action = "GetDocumentPageImage" }
+            );
+
+            routes.MapRoute(
+                name: null,
+                url: "gd-signature/signature2/{action}",
+                defaults: new { controller = "Signature" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
