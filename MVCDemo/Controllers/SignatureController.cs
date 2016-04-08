@@ -121,7 +121,7 @@ namespace MVCDemo.Controllers
             int pageCount= 1;
             PageDescription[] pageDescs = null;
             int maxPageHeight = 0, widthForMaxHeight = 0;
-            int pageHeight;
+            int pageWidth, pageHeight;
             bool isFirstPass = true;
             switch (fileNameExtension)
             {
@@ -136,15 +136,17 @@ namespace MVCDemo.Controllers
                     for (int i = 0; i < pageDescs.Length; i++)
                     {
                         var page = document.Pages[i + 1];
+                        pageWidth = (int) page.Rect.Width;
                         pageHeight = (int) page.Rect.Height;
                         pageDescs[i] = new PageDescription() {
-                            w = (int)page.Rect.Width,
+                            w = pageWidth,
                             h = pageHeight,
                             pageNumber = i
                         };
                         if (isFirstPass || pageHeight > maxPageHeight)
                         {
                             maxPageHeight = pageHeight;
+                            widthForMaxHeight = pageWidth;
                             isFirstPass = false;
                         }
                     }
