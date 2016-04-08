@@ -3,9 +3,14 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Web.UI;
+using Aspose.Pdf;
+using Aspose.Pdf.Devices;
+using Aspose.Words.Saving;
 using Groupdocs.Data.Signature;
 using Groupdocs.Web.UI.Signature.Services;
 using MVCDemo.Models;
+using SaveOptions = Aspose.Pdf.SaveOptions;
 
 namespace MVCDemo.Controllers
 {
@@ -102,13 +107,17 @@ namespace MVCDemo.Controllers
 
 
         [HttpPost]
-        public ActionResult ViewDocument()
+        public ActionResult ViewDocument(string path,
+            int quality, int width)
         {
+            string fileNameExtension = Path.GetExtension(path).TrimStart('.');
+            fileNameExtension = fileNameExtension.ToLower();
+            fileNameExtension = fileNameExtension.Substring(0, 1).ToUpper() + fileNameExtension.Substring(1);
             var result = new
             {
-                path = "sample.pdf",
+                path = path,
                 docType = "Pdf",
-                fileType = "Pdf",
+                fileType = fileNameExtension,
                 url = "http://localhost:13469/gd-signature/signature2/GetFileHandler?path=sample.pdf\u0026getPdf=false\u0026useHtmlBasedEngine=false\u0026supportPageRotation=false",
                 pdfDownloadUrl = "http://localhost:13469/gd-signature/signature2/GetFileHandler?path=sample.pdf\u0026getPdf=true\u0026useHtmlBasedEngine=false\u0026supportPageRotation=false",
                 name = "sample.pdf",
@@ -140,9 +149,29 @@ namespace MVCDemo.Controllers
 
         public ActionResult GetDocumentPageImage(string path, int width, int quality, int pageIndex)
         {
-            //string baseImageCachePath = Server.MapPath("~App_Data/");
             string appDataPath = Server.MapPath("~/App_Data/");
             string fullPathToDocument = Path.Combine(appDataPath, path);
+
+            string fileNameExtension = Path.GetExtension(path).TrimStart('.');
+            fileNameExtension = fileNameExtension.ToLower();
+            const string mimeType = "image/jpeg";
+            switch (fileNameExtension)
+            {
+                case "pdf":
+                    Aspose.Pdf.Document document = new Document(fullPathToDocument);
+                    JpegDevice jpegDevice = new JpegDevice(quality);
+                    int pageCount = document.Pages.Count;
+                    if (pageIndex < pageCount)
+                    {
+                        using (MemoryStream outputStream = new MemoryStream())
+                        {
+                            jpegDevice.Process(document.Pages[pageIndex + 1], outputStream);
+                            return File(outputStream.ToArray(), mimeType);
+                        }
+                    }
+                    else
+                        return new EmptyResult();
+            }
             string fileModificationDateTime =System.IO.File.GetLastWriteTimeUtc(fullPathToDocument).ToString("s").Replace(":", "_");
 
             string qualityWidth = String.Format("{0}@{1}x", quality, width);
