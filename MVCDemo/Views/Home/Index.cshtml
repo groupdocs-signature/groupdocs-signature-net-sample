@@ -8,10 +8,11 @@
 
 </div>
 
-@(Html.Signature("#groupdocs-signature")
-    .DocumentGuid("123")
+@*@(Html.Signature("#groupdocs-signature")
+    //.DocumentGuid("sample.pdf")
+    .DocumentGuid("candy.pdf")
     .RecipientGuid("456")
-)
+)*@
 
 @*@(Html.Signature("#groupdocs-signature")
     .DocumentGuid(@Model.DocumentGuid1)
@@ -22,6 +23,20 @@
     .DocumentGuid(@Model.DocumentGuid2)
     .RecipientGuid(@Model.RecipientGuid2)
 )*@
+
+<script type='text/javascript'>
+    $(function () { $('#groupdocs-signature').groupdocsSignature({
+            documentGuid: 'candy.pdf',
+            recipientGuid: '71d1f3ef88a5d7fe32f4c46588a69887',
+            hostUrl: '',
+            showHeader: true,
+            showTypeItTab: true,
+            showUploadTab: true,
+            signaturePenColors: ["#0036D9","#5F5F5F","#E15F5F","#2DB200"],
+            dateFormats: ["dd.mm.yy","dd/mm/yy","d/m/yy","d.m.yy","m/d/yy","m.d.yy","mm/dd/yy","mm.dd.yy","yy-m-d","yy/mm/dd","yy-mm-dd"]
+        });
+    });
+</script>
 
 
 @section scripts

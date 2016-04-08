@@ -20,8 +20,6 @@
 
 </head>
 <body>
-    @RenderBody()
-
     @*@Html.CreateSignatureScriptsLoadBlock()*@
     
     <script type='text/javascript' src='Public/Scripts/Libs/jquery-1.7.1.min.js'></script>
@@ -67,7 +65,7 @@
     </script>
     <script type='text/javascript' src='Public/Scripts/Libs/require.js'></script>
     <script type='text/javascript' src="Public/Scripts/DocViewer.all.js"></script>
-    <script type='text/javascript'>
+    @*<script type='text/javascript'>
         $(function () { $('#groupdocs-signature').groupdocsSignature({
             documentGuid: 'cea6784811dc54d7feac5fcb5ef8817a',
             recipientGuid: '71d1f3ef88a5d7fe32f4c46588a69887',
@@ -79,7 +77,10 @@
             dateFormats: ["dd.mm.yy","dd/mm/yy","d/m/yy","d.m.yy","m/d/yy","m.d.yy","mm/dd/yy","mm.dd.yy","yy-m-d","yy/mm/dd","yy-mm-dd"]
         });
         });
-    </script>
+    </script>*@
+
+
+    @RenderBody()
 
 
 @RenderSection("scripts", false)
