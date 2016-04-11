@@ -1,1 +1,0 @@
-Before start the sample please ensure that the permissions of App_Data folder are set correctly for access from the SQL Server
