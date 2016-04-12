@@ -11,18 +11,18 @@ using System.Web.Script.Serialization;
 using System.Web.UI;
 using Aspose.Pdf;
 using Aspose.Pdf.Devices;
-using Aspose.Words.Saving;
+using MVCDemo;
+using Signature.Net.Sample.Mvc.Models;
 using GroupDocs.Signature.Config;
 using GroupDocs.Signature.Handler;
 using GroupDocs.Signature.Options;
-using MVCDemo;
-using SaveOptions = Aspose.Pdf.SaveOptions;
-using Signature.Net.Sample.Mvc.Models;
 
 namespace Signature.Net.Sample.Mvc.Controllers
 {
     public class SignatureController : Controller
     {
+        private readonly string _virtualStoragePath = "~/App_Data/Storage";
+
         [HttpPost]
         public ActionResult PublicGetDocument(string documentGuid, string recipientGuid)
         {
@@ -50,8 +50,6 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     }
                 }
             };
-            //JavaScriptSerializer serializer = new JavaScriptSerializer();
-            //string serializedData = serializer.Serialize(result);
             return Json(result);
         }
 
@@ -107,8 +105,6 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 }
 
             };
-            //JavaScriptSerializer serializer = new JavaScriptSerializer();
-            //string serializedData = serializer.Serialize(result);
             return Json(result);
         }
 
@@ -121,7 +117,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             fileNameExtension = fileNameExtension.ToLower();
             string fileType = fileNameExtension.Substring(0, 1).ToUpper() + fileNameExtension.Substring(1);
 
-            string appDataPath = Server.MapPath("~/App_Data/");
+            string appDataPath = Server.MapPath(_virtualStoragePath);
             string fullPathToDocument = Path.Combine(appDataPath, path);
             int pageCount= 1;
             PageDescription[] pageDescs = null;
@@ -132,7 +128,6 @@ namespace Signature.Net.Sample.Mvc.Controllers
             {
                 case "pdf":
                     Aspose.Pdf.Document document = new Document(fullPathToDocument);
-                    JpegDevice jpegDevice = new JpegDevice(quality);
                     pageCount = document.Pages.Count;
                     const int asposePdfTrialPagesLimit = 4;
                     if (pageCount > asposePdfTrialPagesLimit)
@@ -166,15 +161,15 @@ namespace Signature.Net.Sample.Mvc.Controllers
             });
             var result = new
             {
-                path = path,
+                path,
                 docType = "Pdf",
                 fileType = fileNameExtension,
-                url = "http://localhost:13469/gd-signature/signature2/GetFileHandler?path=sample.pdf\u0026getPdf=false\u0026useHtmlBasedEngine=false\u0026supportPageRotation=false",
-                pdfDownloadUrl = "http://localhost:13469/gd-signature/signature2/GetFileHandler?path=sample.pdf\u0026getPdf=true\u0026useHtmlBasedEngine=false\u0026supportPageRotation=false",
+                url = (string)null,
+                pdfDownloadUrl = (string)null,
                 name = path,
                 imageUrls= pageImageUrls,
                 lic = true,
-                pdfPrintUrl = "http://localhost:13469/gd-signature/signature2/GetPdfWithPrintDialogHandler?path=sample.pdf\u0026useHtmlBasedEngine=false\u0026supportPageRotation=false",
+                pdfPrintUrl = (string)null,
                 pageHtml = (object)null,
                 pageCss = (object)null,
                 documentDescription,
@@ -198,7 +193,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
 
         public ActionResult GetDocumentPageImage(string path, int width, int quality, int pageIndex)
         {
-            string appDataPath = Server.MapPath("~/App_Data/");
+            string appDataPath = Server.MapPath(_virtualStoragePath);
             string fullPathToDocument = Path.Combine(appDataPath, path);
 
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
@@ -253,16 +248,15 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 signatureText += textElement.Value;
             }
 
-            //string data = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewbox=\"0 0 233 82\" preserveaspectratio=\"none\"><text font-family=\"Tangerine\" font-size=\"60px\" fill=\"#0036D9\" y=\"50%\" x=\"50%\" dy=\"0.3em\" text-anchor=\"middle\">Anonymous</text><defs><link href=\"http://fonts.googleapis.com/css?family=Tangerine\" type=\"text/css\" rel=\"stylesheet\" xmlns=\"http://www.w3.org/1999/xhtml\"><style type=\"text/css\">@import url(http://fonts.googleapis.com/css?family=Tangerine)</style></defs></svg>";
+            // request:
             //{ "documentId":"","name":"a b","waterMarkText":"","waterMarkImage":"","fields":[{"fieldType":1,"data":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewbox=\"0 0 233 82\" preserveaspectratio=\"none\"><text font-family=\"Tangerine\" font-size=\"60px\" fill=\"#0036D9\" y=\"50%\" x=\"50%\" dy=\"0.3em\" text-anchor=\"middle\">Anonymous</text><defs><link href=\"http://fonts.googleapis.com/css?family=Tangerine\" type=\"text/css\" rel=\"stylesheet\" xmlns=\"http://www.w3.org/1999/xhtml\"><style type=\"text/css\">@import url(http://fonts.googleapis.com/css?family=Tangerine)</style></defs></svg>","locations":[{"page":1,"locationX":0.4,"locationY":0.3,"locationWidth":150,"locationHeight":50,"fontName":null,"fontSize":null,"fontColor":null,"fontBold":null,"fontItalic":null,"fontUnderline":null,"alignment":0,"id":"ff4dd6a4a44ecd682a4be3a19a801e6f"}],"id":"1c9b463ac3c1e9ebaf51e34ea352de3a"}],"documentGuid":"candy.pdf","recipientGuid":"71d1f3ef88a5d7fe32f4c46588a69887","email":"a@b.com"}
 
             string path = documentGuid;
-            string appDataPath = Server.MapPath("~/App_Data/");
+            string appDataPath = Server.MapPath(_virtualStoragePath);
             string fullPathToDocument = Path.Combine(appDataPath, path);
 
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
-            const string mimeType = "image/jpeg";
             int pageWidth = 0, pageHeight = 0;
             switch (fileNameExtension)
             {
@@ -380,7 +374,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             signOptions.DocumentPageNumber = pageNumber;
             signOptions.Left = left;
             signOptions.Top = top;
-            signOptions.SignAllPages = true;
+            signOptions.SignAllPages = false;
 
             GroupDocs.Signature.Options.SaveOptions saveOptions = new GroupDocs.Signature.Options.SaveOptions(OutputType.String);
             // sign the document
