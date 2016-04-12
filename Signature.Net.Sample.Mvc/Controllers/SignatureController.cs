@@ -15,9 +15,11 @@ using Aspose.Words.Saving;
 using GroupDocs.Signature.Config;
 using GroupDocs.Signature.Handler;
 using GroupDocs.Signature.Options;
+using MVCDemo;
 using SaveOptions = Aspose.Pdf.SaveOptions;
+using Signature.Net.Sample.Mvc.Models;
 
-namespace MVCDemo.Controllers
+namespace Signature.Net.Sample.Mvc.Controllers
 {
     public class SignatureController : Controller
     {
@@ -230,36 +232,16 @@ namespace MVCDemo.Controllers
                 return new EmptyResult();
         }
 
-        public class SignatureField
-        {
-            public int fieldType { get; set; }
-            public string data { get; set; }
-            public string documentGuid { get; set; }
-            public location[] locations { get; set; }
 
-            public class location
-            {
-                public int page { get; set; }
-                public double locationX { get; set; }
-                public double locationY { get; set; }
-                public int locationWidth { get; set; }
-                public int locationHeight { get; set; }
-                public string fontName { get; set; }
-                public int fontSize { get; set; }
-                public int fontColor { get; set; }
-                public bool? fontBold { get; set; }
-                public bool? fontItalic { get; set; }
-                public bool? fontUnderline { get; set; }
-                public int alignment { get; set; }
-                public string id { get; set; }
-            };
-        }
-
-        public ActionResult PublicSignDocument(string documentGuid, string documentId, string name, SignatureField[] fields)
+        public ActionResult PublicSignDocument(string documentGuid,
+            string documentId,
+            string name,
+            SignatureField[] fields)
         {
-            if (fields.Length == 0)
+            if (fields == null || fields.Length == 0)
                 return new EmptyResult();
-            string data = fields[0].data;
+            SignatureField field = fields[0];
+            string data = field.data;
             Regex removeUnclosedLinkTagRegex = new Regex(@"<link[^>]*>");
             string svgData = removeUnclosedLinkTagRegex.Replace(data, String.Empty);
             XDocument root = XDocument.Parse(svgData);
@@ -273,8 +255,62 @@ namespace MVCDemo.Controllers
 
             //string data = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewbox=\"0 0 233 82\" preserveaspectratio=\"none\"><text font-family=\"Tangerine\" font-size=\"60px\" fill=\"#0036D9\" y=\"50%\" x=\"50%\" dy=\"0.3em\" text-anchor=\"middle\">Anonymous</text><defs><link href=\"http://fonts.googleapis.com/css?family=Tangerine\" type=\"text/css\" rel=\"stylesheet\" xmlns=\"http://www.w3.org/1999/xhtml\"><style type=\"text/css\">@import url(http://fonts.googleapis.com/css?family=Tangerine)</style></defs></svg>";
             //{ "documentId":"","name":"a b","waterMarkText":"","waterMarkImage":"","fields":[{"fieldType":1,"data":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewbox=\"0 0 233 82\" preserveaspectratio=\"none\"><text font-family=\"Tangerine\" font-size=\"60px\" fill=\"#0036D9\" y=\"50%\" x=\"50%\" dy=\"0.3em\" text-anchor=\"middle\">Anonymous</text><defs><link href=\"http://fonts.googleapis.com/css?family=Tangerine\" type=\"text/css\" rel=\"stylesheet\" xmlns=\"http://www.w3.org/1999/xhtml\"><style type=\"text/css\">@import url(http://fonts.googleapis.com/css?family=Tangerine)</style></defs></svg>","locations":[{"page":1,"locationX":0.4,"locationY":0.3,"locationWidth":150,"locationHeight":50,"fontName":null,"fontSize":null,"fontColor":null,"fontBold":null,"fontItalic":null,"fontUnderline":null,"alignment":0,"id":"ff4dd6a4a44ecd682a4be3a19a801e6f"}],"id":"1c9b463ac3c1e9ebaf51e34ea352de3a"}],"documentGuid":"candy.pdf","recipientGuid":"71d1f3ef88a5d7fe32f4c46588a69887","email":"a@b.com"}
-            SignDocument(documentGuid, signatureText);
-            return null;
+
+            string path = documentGuid;
+            string appDataPath = Server.MapPath("~/App_Data/");
+            string fullPathToDocument = Path.Combine(appDataPath, path);
+
+            string fileNameExtension = Path.GetExtension(path).TrimStart('.');
+            fileNameExtension = fileNameExtension.ToLower();
+            const string mimeType = "image/jpeg";
+            int pageWidth = 0, pageHeight = 0;
+            switch (fileNameExtension)
+            {
+                case "pdf":
+                    Aspose.Pdf.Document document = new Document(fullPathToDocument);
+                    pageWidth = (int)document.Pages[1].Rect.Width;
+                    pageHeight = (int)document.Pages[1].Rect.Height;
+                    break;
+            }
+
+            SignatureField.location location = field.locations[0];
+            SignDocument(documentGuid,
+                signatureText,
+                location.page,
+                (int)(pageWidth * location.locationX),
+                (int)(pageHeight * location.locationY),
+                location.locationWidth,
+                location.locationHeight);
+
+            var resultData = new
+            {
+                status = "Ok",
+                result = new
+                {
+                    document = new
+                    {
+                        guid = documentGuid,
+                        name = documentGuid,
+                        signedName = documentGuid,
+                        signedFromAll = true,
+                        recipients = new[]
+                        {
+                            new
+                            {
+                                id = 0,
+                                guid = "71d1f3ef88a5d7fe32f4c46588a69887",
+                                documentGuid = "cea6784811dc54d7feac5fcb5ef8817a",
+                                firstName = "dummy",
+                                lastName = "dummy",
+                                email = "dummy@dummy.pp",
+                                signed = true
+                            }
+                        }
+                    }
+                }
+            };
+  
+            return Json(resultData);
         }
 
         #region Private methods
@@ -312,7 +348,13 @@ namespace MVCDemo.Controllers
             return result;
         }
 
-        private void SignDocument(string fileName, string signatureText)
+        private void SignDocument(string fileName,
+                                  string signatureText,
+                                  int pageNumber,
+                                  int left,
+                                  int top,
+                                  int width,
+                                  int height)
         {
             string rootPath = Server.MapPath("~/App_Data");
             string storagePath = Path.Combine(rootPath, @"Storage");
@@ -335,9 +377,9 @@ namespace MVCDemo.Controllers
 
             // setup PDF image signature options
             PDFSignTextOptions signOptions = new PDFSignTextOptions(signatureText);
-            signOptions.DocumentPageNumber = 1;
-            signOptions.Left = 100;
-            signOptions.Top = 0;
+            signOptions.DocumentPageNumber = pageNumber;
+            signOptions.Left = left;
+            signOptions.Top = top;
             signOptions.SignAllPages = true;
 
             GroupDocs.Signature.Options.SaveOptions saveOptions = new GroupDocs.Signature.Options.SaveOptions(OutputType.String);
