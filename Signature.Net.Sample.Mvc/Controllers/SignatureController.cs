@@ -137,9 +137,39 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     for (int i = 0; i < pageDescs.Length; i++)
                     {
                         var page = document.Pages[i + 1];
-                        pageWidth = (int) page.Rect.Width;
-                        pageHeight = (int) page.Rect.Height;
-                        pageDescs[i] = new PageDescription() {
+                        pageWidth = (int)page.Rect.Width;
+                        pageHeight = (int)page.Rect.Height;
+                        pageDescs[i] = new PageDescription()
+                        {
+                            W = pageWidth,
+                            H = pageHeight,
+                            PageNumber = i
+                        };
+                        if (isFirstPass || pageHeight > maxPageHeight)
+                        {
+                            maxPageHeight = pageHeight;
+                            widthForMaxHeight = pageWidth;
+                            isFirstPass = false;
+                        }
+                    }
+                    break;
+
+                case "doc":
+                case "docx":
+                case "rtf":
+                    Aspose.Words.Document wordsDocument = new Aspose.Words.Document(fullPathToDocument);
+                    pageCount = wordsDocument.PageCount;
+                    pageDescs = new PageDescription[pageCount];
+                    for (int i = 0; i < pageDescs.Length; i++)
+                    {
+                        var page = wordsDocument.GetPageInfo(i);
+                        var rect = page.SizeInPoints;
+
+                        pageWidth = (int)rect.Width;
+                        pageHeight = (int)rect.Height;
+
+                        pageDescs[i] = new PageDescription()
+                        {
                             W = pageWidth,
                             H = pageHeight,
                             PageNumber = i
@@ -199,18 +229,42 @@ namespace Signature.Net.Sample.Mvc.Controllers
 
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
+            int pageCount;
             const string mimeType = "image/jpeg";
             switch (fileNameExtension)
             {
                 case "pdf":
                     Aspose.Pdf.Document document = new Document(fullPathToDocument);
                     JpegDevice jpegDevice = new JpegDevice(quality);
-                    int pageCount = document.Pages.Count;
+                    pageCount = document.Pages.Count;
                     if (pageIndex < pageCount)
                     {
                         using (MemoryStream outputStream = new MemoryStream())
                         {
                             jpegDevice.Process(document.Pages[pageIndex + 1], outputStream);
+                            return File(outputStream.ToArray(), mimeType);
+                        }
+                    }
+                    else
+                        return new EmptyResult();
+
+                case "doc":
+                case "docx":
+                case "rtf":
+                    Aspose.Words.Document wordsDocument = new Aspose.Words.Document(fullPathToDocument);
+                    pageCount = wordsDocument.PageCount;
+                    if (pageIndex < pageCount)
+                    {
+                        using (MemoryStream outputStream = new MemoryStream())
+                        {
+                            Aspose.Words.Saving.ImageSaveOptions saveOptions =
+                                new Aspose.Words.Saving.ImageSaveOptions(Aspose.Words.SaveFormat.Jpeg)
+                                {
+                                    PageCount = 1,
+                                    JpegQuality = quality
+                                };
+
+                            wordsDocument.Save(outputStream, saveOptions);
                             return File(outputStream.ToArray(), mimeType);
                         }
                     }
