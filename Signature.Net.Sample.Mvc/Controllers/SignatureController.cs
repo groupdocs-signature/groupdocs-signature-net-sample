@@ -21,7 +21,8 @@ namespace Signature.Net.Sample.Mvc.Controllers
 {
     public class SignatureController : Controller
     {
-        private readonly string _virtualStoragePath = "~/App_Data/Storage";
+        private const string StorageDirectoryName = "Storage";
+        private const string AppDataVirtualPath = "~/App_Data/";
 
         [HttpPost]
         public ActionResult PublicGetDocument(string documentGuid, string recipientGuid)
@@ -117,7 +118,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             fileNameExtension = fileNameExtension.ToLower();
             string fileType = fileNameExtension.Substring(0, 1).ToUpper() + fileNameExtension.Substring(1);
 
-            string appDataPath = Server.MapPath(_virtualStoragePath);
+            string appDataPath = Server.MapPath(AppDataVirtualPath);
             string fullPathToDocument = Path.Combine(appDataPath, path);
             int pageCount= 1;
             PageDescription[] pageDescs = null;
@@ -139,9 +140,9 @@ namespace Signature.Net.Sample.Mvc.Controllers
                         pageWidth = (int) page.Rect.Width;
                         pageHeight = (int) page.Rect.Height;
                         pageDescs[i] = new PageDescription() {
-                            w = pageWidth,
-                            h = pageHeight,
-                            pageNumber = i
+                            W = pageWidth,
+                            H = pageHeight,
+                            PageNumber = i
                         };
                         if (isFirstPass || pageHeight > maxPageHeight)
                         {
@@ -193,7 +194,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
 
         public ActionResult GetDocumentPageImage(string path, int width, int quality, int pageIndex)
         {
-            string appDataPath = Server.MapPath(_virtualStoragePath);
+            string appDataPath = Server.MapPath(AppDataVirtualPath);
             string fullPathToDocument = Path.Combine(appDataPath, path);
 
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
@@ -236,7 +237,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             if (fields == null || fields.Length == 0)
                 return new EmptyResult();
             SignatureField field = fields[0];
-            string data = field.data;
+            string data = field.Data;
             Regex removeUnclosedLinkTagRegex = new Regex(@"<link[^>]*>");
             string svgData = removeUnclosedLinkTagRegex.Replace(data, String.Empty);
             XDocument root = XDocument.Parse(svgData);
@@ -252,7 +253,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             //{ "documentId":"","name":"a b","waterMarkText":"","waterMarkImage":"","fields":[{"fieldType":1,"data":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewbox=\"0 0 233 82\" preserveaspectratio=\"none\"><text font-family=\"Tangerine\" font-size=\"60px\" fill=\"#0036D9\" y=\"50%\" x=\"50%\" dy=\"0.3em\" text-anchor=\"middle\">Anonymous</text><defs><link href=\"http://fonts.googleapis.com/css?family=Tangerine\" type=\"text/css\" rel=\"stylesheet\" xmlns=\"http://www.w3.org/1999/xhtml\"><style type=\"text/css\">@import url(http://fonts.googleapis.com/css?family=Tangerine)</style></defs></svg>","locations":[{"page":1,"locationX":0.4,"locationY":0.3,"locationWidth":150,"locationHeight":50,"fontName":null,"fontSize":null,"fontColor":null,"fontBold":null,"fontItalic":null,"fontUnderline":null,"alignment":0,"id":"ff4dd6a4a44ecd682a4be3a19a801e6f"}],"id":"1c9b463ac3c1e9ebaf51e34ea352de3a"}],"documentGuid":"candy.pdf","recipientGuid":"71d1f3ef88a5d7fe32f4c46588a69887","email":"a@b.com"}
 
             string path = documentGuid;
-            string appDataPath = Server.MapPath(_virtualStoragePath);
+            string appDataPath = Server.MapPath(AppDataVirtualPath);
             string fullPathToDocument = Path.Combine(appDataPath, path);
 
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
@@ -261,21 +262,24 @@ namespace Signature.Net.Sample.Mvc.Controllers
             switch (fileNameExtension)
             {
                 case "pdf":
-                    Aspose.Pdf.Document document = new Document(fullPathToDocument);
-                    pageWidth = (int)document.Pages[1].Rect.Width;
-                    pageHeight = (int)document.Pages[1].Rect.Height;
+                    using (Aspose.Pdf.Document document = new Document(fullPathToDocument))
+                    {
+                        pageWidth = (int) document.Pages[1].Rect.Width;
+                        pageHeight = (int) document.Pages[1].Rect.Height;
+                    }
                     break;
             }
 
-            SignatureField.location location = field.locations[0];
-            SignDocument(documentGuid,
+            SignatureField.Location location = field.Locations[0];
+            string outputFilePath = SignDocument(documentGuid,
                 signatureText,
-                location.page,
-                (int)(pageWidth * location.locationX),
-                (int)(pageHeight * location.locationY),
-                location.locationWidth,
-                location.locationHeight);
+                location.Page ,
+                (int)(pageWidth * location.LocationX),
+                (int)(pageHeight * location.LocationY),
+                location.LocationWidth,
+                location.LocationHeight);
 
+            string relativeOutputFileName = Path.Combine("Output", Path.GetFileName(outputFilePath));
             var resultData = new
             {
                 status = "Ok",
@@ -283,9 +287,9 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 {
                     document = new
                     {
-                        guid = documentGuid,
-                        name = documentGuid,
-                        signedName = documentGuid,
+                        guid = relativeOutputFileName,
+                        name = relativeOutputFileName,
+                        signedName = relativeOutputFileName,
                         signedFromAll = true,
                         recipients = new[]
                         {
@@ -342,7 +346,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             return result;
         }
 
-        private void SignDocument(string fileName,
+        private string SignDocument(string fileName,
                                   string signatureText,
                                   int pageNumber,
                                   int left,
@@ -351,7 +355,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                                   int height)
         {
             string rootPath = Server.MapPath("~/App_Data");
-            string storagePath = Path.Combine(rootPath, @"Storage");
+            string storagePath = rootPath;
             string outputPath = Path.Combine(rootPath, @"Output");
             string imagesPath = Path.Combine(rootPath, @"Images");
 
@@ -378,7 +382,8 @@ namespace Signature.Net.Sample.Mvc.Controllers
 
             GroupDocs.Signature.Options.SaveOptions saveOptions = new GroupDocs.Signature.Options.SaveOptions(OutputType.String);
             // sign the document
-            handler.Sign<string>(fileName, signOptions, saveOptions);
+            string outputFilePath = handler.Sign<string>(fileName, signOptions, saveOptions);
+            return outputFilePath;
         }
 
         #endregion

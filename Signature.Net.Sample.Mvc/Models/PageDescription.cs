@@ -7,8 +7,8 @@ namespace MVCDemo
 {
     public class PageDescription
     {
-        public int w { get; set; }
-        public int h { get; set; }
-        public int pageNumber { get; set; }
+        public int W { get; set; }
+        public int H { get; set; }
+        public int PageNumber { get; set; }
     }
 }

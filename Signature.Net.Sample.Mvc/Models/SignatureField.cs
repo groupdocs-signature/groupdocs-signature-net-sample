@@ -2,26 +2,26 @@
 {
     public class SignatureField
     {
-        public int fieldType { get; set; }
-        public string data { get; set; }
-        public string documentGuid { get; set; }
-        public location[] locations { get; set; }
+        public int FieldType { get; set; }
+        public string Data { get; set; }
+        public string DocumentGuid { get; set; }
+        public Location[] Locations { get; set; }
 
-        public class location
+        public class Location
         {
-            public int page { get; set; }
-            public double locationX { get; set; }
-            public double locationY { get; set; }
-            public int locationWidth { get; set; }
-            public int locationHeight { get; set; }
-            public string fontName { get; set; }
-            public int fontSize { get; set; }
-            public int fontColor { get; set; }
-            public bool? fontBold { get; set; }
-            public bool? fontItalic { get; set; }
-            public bool? fontUnderline { get; set; }
-            public int alignment { get; set; }
-            public string id { get; set; }
+            public int Page { get; set; }
+            public double LocationX { get; set; }
+            public double LocationY { get; set; }
+            public int LocationWidth { get; set; }
+            public int LocationHeight { get; set; }
+            public string FontName { get; set; }
+            public int FontSize { get; set; }
+            public int FontColor { get; set; }
+            public bool? FontBold { get; set; }
+            public bool? FontItalic { get; set; }
+            public bool? FontUnderline { get; set; }
+            public int Alignment { get; set; }
+            public string Id { get; set; }
         };
     }
 }
