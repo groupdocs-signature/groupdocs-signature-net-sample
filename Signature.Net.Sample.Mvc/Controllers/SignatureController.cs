@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,20 +9,17 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
-using System.Web.UI;
 using Aspose.Pdf;
 using Aspose.Pdf.Devices;
 using MVCDemo;
 using Signature.Net.Sample.Mvc.Models;
-using GroupDocs.Signature.Config;
-using GroupDocs.Signature.Handler;
-using GroupDocs.Signature.Options;
+using PageInfo = Aspose.Words.Rendering.PageInfo;
+using Signature.Net.Sample.Mvc.Engine;
 
 namespace Signature.Net.Sample.Mvc.Controllers
 {
     public class SignatureController : Controller
     {
-        private const string StorageDirectoryName = "Storage";
         private const string AppDataVirtualPath = "~/App_Data/";
 
         [HttpPost]
@@ -162,8 +160,8 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     pageDescs = new PageDescription[pageCount];
                     for (int i = 0; i < pageDescs.Length; i++)
                     {
-                        var page = wordsDocument.GetPageInfo(i);
-                        var rect = page.SizeInPoints;
+                        PageInfo page = wordsDocument.GetPageInfo(i);
+                        SizeF rect = page.SizeInPoints;
 
                         pageWidth = (int)rect.Width;
                         pageHeight = (int)rect.Height;
@@ -260,6 +258,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                             Aspose.Words.Saving.ImageSaveOptions saveOptions =
                                 new Aspose.Words.Saving.ImageSaveOptions(Aspose.Words.SaveFormat.Jpeg)
                                 {
+                                    PageIndex = pageIndex,
                                     PageCount = 1,
                                     JpegQuality = quality
                                 };
@@ -313,6 +312,8 @@ namespace Signature.Net.Sample.Mvc.Controllers
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
             int pageWidth = 0, pageHeight = 0;
+            SignatureField.Location location = field.Locations[0];
+            int pageNumber = location.Page;
             switch (fileNameExtension)
             {
                 case "pdf":
@@ -322,12 +323,26 @@ namespace Signature.Net.Sample.Mvc.Controllers
                         pageHeight = (int) document.Pages[1].Rect.Height;
                     }
                     break;
+
+                case "doc":
+                case "docx":
+                case "rtf":
+                    Aspose.Words.Document wordsDocument = new Aspose.Words.Document(fullPathToDocument);
+                    PageInfo page = wordsDocument.GetPageInfo(0);
+                    SizeF rect = page.SizeInPoints;
+
+                    pageWidth = (int)rect.Width;
+                    pageHeight = (int)rect.Height;
+                    pageNumber = location.Page - 1;
+                    break;
             }
 
-            SignatureField.Location location = field.Locations[0];
-            string outputFilePath = SignDocument(documentGuid,
+            string rootPath = Server.MapPath("~/App_Data");
+            
+            string outputFilePath = new SigningEngine().SignDocument(rootPath,
+                documentGuid,
                 signatureText,
-                location.Page ,
+                pageNumber,
                 (int)(pageWidth * location.LocationX),
                 (int)(pageHeight * location.LocationY),
                 location.LocationWidth,
@@ -399,46 +414,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             string result = string.Format("{0}{1}", applicationHost, inputUrl);
             return result;
         }
-
-        private string SignDocument(string fileName,
-                                  string signatureText,
-                                  int pageNumber,
-                                  int left,
-                                  int top,
-                                  int width,
-                                  int height)
-        {
-            string rootPath = Server.MapPath("~/App_Data");
-            string storagePath = rootPath;
-            string outputPath = Path.Combine(rootPath, @"Output");
-            string imagesPath = Path.Combine(rootPath, @"Images");
-
-            // setup a configuration
-            SignatureConfig config = new SignatureConfig()
-            {
-                StoragePath = storagePath,
-                OutputPath = outputPath,
-                ImagesPath = imagesPath
-            };
-
-            // instantiating the handler
-            SignatureHandler handler = new SignatureHandler(config);
-
-            // Set a license if you have one
-            handler.SetLicense(@"GroupDocs.Signature3.lic");
-
-            // setup PDF image signature options
-            PDFSignTextOptions signOptions = new PDFSignTextOptions(signatureText);
-            signOptions.DocumentPageNumber = pageNumber;
-            signOptions.Left = left;
-            signOptions.Top = top;
-            signOptions.SignAllPages = false;
-
-            GroupDocs.Signature.Options.SaveOptions saveOptions = new GroupDocs.Signature.Options.SaveOptions(OutputType.String);
-            // sign the document
-            string outputFilePath = handler.Sign<string>(fileName, signOptions, saveOptions);
-            return outputFilePath;
-        }
+        
 
         #endregion
     }
