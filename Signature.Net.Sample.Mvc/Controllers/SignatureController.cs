@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,12 +10,15 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
+using Aspose.Cells;
+using Aspose.Cells.Rendering;
 using Aspose.Pdf;
 using Aspose.Pdf.Devices;
 using MVCDemo;
 using Signature.Net.Sample.Mvc.Models;
 using PageInfo = Aspose.Words.Rendering.PageInfo;
 using Signature.Net.Sample.Mvc.Engine;
+using Rectangle = Aspose.Pdf.Rectangle;
 
 namespace Signature.Net.Sample.Mvc.Controllers
 {
@@ -180,6 +184,45 @@ namespace Signature.Net.Sample.Mvc.Controllers
                         }
                     }
                     break;
+
+                case "xls":
+                    Workbook excelDocument = new Workbook(fullPathToDocument);
+                    pageCount = excelDocument.Worksheets.Count;
+
+                    pageDescs = new PageDescription[pageCount];
+                    List<PageDescription> notEmptyPageList =  new List<PageDescription>();
+                    for (int i = 0; i < pageCount; i++)
+                    {
+                        Worksheet sheet = excelDocument.Worksheets[i];
+                        ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
+                        imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                        imgOptions.OnePagePerSheet = true;
+                        SheetRender sheetRenderer = new SheetRender(sheet, imgOptions);
+                        if (sheetRenderer.PageCount > 0)
+                        {
+                            Size pageSize = sheetRenderer.GetPageSize(0);
+                            pageWidth = pageSize.Width;
+                            pageHeight = pageSize.Height;
+
+                            PageDescription pageDesc = new PageDescription()
+                            {
+                                W = pageWidth,
+                                H = pageHeight,
+                                PageNumber = i
+                            };
+                            if (isFirstPass || pageHeight > maxPageHeight)
+                            {
+                                maxPageHeight = pageHeight;
+                                widthForMaxHeight = pageWidth;
+                                isFirstPass = false;
+                            }
+
+                            notEmptyPageList.Add(pageDesc);
+                        }
+                    }
+                    pageDescs = notEmptyPageList.ToArray();
+                    pageCount = pageDescs.Length;
+                    break;
             }
             string[] pageImageUrls = GetImageUrls(path, 0, pageCount, width, quality);
             string documentDescription = new JavaScriptSerializer().Serialize(new
@@ -269,6 +312,26 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     }
                     else
                         return new EmptyResult();
+
+                case "xls":
+                    Workbook excelDocument = new Workbook(fullPathToDocument);
+                    pageCount = excelDocument.Worksheets.Count;
+                    if (pageIndex >= pageCount)
+                        return new EmptyResult();
+
+                    Worksheet sheet = excelDocument.Worksheets[pageIndex];
+                    ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
+                    imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                    imgOptions.OnePagePerSheet = true;
+                    SheetRender sr = new SheetRender(sheet, imgOptions);
+                    using (Bitmap bitmap = sr.ToImage(0))
+                    {
+                        using (MemoryStream outputStream = new MemoryStream())
+                        {
+                            bitmap.Save(outputStream, ImageFormat.Jpeg);
+                            return File(outputStream.ToArray(), mimeType);
+                        }
+                    }
             }
             string fileModificationDateTime = System.IO.File.GetLastWriteTimeUtc(fullPathToDocument).ToString("s").Replace(":", "_");
 
@@ -312,6 +375,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
             int pageWidth = 0, pageHeight = 0;
+            int signatureColumnNum = 0, signatureRowNum = 0;
             SignatureField.Location location = field.Locations[0];
             int pageNumber = location.Page;
             switch (fileNameExtension)
@@ -319,8 +383,9 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 case "pdf":
                     using (Aspose.Pdf.Document document = new Document(fullPathToDocument))
                     {
-                        pageWidth = (int) document.Pages[1].Rect.Width;
-                        pageHeight = (int) document.Pages[1].Rect.Height;
+                        Rectangle pageRect = document.Pages[pageNumber].Rect;
+                        pageWidth = (int)pageRect.Width;
+                        pageHeight = (int)pageRect.Height;
                     }
                     break;
 
@@ -328,12 +393,58 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 case "docx":
                 case "rtf":
                     Aspose.Words.Document wordsDocument = new Aspose.Words.Document(fullPathToDocument);
-                    PageInfo page = wordsDocument.GetPageInfo(0);
+                    pageNumber = location.Page - 1;
+                    PageInfo page = wordsDocument.GetPageInfo(pageNumber);
                     SizeF rect = page.SizeInPoints;
-
                     pageWidth = (int)rect.Width;
                     pageHeight = (int)rect.Height;
+                    break;
+
+                case "xls":
+                    Workbook excelDocument = new Workbook(fullPathToDocument);
                     pageNumber = location.Page - 1;
+                    Worksheet sheet = excelDocument.Worksheets[pageNumber];
+                    ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
+                    imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                    imgOptions.OnePagePerSheet = true;
+                    SheetRender sheetRenderer = new SheetRender(sheet, imgOptions);
+                    if (sheetRenderer.PageCount > 0)
+                    {
+                        Size pageSize = sheetRenderer.GetPageSize(0);
+                        pageWidth = pageSize.Width;
+                        pageHeight = pageSize.Height;
+                        int absoluteLocationLeft = (int)(pageWidth * location.LocationX);
+                        int absoluteLocationTop = (int)(pageHeight * location.LocationY);
+                        int columnCount = sheet.Cells.Columns.Count;
+                        int rowCount = sheet.Cells.Rows.Count;
+                        int sumWidth = 0, sumHeight = 0;
+                        int columnWidth, rowHeight;
+                        for (int columnNum = 0; columnNum < columnCount; columnNum++)
+                        {
+                            columnWidth = sheet.Cells.GetViewColumnWidthPixel(columnNum);
+                            if (absoluteLocationLeft >= sumWidth
+                                && absoluteLocationLeft < sumWidth + columnWidth)
+                            {
+                                signatureColumnNum = columnNum;
+                                break;
+                            }
+                            sumWidth += columnWidth;
+                        }
+
+                        for (int rowNum = 0; rowNum < rowCount; rowNum++)
+                        {
+                            rowHeight = sheet.Cells.GetRowHeightPixel(rowNum);
+                            if (absoluteLocationTop >= sumHeight
+                                && absoluteLocationTop < sumHeight + rowHeight)
+                            {
+                                signatureRowNum = rowNum;
+                                break;
+                            }
+                            sumHeight += rowHeight;
+                        }
+
+                    }
+                    pageNumber = location.Page;
                     break;
             }
 
@@ -346,7 +457,8 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 (int)(pageWidth * location.LocationX),
                 (int)(pageHeight * location.LocationY),
                 location.LocationWidth,
-                location.LocationHeight);
+                location.LocationHeight,
+                signatureColumnNum, signatureRowNum);
 
             string relativeOutputFileName = Path.Combine("Output", Path.GetFileName(outputFilePath));
             var resultData = new

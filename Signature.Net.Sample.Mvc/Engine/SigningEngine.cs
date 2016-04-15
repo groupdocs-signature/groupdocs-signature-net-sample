@@ -21,7 +21,8 @@ namespace Signature.Net.Sample.Mvc.Engine
                                   int left,
                                   int top,
                                   int width,
-                                  int height)
+                                  int height,
+                                  int signatureColumnNum, int signatureRowNum)
         {
             string storagePath = rootPath;
             string outputPath = Path.Combine(rootPath, @"Output");
@@ -39,7 +40,7 @@ namespace Signature.Net.Sample.Mvc.Engine
             SignatureHandler handler = new SignatureHandler(config);
 
             // Set a license if you have one
-            handler.SetLicense(@"GroupDocs.Signature3.lic");
+            handler.SetLicense(@"d:\temp\SignatureLicense\GroupDocs.Signature3.lic");
 
             // setup PDF image signature options
             SignTextOptions signOptions = null;
@@ -56,6 +57,14 @@ namespace Signature.Net.Sample.Mvc.Engine
                 case "docx":
                 case "rtf":
                     signOptions = new WordsSignTextOptions(signatureText);
+                    break;
+
+                case "xls":
+                    signOptions = new CellsSignTextOptions(signatureText)
+                    {
+                        ColumnNumber = signatureColumnNum,
+                        RowNumber = signatureRowNum
+                    };
                     break;
             }
             signOptions.DocumentPageNumber = pageNumber;
