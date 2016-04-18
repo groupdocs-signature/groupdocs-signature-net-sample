@@ -143,9 +143,9 @@ namespace Signature.Net.Sample.Mvc.Controllers
                         pageHeight = (int)page.Rect.Height;
                         pageDescs[i] = new PageDescription()
                         {
-                            W = pageWidth,
-                            H = pageHeight,
-                            PageNumber = i
+                            w = pageWidth,
+                            h = pageHeight,
+                            pageNumber = i
                         };
                         if (isFirstPass || pageHeight > maxPageHeight)
                         {
@@ -172,9 +172,9 @@ namespace Signature.Net.Sample.Mvc.Controllers
 
                         pageDescs[i] = new PageDescription()
                         {
-                            W = pageWidth,
-                            H = pageHeight,
-                            PageNumber = i
+                            w = pageWidth,
+                            h = pageHeight,
+                            pageNumber = i
                         };
                         if (isFirstPass || pageHeight > maxPageHeight)
                         {
@@ -200,15 +200,20 @@ namespace Signature.Net.Sample.Mvc.Controllers
                         SheetRender sheetRenderer = new SheetRender(sheet, imgOptions);
                         if (sheetRenderer.PageCount > 0)
                         {
-                            Size pageSize = sheetRenderer.GetPageSize(0);
-                            pageWidth = pageSize.Width;
-                            pageHeight = pageSize.Height;
+                            //Size pageSize = sheetRenderer.GetPageSize(0);
+                            //pageWidth = pageSize.Width;
+                            //pageHeight = pageSize.Height;
+                            using (Bitmap bitmap = sheetRenderer.ToImage(0))
+                            {
+                                pageWidth = bitmap.Width;
+                                pageHeight = bitmap.Height;
+                            }
 
                             PageDescription pageDesc = new PageDescription()
                             {
-                                W = pageWidth,
-                                H = pageHeight,
-                                PageNumber = i
+                                w = pageWidth,
+                                h = pageHeight,
+                                pageNumber = i
                             };
                             if (isFirstPass || pageHeight > maxPageHeight)
                             {
@@ -221,6 +226,11 @@ namespace Signature.Net.Sample.Mvc.Controllers
                         }
                     }
                     pageDescs = notEmptyPageList.ToArray();
+                    //for (int pageNum = 0; pageNum < pageDescs.Length; pageNum++)
+                    //{
+                    //    pageDescs[pageNum].h *= (int)(((double)pageDescs[pageNum].w) / (double)widthForMaxHeight);
+                    //    pageDescs[pageNum].w = widthForMaxHeight;
+                    //}
                     pageCount = pageDescs.Length;
                     break;
             }
@@ -407,7 +417,69 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
                     imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
                     imgOptions.OnePagePerSheet = true;
+
+                    //ImageOrPrintOptions imgOptionsForShift = new ImageOrPrintOptions();
+                    //imgOptionsForShift.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                    //imgOptionsForShift.OnePagePerSheet = true;
+                    //ShiftCalculatingCellDrawing shiftCalculatingCellDrawing = new ShiftCalculatingCellDrawing();
+                    //imgOptionsForShift.DrawObjectEventHandler = shiftCalculatingCellDrawing;
+                    //imgOptionsForShift.HorizontalResolution = 96;
+                    //imgOptionsForShift.VerticalResolution = 96;
+                    //SheetRender shiftCalculatingSheetRenderer = new SheetRender(sheet, imgOptionsForShift);
+                    //if (shiftCalculatingSheetRenderer.PageCount > 0)
+                    //{
+                    //    using (MemoryStream tempStream = new MemoryStream())
+                    //    {
+                    //        shiftCalculatingSheetRenderer.ToImage(0, tempStream);
+                    //    }
+                    //}
+
+                    //int horizontalShift = shiftCalculatingCellDrawing.HorizontalShift;
+                    //int verticalShift = shiftCalculatingCellDrawing.VerticalShift;
+
+                    //SheetRender sheetRenderer = new SheetRender(sheet, imgOptions);
+                    //if (sheetRenderer.PageCount > 0)
+                    //{
+                    //    Size pageSize = sheetRenderer.GetPageSize(0);
+                    //    pageWidth = pageSize.Width;
+                    //    pageHeight = pageSize.Height;
+                    //    int absoluteLocationLeft = (int)(pageWidth * location.LocationX);
+                    //    int absoluteLocationTop = (int)(pageHeight * location.LocationY);
+                    //    int columnCount = sheet.Cells.MaxDataColumn;
+                    //    int rowCount = sheet.Cells.MaxDataRow;
+                    //    int sumWidth = horizontalShift, sumHeight = verticalShift;
+                    //    int columnWidth, rowHeight;
+                    //    for (int columnNum = 0; columnNum < columnCount; columnNum++)
+                    //    {
+                    //        columnWidth = sheet.Cells.GetViewColumnWidthPixel(columnNum);
+                    //        if (absoluteLocationLeft >= sumWidth
+                    //            && absoluteLocationLeft < sumWidth + columnWidth)
+                    //        {
+                    //            signatureColumnNum = columnNum;
+                    //            break;
+                    //        }
+                    //        sumWidth += columnWidth;
+                    //    }
+
+                    //    for (int rowNum = 0; rowNum < rowCount; rowNum++)
+                    //    {
+                    //        rowHeight = sheet.Cells.GetRowHeightPixel(rowNum);
+                    //        if (absoluteLocationTop >= sumHeight
+                    //            && absoluteLocationTop < sumHeight + rowHeight)
+                    //        {
+                    //            signatureRowNum = rowNum;
+                    //            break;
+                    //        }
+                    //        sumHeight += rowHeight;
+                    //    }
+
+                    //}
+                    pageNumber = location.Page;
+
+                    CellDrawFindingNearest cellsDrawFindingNearest = new CellDrawFindingNearest();
+                    imgOptions.DrawObjectEventHandler = cellsDrawFindingNearest;
                     SheetRender sheetRenderer = new SheetRender(sheet, imgOptions);
+
                     if (sheetRenderer.PageCount > 0)
                     {
                         Size pageSize = sheetRenderer.GetPageSize(0);
@@ -415,36 +487,14 @@ namespace Signature.Net.Sample.Mvc.Controllers
                         pageHeight = pageSize.Height;
                         int absoluteLocationLeft = (int)(pageWidth * location.LocationX);
                         int absoluteLocationTop = (int)(pageHeight * location.LocationY);
-                        int columnCount = sheet.Cells.Columns.Count;
-                        int rowCount = sheet.Cells.Rows.Count;
-                        int sumWidth = 0, sumHeight = 0;
-                        int columnWidth, rowHeight;
-                        for (int columnNum = 0; columnNum < columnCount; columnNum++)
+                        cellsDrawFindingNearest.SetPositions(absoluteLocationLeft, absoluteLocationTop);
+                        using (MemoryStream tempStream = new MemoryStream())
                         {
-                            columnWidth = sheet.Cells.GetViewColumnWidthPixel(columnNum);
-                            if (absoluteLocationLeft >= sumWidth
-                                && absoluteLocationLeft < sumWidth + columnWidth)
-                            {
-                                signatureColumnNum = columnNum;
-                                break;
-                            }
-                            sumWidth += columnWidth;
+                            sheetRenderer.ToImage(0, tempStream);
                         }
-
-                        for (int rowNum = 0; rowNum < rowCount; rowNum++)
-                        {
-                            rowHeight = sheet.Cells.GetRowHeightPixel(rowNum);
-                            if (absoluteLocationTop >= sumHeight
-                                && absoluteLocationTop < sumHeight + rowHeight)
-                            {
-                                signatureRowNum = rowNum;
-                                break;
-                            }
-                            sumHeight += rowHeight;
-                        }
-
+                        signatureColumnNum = cellsDrawFindingNearest.Column;
+                        signatureRowNum = cellsDrawFindingNearest.Row;
                     }
-                    pageNumber = location.Page;
                     break;
             }
 
@@ -530,4 +580,91 @@ namespace Signature.Net.Sample.Mvc.Controllers
 
         #endregion
     }
+
+    internal class ShiftCalculatingCellDrawing : DrawObjectEventHandler
+    {
+        public int HorizontalShift { get; set; }
+        public int VerticalShift { get; set; }
+        private bool _isShiftCalculated = false;
+
+        public override void Draw(DrawObject drawObject, float x, float y, float width, float height)
+        {
+            var cell = drawObject.Cell;
+            if (cell != null && !_isShiftCalculated)
+            {
+                int columnCount = cell.Column;
+                int rowCount = cell.Row;
+                int sumWidth = 0, sumHeight = 0;
+                int columnWidth, rowHeight;
+                Worksheet sheet = cell.Worksheet;
+                for (int columnNum = 0; columnNum < columnCount; columnNum++)
+                {
+                    columnWidth = sheet.Cells.GetViewColumnWidthPixel(columnNum);
+                    sumWidth += columnWidth;
+                }
+
+                for (int rowNum = 0; rowNum < rowCount; rowNum++)
+                {
+                    rowHeight = sheet.Cells.GetRowHeightPixel(rowNum);
+                    sumHeight += rowHeight;
+                }
+                HorizontalShift = (int)x - sumWidth;
+                VerticalShift = (int)y - sumHeight;
+                _isShiftCalculated = true;
+            }
+        }
+    }
+
+    internal class CellDrawFindingNearest : DrawObjectEventHandler
+    {
+        Bitmap _bitmao;
+        Graphics gr;
+        private int _left, _top;
+        private int _nearestLeft, _nearestTop;
+        private int smallestDistance;
+        private bool isFirstPass = true;
+        public int Column { get; set; }
+        public int Row { get; set; }
+
+        //public MyDraw()
+        //{
+        //    //_bitmao = new Bitmap(1200, 1200);
+        //    //gr = Graphics.FromImage(_bitmao);
+        //    //gr.PageUnit = GraphicsUnit.Point;
+        //}
+
+        public void SetPositions(int left, int top)
+        {
+            _left = left;
+            _top = top;
+        }
+
+        public override void Draw(DrawObject drawObject, float x, float y, float width, float height)
+        {
+            //if (drawObject.Image != null)
+            //    gr.DrawImage(drawObject.Image, x, y, width, height);
+            var cell = drawObject.Cell;
+            if (cell != null)
+            {
+                int horizontalDistance = (int)x - _left;
+                int varticalDistance = (int)y - _top;
+                int distance = horizontalDistance * horizontalDistance + varticalDistance * varticalDistance;
+                if (isFirstPass || distance < smallestDistance)
+                {
+                    smallestDistance = distance;
+                    Column = cell.Column;
+                    Row = cell.Row;
+                    isFirstPass = false;
+                }
+                //if (_left >= x && _left < x + width &&
+                //    _top >= y && _top < y + height)
+                //{
+                //    Column = cell.Column;
+                //    Row = cell.Row;
+                //}
+                //gr.DrawString(drawObject.Cell.StringValue, new System.Drawing.Font("arial", 10), new SolidBrush(Color.Black), x, y);
+            }
+        }
+    }
+
 }
