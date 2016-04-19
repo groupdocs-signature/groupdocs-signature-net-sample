@@ -56,6 +56,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Aspose.Pdf.dll</HintPath>
     </Reference>
+    <Reference Include="Aspose.Slides, Version=15.10.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\Aspose.Slides.dll</HintPath>
+    </Reference>
     <Reference Include="Aspose.Words, Version=16.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dependencies\Aspose.Words.dll</HintPath>

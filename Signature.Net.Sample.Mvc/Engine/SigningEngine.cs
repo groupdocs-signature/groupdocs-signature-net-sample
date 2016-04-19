@@ -60,11 +60,17 @@ namespace Signature.Net.Sample.Mvc.Engine
                     break;
 
                 case "xls":
+                case "xlsx":
                     signOptions = new CellsSignTextOptions(signatureText)
                     {
                         ColumnNumber = signatureColumnNum,
                         RowNumber = signatureRowNum
                     };
+                    break;
+
+                case "ppt":
+                case "pptx":
+                    signOptions = new SlidesSignTextOptions(signatureText);
                     break;
             }
             signOptions.DocumentPageNumber = pageNumber;

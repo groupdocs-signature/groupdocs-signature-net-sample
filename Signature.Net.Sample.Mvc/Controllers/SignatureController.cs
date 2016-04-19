@@ -14,6 +14,8 @@ using Aspose.Cells;
 using Aspose.Cells.Rendering;
 using Aspose.Pdf;
 using Aspose.Pdf.Devices;
+using Aspose.Slides;
+
 using MVCDemo;
 using Signature.Net.Sample.Mvc.Models;
 using PageInfo = Aspose.Words.Rendering.PageInfo;
@@ -186,6 +188,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     break;
 
                 case "xls":
+                case "xlsx":
                     Workbook excelDocument = new Workbook(fullPathToDocument);
                     pageCount = excelDocument.Worksheets.Count;
 
@@ -223,7 +226,34 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     pageDescs = notEmptyPageList.ToArray();
                     pageCount = pageDescs.Length;
                     break;
+
+                case "ppt":
+                case "pptx":
+                    Presentation powerPointDocument = new Presentation(fullPathToDocument);
+                    pageCount = powerPointDocument.Slides.Count;
+
+                    pageDescs = new PageDescription[pageCount];
+                    SizeF slideSize = powerPointDocument.SlideSize.Size;
+                    pageWidth = (int)slideSize.Width;
+                    pageHeight = (int)slideSize.Height;
+                    for (int i = 0; i < pageDescs.Length; i++)
+                    {
+                        pageDescs[i] = new PageDescription()
+                        {
+                            w = pageWidth,
+                            h = pageHeight,
+                            pageNumber = i
+                        };
+                        if (isFirstPass || pageHeight > maxPageHeight)
+                        {
+                            maxPageHeight = pageHeight;
+                            widthForMaxHeight = pageWidth;
+                            isFirstPass = false;
+                        }
+                    }
+                    break;
             }
+
             string[] pageImageUrls = GetImageUrls(path, 0, pageCount, width, quality);
             string documentDescription = new JavaScriptSerializer().Serialize(new
             {
@@ -332,6 +362,24 @@ namespace Signature.Net.Sample.Mvc.Controllers
                             return File(outputStream.ToArray(), mimeType);
                         }
                     }
+
+                case "ppt":
+                case "pptx":
+                    Presentation powerPointDocument = new Presentation(fullPathToDocument);
+                    pageCount = powerPointDocument.Slides.Count;
+                    if (pageIndex >= pageCount)
+                        return new EmptyResult();
+
+                    ISlide slide = powerPointDocument.Slides[pageIndex];
+                    SizeF slideSize = powerPointDocument.SlideSize.Size;
+                    using (System.Drawing.Image image = slide.GetThumbnail(new Size((int)slideSize.Width, (int)slideSize.Height)))
+                    {
+                        using (MemoryStream outputStream = new MemoryStream())
+                        {
+                            image.Save(outputStream, ImageFormat.Jpeg);
+                            return File(outputStream.ToArray(), mimeType);
+                        }
+                    }
             }
             string fileModificationDateTime = System.IO.File.GetLastWriteTimeUtc(fullPathToDocument).ToString("s").Replace(":", "_");
 
@@ -401,6 +449,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     break;
 
                 case "xls":
+                case "xlsx":
                     Workbook excelDocument = new Workbook(fullPathToDocument);
                     pageNumber = location.Page - 1;
                     Worksheet sheet = excelDocument.Worksheets[pageNumber];
@@ -428,6 +477,16 @@ namespace Signature.Net.Sample.Mvc.Controllers
                         signatureColumnNum = cellsDrawFindingNearest.Column;
                         signatureRowNum = cellsDrawFindingNearest.Row;
                     }
+                    break;
+
+
+                case "ppt":
+                case "pptx":
+                    Presentation powerPointDocument = new Presentation(fullPathToDocument);
+                    pageNumber = location.Page - 1;
+                    SizeF slideSize = powerPointDocument.SlideSize.Size;
+                    pageWidth = (int)slideSize.Width;
+                    pageHeight = (int)slideSize.Height;
                     break;
             }
 
