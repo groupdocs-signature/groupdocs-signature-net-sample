@@ -282,6 +282,20 @@ namespace Signature.Net.Sample.Mvc.Controllers
             return Json(result);
         }
 
+        [HttpPost]
+        public ActionResult GetImageUrls(string path,
+                                         string dimension,
+                                         int firstPage,
+                                         int pageCount,
+                                         int quality)
+        {
+            int width = Int32.Parse(dimension.Substring(0, dimension.Length - 1));
+            string[] pageImageUrls = GetImageUrls(path, 0, pageCount, width, quality);
+            var result = new {imageUrls = pageImageUrls, success = true };
+            return Json(result);
+        }
+
+
         public ActionResult GetSignatureBackgroundSvg()
         {
             return File(Server.MapPath("~/gd-signature/signature2/resource/signature.svg"), "image/svg+xml");
