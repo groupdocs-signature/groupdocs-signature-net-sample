@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Web;
@@ -236,6 +235,8 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     SizeF slideSize = powerPointDocument.SlideSize.Size;
                     pageWidth = (int)slideSize.Width;
                     pageHeight = (int)slideSize.Height;
+                    //pageWidth = width;
+                    //pageHeight = (int)((width / slideSize.Width) * slideSize.Height);
                     for (int i = 0; i < pageDescs.Length; i++)
                     {
                         pageDescs[i] = new PageDescription()
@@ -386,12 +387,16 @@ namespace Signature.Net.Sample.Mvc.Controllers
 
                     ISlide slide = powerPointDocument.Slides[pageIndex];
                     SizeF slideSize = powerPointDocument.SlideSize.Size;
+                    ViewingEngine viewingEngine = new ViewingEngine();
                     using (System.Drawing.Image image = slide.GetThumbnail(new Size((int)slideSize.Width, (int)slideSize.Height)))
                     {
-                        using (MemoryStream outputStream = new MemoryStream())
+                        using (System.Drawing.Image resizedImage = viewingEngine.ResizeImage(image, width))
                         {
-                            image.Save(outputStream, ImageFormat.Jpeg);
-                            return File(outputStream.ToArray(), mimeType);
+                            using (MemoryStream outputStream = new MemoryStream())
+                            {
+                                resizedImage.Save(outputStream, ImageFormat.Jpeg);
+                                return File(outputStream.ToArray(), mimeType);
+                            }
                         }
                     }
             }
@@ -439,6 +444,9 @@ namespace Signature.Net.Sample.Mvc.Controllers
             int pageWidth = 0, pageHeight = 0;
             int signatureColumnNum = 0, signatureRowNum = 0;
             SignatureField.Location location = field.Locations[0];
+            const double scaleForSizes = 2.083;
+            int signatureWidth = (int)(location.LocationWidth / scaleForSizes);
+            int signatureHeight = (int)(location.LocationHeight / scaleForSizes);
             int pageNumber = location.Page;
             switch (fileNameExtension)
             {
@@ -493,7 +501,6 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     }
                     break;
 
-
                 case "ppt":
                 case "pptx":
                     Presentation powerPointDocument = new Presentation(fullPathToDocument);
@@ -505,15 +512,15 @@ namespace Signature.Net.Sample.Mvc.Controllers
             }
 
             string rootPath = Server.MapPath("~/App_Data");
-            
+
             string outputFilePath = new SigningEngine().SignDocument(rootPath,
                 documentGuid,
                 signatureText,
                 pageNumber,
                 (int)(pageWidth * location.LocationX),
                 (int)(pageHeight * location.LocationY),
-                location.LocationWidth,
-                location.LocationHeight,
+                signatureWidth,
+                signatureHeight,
                 signatureColumnNum, signatureRowNum);
 
             string relativeOutputFileName = Path.Combine("Output", Path.GetFileName(outputFilePath));
@@ -582,42 +589,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             string result = string.Format("{0}{1}", applicationHost, inputUrl);
             return result;
         }
-
+        
         #endregion
     }
-
-    
-    internal class CellDrawFindingNearest : DrawObjectEventHandler
-    {
-        private int _left, _top;
-        private int _smallestDistance;
-        private bool _isFirstPass = true;
-        public int Column { get; set; }
-        public int Row { get; set; }
-
-        public void SetPositions(int left, int top)
-        {
-            _left = left;
-            _top = top;
-        }
-
-        public override void Draw(DrawObject drawObject, float x, float y, float width, float height)
-        {
-            var cell = drawObject.Cell;
-            if (cell != null)
-            {
-                int horizontalDistance = (int)x - _left;
-                int varticalDistance = (int)y - _top;
-                int distance = horizontalDistance * horizontalDistance + varticalDistance * varticalDistance;
-                if (_isFirstPass || distance < _smallestDistance)
-                {
-                    _smallestDistance = distance;
-                    Column = cell.Column;
-                    Row = cell.Row;
-                    _isFirstPass = false;
-                }
-            }
-        }
-    }
-
 }

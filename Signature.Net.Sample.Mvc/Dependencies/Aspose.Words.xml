@@ -143,6 +143,141 @@
             </summary>
       <remarks>Only works for <see cref="F:Aspose.Words.RevisionType.Deletion" /> and <see cref="F:Aspose.Words.RevisionType.Moving" /> ('move from' type).</remarks>
     </member>
+    <member name="T:Aspose.Words.PlainTextDocument">
+      <summary>
+            Allows to extract plain-text representation of the document's content.
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.PlainTextDocument.#ctor(System.String)">
+      <summary>
+            Creates a plain text document from a file. Automatically detects the file format.
+            </summary>
+      <param name="fileName">Name of the file to extract the text from.</param>
+      <exception cref="T:Aspose.Words.UnsupportedFileFormatException">The document format is not recognized or not supported.</exception>
+      <exception cref="T:Aspose.Words.FileCorruptedException">The document appears to be corrupted and cannot be loaded.</exception>
+      <exception cref="T:System.Exception">There is a problem with the document and it should be reported to Aspose.Words developers.</exception>
+      <exception cref="T:System.IO.IOException">There is an input/output exception.</exception>
+      <exception cref="T:Aspose.Words.IncorrectPasswordException">The document is encrypted and requires a password to open, but you supplied an incorrect password.</exception>
+      <exception cref="T:System.ArgumentException">The name of the file cannot be null or empty string.</exception>
+    </member>
+    <member name="M:Aspose.Words.PlainTextDocument.#ctor(System.String,Aspose.Words.LoadOptions)">
+      <summary>
+            Creates a plain text document from a file. Allows to specify additional options such as an encryption password.
+            </summary>
+      <remarks>
+      </remarks>
+      <param name="fileName">Name of the file to extract the text from.</param>
+      <param name="loadOptions">Additional options to use when loading a document. Can be null.</param>
+      <exception cref="T:Aspose.Words.UnsupportedFileFormatException">The document format is not recognized or not supported.</exception>
+      <exception cref="T:Aspose.Words.FileCorruptedException">The document appears to be corrupted and cannot be loaded.</exception>
+      <exception cref="T:System.Exception">There is a problem with the document and it should be reported to Aspose.Words developers.</exception>
+      <exception cref="T:System.IO.IOException">There is an input/output exception.</exception>
+      <exception cref="T:Aspose.Words.IncorrectPasswordException">The document is encrypted and requires a password to open, but you supplied an incorrect password.</exception>
+      <exception cref="T:System.ArgumentException">The name of the file cannot be null or empty string.</exception>
+    </member>
+    <member name="M:Aspose.Words.PlainTextDocument.#ctor(System.IO.Stream)">
+      <summary>
+            Creates a plain text document from a stream. Automatically detects the file format.
+            </summary>
+      <remarks>
+        <remarks>
+          <p>
+  The document must be stored at the beginning of the stream. The stream must support random positioning.</p>
+        </remarks>
+      </remarks>
+      <param name="stream">The stream where to extract the text from.</param>
+      <exception cref="T:Aspose.Words.UnsupportedFileFormatException">The document format is not recognized or not supported.</exception>
+      <exception cref="T:Aspose.Words.FileCorruptedException">The document appears to be corrupted and cannot be loaded.</exception>
+      <exception cref="T:System.Exception">There is a problem with the document and it should be reported to Aspose.Words developers.</exception>
+      <exception cref="T:System.IO.IOException">There is an input/output exception.</exception>
+      <exception cref="T:Aspose.Words.IncorrectPasswordException">The document is encrypted and requires a password to open, but you supplied an incorrect password.</exception>
+      <exception cref="T:System.ArgumentNullException">The stream cannot be null.</exception>
+      <exception cref="T:System.NotSupportedException">The stream does not support reading or seeking.</exception>
+      <exception cref="T:System.ObjectDisposedException">The stream is a disposed object.</exception>
+    </member>
+    <member name="M:Aspose.Words.PlainTextDocument.#ctor(System.IO.Stream,Aspose.Words.LoadOptions)">
+      <summary>
+            Creates a plain text document from a stream. Allows to specify additional options such as an encryption password.
+            </summary>
+      <remarks>
+        <remarks>
+          <p>
+  The document must be stored at the beginning of the stream. The stream must support random positioning.</p>
+        </remarks>
+      </remarks>
+      <param name="stream">The stream where to extract the text from.</param>
+      <param name="loadOptions">Additional options to use when loading a document. Can be null.</param>
+      <exception cref="T:Aspose.Words.UnsupportedFileFormatException">The document format is not recognized or not supported.</exception>
+      <exception cref="T:Aspose.Words.FileCorruptedException">The document appears to be corrupted and cannot be loaded.</exception>
+      <exception cref="T:System.Exception">There is a problem with the document and it should be reported to Aspose.Words developers.</exception>
+      <exception cref="T:System.IO.IOException">There is an input/output exception.</exception>
+      <exception cref="T:Aspose.Words.IncorrectPasswordException">The document is encrypted and requires a password to open, but you supplied an incorrect password.</exception>
+      <exception cref="T:System.ArgumentNullException">The stream cannot be null.</exception>
+      <exception cref="T:System.NotSupportedException">The stream does not support reading or seeking.</exception>
+      <exception cref="T:System.ObjectDisposedException">The stream is a disposed object.</exception>
+    </member>
+    <member name="P:Aspose.Words.PlainTextDocument.Text">
+      <summary>
+            Gets textual content of the document concatenated as a string.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.PlainTextDocument.BuiltInDocumentProperties">
+      <summary>
+            Gets <see cref="P:Aspose.Words.PlainTextDocument.BuiltInDocumentProperties" /> of the document.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.PlainTextDocument.CustomDocumentProperties">
+      <summary>
+            Gets <see cref="P:Aspose.Words.PlainTextDocument.CustomDocumentProperties" /> of the document.
+            </summary>
+    </member>
+    <member name="T:Aspose.Words.SignatureLineOptions">
+      <summary>
+            Allows to specify options for signature line being inserted. Used in <see cref="T:Aspose.Words.DocumentBuilder" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.SignatureLineOptions.Signer">
+      <summary>
+            Gets or sets suggested signer of the signature line.
+            Default value for this property is <see cref="F:System.String.Empty" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.SignatureLineOptions.SignerTitle">
+      <summary>
+            Gets or sets suggested signer's title.
+            Default value for this property is <see cref="F:System.String.Empty" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.SignatureLineOptions.Email">
+      <summary>
+            Gets or sets suggested signer's e-mail address.
+            Default value for this property is <see cref="F:System.String.Empty" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.SignatureLineOptions.DefaultInstructions">
+      <summary>
+            Gets or sets a value indicating that default instructions is shown in the Sign dialog.
+            Default value for this property is <b>true</b>.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.SignatureLineOptions.Instructions">
+      <summary>
+            Gets or sets instructions to the signer that are displayed on signing the signature line.
+            Default value for this property is <see cref="F:System.String.Empty" />&gt;.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.SignatureLineOptions.AllowComments">
+      <summary>
+            Gets or sets a value indicating that the signer can add comments in the Sign dialog.
+            Default value for this property is <b>false</b>.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.SignatureLineOptions.ShowDate">
+      <summary>
+            Gets or sets a value indicating that sign date is shown in the signature line.
+            Default value for this property is <b>true</b>.
+            </summary>
+    </member>
     <member name="T:Aspose.Words.Drawing.Charts.Chart">
       <summary>
             Provides access to the chart shape properties.
@@ -452,6 +587,155 @@ For example -1 means the last item, -2 means the second before last and so on.</
         <para>The classes in this namespace support the latest (Word 2007 - 2013 DrawingML) and the earlier (pre Word 2007 - Office Art) shapes.</para>
       </summary>
     </member>
+    <member name="T:Aspose.Words.Drawing.Ole.OleControl">
+      <summary>
+            Represents OLE ActiveX control.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.Ole.OleControl.IsForms2OleControl">
+      <summary>
+            Returns true if the control is a <see cref="T:Aspose.Words.Drawing.Ole.Forms2OleControl" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.Ole.OleControl.Name">
+      <summary>
+            Gets name of the ActiveX control.
+            </summary>
+    </member>
+    <member name="T:Aspose.Words.NodeCollection">
+      <summary>
+             Represents a collection of nodes of a specific type.
+             </summary>
+      <remarks>
+        <p>
+          <b>NodeCollection</b> does not own the nodes it contains, rather, is just a selection of nodes
+             of the specified type, but the nodes are stored in the tree under their respective parent nodes.</p>
+        <p>
+          <b>NodeCollection</b> supports indexed access, iteration and provides add and remove methods.</p>
+        <p>The <b>NodeCollection</b> collection is "live", i.e. changes to the children of the node object
+             that it was created from are immediately reflected in the nodes returned by the <b>NodeCollection</b>
+             properties and methods.</p>
+        <p>
+          <b>NodeCollection</b> is returned by <see cref="M:Aspose.Words.CompositeNode.GetChildNodes(Aspose.Words.NodeType,System.Boolean)" />
+             and also serves as a base class for typed node collections such as <see cref="T:Aspose.Words.SectionCollection" />,
+             <see cref="T:Aspose.Words.ParagraphCollection" /> etc.</p>
+        <p>
+          <b>NodeCollection</b> can be "flat" and contain only immediate children of the node it was created
+             from, or it can be "deep" and contain all descendant children.</p>
+      </remarks>
+    </member>
+    <member name="M:Aspose.Words.NodeCollection.Add(Aspose.Words.Node)">
+      <summary>
+            Adds a node to the end of the collection.
+            </summary>
+      <remarks>
+        <p>The node is inserted as a child into the node object from which the collection was created.</p>
+      </remarks>
+      <remarks>
+        <p>If the newChild is already in the tree, it is first removed.</p>
+        <p>If the node being inserted was created from another document, you should use 
+<see cref="M:Aspose.Words.DocumentBase.ImportNode(Aspose.Words.Node,System.Boolean,Aspose.Words.ImportFormatMode)" /> to import the node to the current document. 
+The imported node can then be inserted into the current document.</p>
+      </remarks>
+      <param name="node">The node to be added to the end of the collection.</param>
+      <exception cref="T:System.NotSupportedException">The <b>NodeCollection</b> is a "deep" collection.</exception>
+    </member>
+    <member name="M:Aspose.Words.NodeCollection.Insert(System.Int32,Aspose.Words.Node)">
+      <summary>
+            Inserts a node into the collection at the specified index.
+            </summary>
+      <remarks>
+        <p>The node is inserted as a child into the node object from which the collection was created.</p>
+        <p>If the index is equal to or greater than Count, the node is added at the end of the collection.</p>
+        <p>If the index is negative and its absolute value is greater than Count, the node is added at the end of the collection.</p>
+      </remarks>
+      <remarks>
+        <p>If the newChild is already in the tree, it is first removed.</p>
+        <p>If the node being inserted was created from another document, you should use 
+<see cref="M:Aspose.Words.DocumentBase.ImportNode(Aspose.Words.Node,System.Boolean,Aspose.Words.ImportFormatMode)" /> to import the node to the current document. 
+The imported node can then be inserted into the current document.</p>
+      </remarks>
+      <param name="index">The zero-based index of the node.
+            Negative indexes are allowed and indicate access from the back of the list.
+            For example -1 means the last node, -2 means the second before last and so on.</param>
+      <param name="node">The node to insert.</param>
+      <exception cref="T:System.NotSupportedException">The <b>NodeCollection</b> is a "deep" collection.</exception>
+    </member>
+    <member name="M:Aspose.Words.NodeCollection.Remove(Aspose.Words.Node)">
+      <summary>
+            Removes the node from the collection and from the document.
+            </summary>
+      <param name="node">The node to remove.</param>
+    </member>
+    <member name="M:Aspose.Words.NodeCollection.RemoveAt(System.Int32)">
+      <summary>
+            Removes the node at the specified index from the collection and from the document.
+            </summary>
+      <param name="index">The zero-based index of the node.
+            Negative indexes are allowed and indicate access from the back of the list.
+            For example -1 means the last node, -2 means the second before last and so on.</param>
+    </member>
+    <member name="M:Aspose.Words.NodeCollection.Clear">
+      <summary>
+            Removes all nodes from this collection and from the document.
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.NodeCollection.Contains(Aspose.Words.Node)">
+      <summary>
+            Determines whether a node is in the collection.
+            </summary>
+      <remarks>
+        <p>This method performs a linear search; therefore, the average execution time is proportional to Count.</p>
+      </remarks>
+      <param name="node">The node to locate.</param>
+      <returns>True if item is found in the collection; otherwise, false.</returns>
+    </member>
+    <member name="M:Aspose.Words.NodeCollection.IndexOf(Aspose.Words.Node)">
+      <summary>
+            Returns the zero-based index of the specified node.
+            </summary>
+      <param name="node">The node to locate.</param>
+      <returns>The zero-based index of the node within the collection, if found; otherwise, -1.</returns>
+      <remarks>
+        <p>This method performs a linear search; therefore, the average execution time is proportional to Count.</p>
+      </remarks>
+    </member>
+    <member name="M:Aspose.Words.NodeCollection.ToArray">
+      <summary>
+            Copies all nodes from the collection to a new array of nodes.
+            </summary>
+      <remarks>
+        <p>You should not be adding/removing nodes while iterating over a collection 
+of nodes because it invalidates the iterator and requires refreshes for live collections.</p>
+        <p>To be able to add/remove nodes during iteration, use this method to copy 
+nodes into a fixed-size array and then iterate over the array.</p>
+      </remarks>
+      <returns>An array of nodes.</returns>
+    </member>
+    <member name="M:Aspose.Words.NodeCollection.GetEnumerator">
+      <summary>
+            Provides a simple "foreach" style iteration over the collection of nodes.
+            </summary>
+      <returns>An IEnumerator.</returns>
+    </member>
+    <member name="P:Aspose.Words.NodeCollection.Item(System.Int32)">
+      <summary>
+            Retrieves a node at the given index.
+            </summary>
+      <param name="index">An index into the collection of nodes.</param>
+      <remarks>
+        <p>The index is zero-based.</p>
+        <p>Negative indexes are allowed and indicate access from the back of the collection. 
+For example -1 means the last item, -2 means the second before last and so on.</p>
+        <p>If index is greater than or equal to the number of items in the list, this returns a null reference.</p>
+        <p>If index is negative and its absolute value is greater than the number of items in the list, this returns a null reference.</p>
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.NodeCollection.Count">
+      <summary>
+            Gets the number of nodes in the collection.
+            </summary>
+    </member>
     <member name="T:Aspose.Words.Drawing.ShapeMarkupLanguage">
       <summary>
             Specifies Markup language used for the shape.
@@ -470,6 +754,126 @@ For example -1 means the last item, -2 means the second before last and so on.</
             Vector Markup Language is used to define the shape. 
             </summary>
       <remarks>A deprecated format included in Office Open XML for legacy reasons only.</remarks>
+    </member>
+    <member name="T:Aspose.Words.Fields.Expressions.NullableDouble">
+      <summary>
+            Represents a nullable double value.
+            </summary>
+    </member>
+    <member name="T:Aspose.Words.Fields.FieldArgumentBuilder">
+      <summary>
+            Builds a complex field argument consisting of fields, nodes, and plain text.
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldArgumentBuilder.#ctor">
+      <summary>
+            Initializes an instance of the <see cref="T:Aspose.Words.Fields.FieldArgumentBuilder" /> class.
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldArgumentBuilder.AddText(System.String)">
+      <summary>
+            Adds a plain text to the argument.
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldArgumentBuilder.AddNode(Aspose.Words.Inline)">
+      <summary>
+            Adds a node to the argument.
+            </summary>
+      <remarks>
+            Only text level nodes are supported at the moment.
+            </remarks>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldArgumentBuilder.AddField(Aspose.Words.Fields.FieldBuilder)">
+      <summary>
+            Adds a field represented by a <see cref="T:Aspose.Words.Fields.FieldBuilder" /> to the argument.
+            </summary>
+    </member>
+    <member name="T:Aspose.Words.Fields.FieldBuilder">
+      <summary>
+            Builds a field from field code tokens (arguments and switches).
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.#ctor(Aspose.Words.Fields.FieldType)">
+      <summary>
+            Initializes an instance of the <see cref="T:Aspose.Words.Fields.FieldBuilder" /> class.
+            </summary>
+      <param name="fieldType">The type of the field to build.</param>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.AddArgument(System.String)">
+      <summary>
+            Adds a field's argument.
+            </summary>
+      <param name="argument">The argument value.</param>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.AddArgument(System.Int32)">
+      <summary>
+            Adds a field's argument.
+            </summary>
+      <param name="argument">The argument value.</param>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.AddArgument(System.Double)">
+      <summary>
+            Adds a field's argument.
+            </summary>
+      <param name="argument">The argument value.</param>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.AddArgument(Aspose.Words.Fields.FieldBuilder)">
+      <summary>
+            Adds a child field represented by another <see cref="T:Aspose.Words.Fields.FieldBuilder" /> to the field's code.
+            </summary>
+      <remarks>
+            This overload is used when the argument consists of a single child field.
+            </remarks>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.AddArgument(Aspose.Words.Fields.FieldArgumentBuilder)">
+      <summary>
+            Adds a field's argument represented by <see cref="T:Aspose.Words.Fields.FieldArgumentBuilder" /> to the field's code.
+            </summary>
+      <remarks>
+            This overload is used when the argument consists of a mixture of different parts such as child fields, nodes, and plain text.
+            </remarks>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.AddSwitch(System.String)">
+      <summary>
+            Adds a field's switch.
+            </summary>
+      <remarks>
+            This overload adds a flag (switch without argument).
+            </remarks>
+      <param name="switchName">The switch name.</param>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.AddSwitch(System.String,System.String)">
+      <summary>
+            Adds a field's switch.
+            </summary>
+      <param name="switchName">The switch name.</param>
+      <param name="switchArgument">The switch value.</param>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.AddSwitch(System.String,System.Int32)">
+      <summary>
+            Adds a field's switch.
+            </summary>
+      <param name="switchName">The switch name.</param>
+      <param name="switchArgument">The switch value.</param>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.AddSwitch(System.String,System.Double)">
+      <summary>
+            Adds a field's switch.
+            </summary>
+      <param name="switchName">The switch name.</param>
+      <param name="switchArgument">The switch value.</param>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.BuildAndInsert(Aspose.Words.Inline)">
+      <summary>
+            Builds and inserts a field into the document before the specified inline node.
+            </summary>
+      <returns>A <see cref="T:Aspose.Words.Fields.Field" /> object that represents the inserted field.</returns>
+    </member>
+    <member name="M:Aspose.Words.Fields.FieldBuilder.BuildAndInsert(Aspose.Words.Paragraph)">
+      <summary>
+            Builds and inserts a field into the document to the end of the specified paragraph.
+            </summary>
+      <returns>A <see cref="T:Aspose.Words.Fields.Field" /> object that represents the inserted field.</returns>
     </member>
     <member name="T:Aspose.Words.Fields.Field">
       <summary>
@@ -628,6 +1032,26 @@ For example -1 means the last item, -2 means the second before last and so on.</
             Whether to fix the check digit if it’s invalid.
             </summary>
     </member>
+    <member name="P:Aspose.Words.Fields.BarcodeParameters.PostalAddress">
+      <summary>
+            Barcode postal address.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Fields.BarcodeParameters.IsBookmark">
+      <summary>
+            Whether <see cref="P:Aspose.Words.Fields.BarcodeParameters.PostalAddress" /> is the name of a bookmark.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Fields.BarcodeParameters.FacingIdentificationMark">
+      <summary>
+            Type of a Facing Identification Mark (FIM).
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Fields.BarcodeParameters.IsUSPostalAddress">
+      <summary>
+            Whether <see cref="P:Aspose.Words.Fields.BarcodeParameters.PostalAddress" /> is a U.S. postal address.
+            </summary>
+    </member>
     <member name="T:Aspose.Words.Fields.FieldMergeBarcode">
       <summary>
             Implements the MERGEBARCODE field.
@@ -784,10 +1208,150 @@ For example -1 means the last item, -2 means the second before last and so on.</
     </member>
     <member name="M:Aspose.Words.Fields.IBarcodeGenerator.GetBarcodeImage(Aspose.Words.Fields.BarcodeParameters)">
       <summary>
-            Generate barcode image using the set of parameters.
+            Generate barcode image using the set of parameters (for DisplayBarcode field).
             </summary>
       <param name="parameters">The set of parameters</param>
       <returns>Image representing generated barcode.</returns>
+    </member>
+    <member name="M:Aspose.Words.Fields.IBarcodeGenerator.GetOldBarcodeImage(Aspose.Words.Fields.BarcodeParameters)">
+      <summary>
+            Generate barcode image using the set of parameters (for old-fashioned Barcode field).
+            </summary>
+      <param name="parameters">The set of parameters</param>
+      <returns>Image representing generated barcode.</returns>
+    </member>
+    <member name="T:Aspose.Words.MailMerging.MailMergeRegionInfo">
+      <summary>
+            Contains information about a mail merge region.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.MailMerging.MailMergeRegionInfo.Regions">
+      <summary>
+            Returns a list of child regions.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.MailMerging.MailMergeRegionInfo.Fields">
+      <summary>
+            Returns a list of child merge fields.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.MailMerging.MailMergeRegionInfo.Name">
+      <summary>
+            Returns the name of region.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.MailMerging.MailMergeRegionInfo.StartField">
+      <summary>
+            Returns a start field for the region.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.MailMerging.MailMergeRegionInfo.EndField">
+      <summary>
+            Returns an end field for the region.
+            </summary>
+    </member>
+    <member name="T:Aspose.Words.MailMerging.IMailMergeCallback">
+      <summary>
+            Implement this interface if you want to receive notifications while mail merge is performed. 
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.MailMerging.IMailMergeCallback.TagsReplaced">
+      <summary>
+            Called when "mustache" text tags are replaced with MERGEFIELD fields.
+            </summary>
+      <seealso cref="P:Aspose.Words.MailMerging.MailMerge.UseNonMergeFields" />
+    </member>
+    <member name="T:Aspose.Words.Saving.IPageSavingCallback">
+      <summary>
+            Implement this interface if you want to control how Aspose.Words saves separate pages when 
+            saving a document to fixed page formats.
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.Saving.IPageSavingCallback.PageSaving(Aspose.Words.Saving.PageSavingArgs)">
+      <summary>
+            Called when Aspose.Words saves a separate page to fixed page formats.
+            </summary>
+    </member>
+    <member name="T:Aspose.Words.Saving.PageSavingArgs">
+      <summary>
+            Provides data for the <see cref="M:Aspose.Words.Saving.IPageSavingCallback.PageSaving(Aspose.Words.Saving.PageSavingArgs)" /> event.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Saving.PageSavingArgs.PageStream">
+      <summary>
+            Allows to specify the stream where the document page will be saved to.
+            </summary>
+      <remarks>
+        <para>This property allows you to save document pages to streams instead of files.</para>
+        <para>The default value is <c>null</c>. When this property is <c>null</c>, the document page 
+            will be saved to a file specified in the <see cref="P:Aspose.Words.Saving.PageSavingArgs.PageFileName" /> property.</para>
+        <para>If both PageStream and PageFileName are set, then PageStream will be used.</para>
+        <seealso cref="P:Aspose.Words.Saving.PageSavingArgs.PageFileName" />
+        <seealso cref="P:Aspose.Words.Saving.PageSavingArgs.KeepPageStreamOpen" />
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.Saving.PageSavingArgs.KeepPageStreamOpen">
+      <summary>
+            Specifies whether Aspose.Words should keep the stream open or close it after saving a document page.
+            </summary>
+      <remarks>
+        <para>Default is <c>false</c> and Aspose.Words will close the stream you provided
+            in the <see cref="P:Aspose.Words.Saving.PageSavingArgs.PageStream" /> property after writing a document page into it.
+            Specify <c>true</c> to keep the stream open.</para>
+        <seealso cref="P:Aspose.Words.Saving.PageSavingArgs.PageStream" />
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.Saving.PageSavingArgs.PageFileName">
+      <summary>
+            Gets or sets the file name where the document page will be saved to.
+            </summary>
+      <remarks>
+            If not specified then page file name and path will be generated automatically using original file name.
+            </remarks>
+    </member>
+    <member name="P:Aspose.Words.Saving.PageSavingArgs.PageIndex">
+      <summary>
+            Current page index.
+            </summary>
+    </member>
+    <member name="T:Aspose.Words.Settings.HyphenationOptions">
+      <summary>
+            Allows to configure document hyphenation options.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Settings.HyphenationOptions.AutoHyphenation">
+      <summary>
+            Gets or sets value determining whether automatic hyphenation is turned on for the document.
+            Default value for this property is <b>false</b>.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Settings.HyphenationOptions.ConsecutiveHyphenLimit">
+      <summary>
+            Gets or sets the maximum number of consecutive lines that can end with hyphens.
+            Default value for this property is 0.
+            </summary>
+      <remarks>
+        <p>If value of this property is set to 0, any number of consecutive lines can end with hyphens.</p>
+        <p>The property does not have effect when saving to fixed page formats e.g. PDF.</p>
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.Settings.HyphenationOptions.HyphenationZone">
+      <summary>        
+            Gets or sets the distance in 1/20 of a point from the right margin within which you do not want
+            to hyphenate words.
+            Default value for this property is 360 (0.25 inch).
+            </summary>
+      <dev>
+            MS Word does not hyphenate words starting inside the hyphenation zone. 
+            A smaller zone reduces the raggedness of the right margin, but more words may require hyphens. 
+            A larger zone increases the raggedness of the right margin, but fewer words may require hyphens.
+            </dev>
+    </member>
+    <member name="P:Aspose.Words.Settings.HyphenationOptions.HyphenateCaps">
+      <summary>
+            Gets or sets value determining whether words written in all capital letters are hyphenated.
+            Default value for this property is <b>true</b>.
+            </summary>
     </member>
     <member name="T:Aspose.Words.Saving.ColorMode">
       <summary>
@@ -829,6 +1393,115 @@ For example -1 means the last item, -2 means the second before last and so on.</
         <para>The <b>Aspose.Words.Themes</b> namespace provides classes that allow to access theme information in Microsoft Word documents.</para>
         <para>A document theme can specify fonts and colors to be used in a document. Themes are supported in Word 2007 and higher.</para>
       </summary>
+    </member>
+    <member name="T:Aspose.Words.Rendering.NodeRendererBase">
+      <summary>
+            Base class for <see cref="T:Aspose.Words.Rendering.ShapeRenderer" /> and <see cref="T:Aspose.Words.Rendering.OfficeMathRenderer" />.
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.Rendering.NodeRendererBase.GetSizeInPixels(System.Single,System.Single)">
+      <summary>
+            Calculates the size of the shape in pixels for a specified zoom factor and resolution.
+            </summary>
+      <remarks>
+        <para>This method converts <see cref="P:Aspose.Words.Rendering.NodeRendererBase.SizeInPoints" /> into size in pixels and it is useful
+            when you want to create a bitmap for rendering the shape neatly onto the bitmap.</para>
+      </remarks>
+      <param name="scale">The zoom factor (1.0 is 100%).</param>
+      <param name="dpi">The resolution to convert from points to pixels (dots per inch).</param>
+      <returns>The size of the shape in pixels.</returns>
+    </member>
+    <member name="M:Aspose.Words.Rendering.NodeRendererBase.GetBoundsInPixels(System.Single,System.Single)">
+      <summary>
+            Calculates the bounds of the shape in pixels for a specified zoom factor and resolution.
+            </summary>
+      <remarks>
+        <para>This method converts <see cref="P:Aspose.Words.Rendering.NodeRendererBase.BoundsInPoints" /> into rectangle in pixels.</para>
+      </remarks>
+      <param name="scale">The zoom factor (1.0 is 100%).</param>
+      <param name="dpi">The resolution to convert from points to pixels (dots per inch).</param>
+      <returns>The actual (as rendered on the page) bounding box of the shape in pixels.</returns>
+    </member>
+    <member name="M:Aspose.Words.Rendering.NodeRendererBase.GetOpaqueBoundsInPixels(System.Single,System.Single)">
+      <summary>
+            Calculates the opaque bounds of the shape in pixels for a specified zoom factor and resolution.
+            </summary>
+      <remarks>
+        <para>This method converts <see cref="P:Aspose.Words.Rendering.NodeRendererBase.OpaqueBoundsInPoints" /> into rectangle in pixels and it is useful
+            when you want to create a bitmap for rendering the shape with only opaque part of the shape.</para>
+      </remarks>
+      <param name="scale">The zoom factor (1.0 is 100%).</param>
+      <param name="dpi">The resolution to convert from points to pixels (dots per inch).</param>
+      <returns>The opaque rectangle of the shape in pixels.</returns>
+    </member>
+    <member name="M:Aspose.Words.Rendering.NodeRendererBase.RenderToScale(System.Drawing.Graphics,System.Single,System.Single,System.Single)">
+      <summary>
+            Renders the shape into a <see cref="T:System.Drawing.Graphics" />
+             object to a specified scale.
+            </summary>
+      <param name="graphics">The object where to render to.</param>
+      <param name="x">The X coordinate (in world units) of the top left corner of the rendered shape.</param>
+      <param name="y">The Y coordinate (in world units) of the top left corner of the rendered shape.</param>
+      <param name="scale">The scale for rendering the shape (1.0 is 100%).</param>
+      <returns>The width and height (in world units) of the rendered shape.</returns>
+    </member>
+    <member name="M:Aspose.Words.Rendering.NodeRendererBase.RenderToSize(System.Drawing.Graphics,System.Single,System.Single,System.Single,System.Single)">
+      <summary>
+            Renders the shape into a <see cref="T:System.Drawing.Graphics" />
+             object to a specified size.
+            </summary>
+      <param name="graphics">The object where to render to.</param>
+      <param name="x">The X coordinate (in world units) of the top left corner of the rendered shape.</param>
+      <param name="y">The Y coordinate (in world units) of the top left corner of the rendered shape.</param>
+      <param name="width">The maximum width (in world units) that can be occupied by the rendered shape.</param>
+      <param name="height">The maximum height (in world units) that can be occupied by the rendered shape.</param>
+      <returns>The scale that was automatically calculated for the rendered shape to fit the specified size.</returns>
+    </member>
+    <member name="M:Aspose.Words.Rendering.NodeRendererBase.Save(System.String,Aspose.Words.Saving.ImageSaveOptions)">
+      <overloads>Renders the shape and saves into an image.</overloads>
+      <summary>
+            Renders the shape into an image and saves into a file.
+            </summary>
+      <param name="fileName">The name for the image file. If a file with the specified name already exists, the existing file is overwritten.</param>
+      <param name="saveOptions">Specifies the options that control how the shape is rendered and saved. Can be null.</param>
+    </member>
+    <member name="M:Aspose.Words.Rendering.NodeRendererBase.Save(System.IO.Stream,Aspose.Words.Saving.ImageSaveOptions)">
+      <summary>
+            Renders the shape into an image and saves into a stream.
+            </summary>
+      <param name="stream">The stream where to save the image of the shape.</param>
+      <param name="saveOptions">Specifies the options that control how the shape is rendered and saved. Can be null.
+            If this is null, the image will be saved in the PNG format.</param>
+    </member>
+    <member name="P:Aspose.Words.Rendering.NodeRendererBase.SizeInPoints">
+      <summary>
+            Gets the actual size of the shape in points.
+            </summary>
+      <remarks>
+        <para>This property returns the size of the actual (as rendered on the page) bounding box of the shape.
+            The size takes into account shape rotation (if any).</para>
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.Rendering.NodeRendererBase.OpaqueBoundsInPoints">
+      <summary>
+            Gets the opaque bounds of the shape in points.
+            </summary>
+      <remarks>
+        <para>This property returns the opaque (i.e. transparent parts of the shape are ignored) bounding box of the shape.
+            The bounds takes the shape rotation into account.</para>
+      </remarks>
+    </member>
+    <member name="T:Aspose.Words.Rendering.OfficeMathRenderer">
+      <summary>
+            Provides methods to render an individual <see cref="T:Aspose.Words.Math.OfficeMath" />
+            to a raster or vector image or to a Graphics object.
+            </summary>
+    </member>
+    <member name="M:Aspose.Words.Rendering.OfficeMathRenderer.#ctor(Aspose.Words.Math.OfficeMath)">
+      <summary>
+            Initializes a new instance of this class.
+            </summary>
+      <param name="math">The OfficeMath object that you want to render.</param>
     </member>
     <member name="T:Aspose.Words.CompositeNode">
       <summary>
@@ -1650,6 +2323,9 @@ The imported node can then be inserted into the current document.</p>
             </summary>
       <param name="specialChar">The object that is being visited.</param>
       <returns>A <see cref="T:Aspose.Words.VisitorAction" /> value that specifies how to continue the enumeration.</returns>
+      <remarks>
+            This method is not be called for generic control characters (see <see cref="T:Aspose.Words.ControlChar" />) that can be present in the document.
+            </remarks>
     </member>
     <member name="M:Aspose.Words.DocumentVisitor.VisitAbsolutePositionTab(Aspose.Words.AbsolutePositionTab)">
       <summary>
@@ -2306,6 +2982,13 @@ call <see cref="M:Aspose.Words.BuildingBlocks.BuildingBlock.Accept(Aspose.Words.
             Gets or sets width of revision bars, points.
             </summary>
     </member>
+    <member name="P:Aspose.Words.Layout.RevisionOptions.CommentColor">
+      <summary>
+            Allows to specify the color to be used for comments.
+            Default value for this property is <see cref="F:Aspose.Words.Layout.RevisionColor.Red" />.
+            <remarks> If set this property  to <see cref="F:Aspose.Words.Layout.RevisionColor.ByAuthor" /> or <see cref="F:Aspose.Words.Layout.RevisionColor.NoHighlight" /> values,
+             as the result this property will be set to default color.</remarks></summary>
+    </member>
     <member name="T:Aspose.Words.Layout.LayoutOptions">
       <summary>
             Holds the options that allow controlling the document layout process.
@@ -2441,6 +3124,9 @@ call <see cref="M:Aspose.Words.BuildingBlocks.BuildingBlock.Accept(Aspose.Words.
         <para>When you no longer need to collect layout information, it is best to set the <see cref="P:Aspose.Words.Layout.LayoutCollector.Document" /> property to null
             to avoid unnecessary collection of more layout mappings.</para>
       </remarks>
+      <dev>
+            !!! DO NOT USE THIS CLASS INTERNALLY IN AW. CONTACT LAYOUT TEAM FOR YOUR CUSTOM SOLUTION FIRST !!!
+            </dev>
     </member>
     <member name="M:Aspose.Words.Layout.LayoutCollector.#ctor(Aspose.Words.Document)">
       <summary>
@@ -2504,6 +3190,9 @@ call <see cref="M:Aspose.Words.BuildingBlocks.BuildingBlock.Accept(Aspose.Words.
             as well as overall structure and relationships.
             Use combination of <see cref="M:Aspose.Words.Layout.LayoutCollector.GetEntity(Aspose.Words.Node)" /> and <see cref="P:Aspose.Words.Layout.LayoutEnumerator.Current" /> move to the entity which corresponds to a document node.
             </summary>
+      <dev>
+            !!! DO NOT USE THIS CLASS INTERNALLY IN AW. CONTACT LAYOUT TEAM FOR YOUR CUSTOM SOLUTION FIRST !!!
+            </dev>
     </member>
     <member name="M:Aspose.Words.Layout.LayoutEnumerator.#ctor(Aspose.Words.Document)">
       <summary>
@@ -4135,12 +4824,17 @@ For example -1 means the last item, -2 means the second before last and so on.</
     </member>
     <member name="F:Aspose.Words.Saving.DmlRenderingMode.Fallback">
       <summary>
-            If fallback shape is available for DrawingML, Aspose.Words renders fallback shape instead of the DrawingML.
+            If fall-back shape is available for DrawingML, Aspose.Words renders fall-back shape instead of the DrawingML.
             </summary>
+      <remarks>
+            Please note that after saving a document to a fixed page format with fall-back DML rendering mode,
+            DML shapes in the AW document model are permanently replaced with their fall-back counterparts.
+            As a result, saving the same document again will always use fall-back shapes, even if DmlRenderingMode is set to DrawingML.
+            </remarks>
     </member>
     <member name="F:Aspose.Words.Saving.DmlRenderingMode.DrawingML">
       <summary>
-            Aspose.Words ignores fallback shape of DrawingML and renders DrawingML itself.
+            Aspose.Words ignores fall-back shape of DrawingML and renders DrawingML itself.
             This is the default mode.
             </summary>
     </member>
@@ -4304,9 +4998,9 @@ For example -1 means the last item, -2 means the second before last and so on.</
             </para>
         <para>This property is used when the document is exported to the following formats: 
             <see cref="F:Aspose.Words.SaveFormat.Tiff" />, <see cref="F:Aspose.Words.SaveFormat.Png" />, <see cref="F:Aspose.Words.SaveFormat.Bmp" />, 
-            <see cref="F:Aspose.Words.SaveFormat.Jpeg" />. When the document is exported to the <see cref="F:Aspose.Words.SaveFormat.Html" />,
-            <see cref="F:Aspose.Words.SaveFormat.Mhtml" /> and <see cref="F:Aspose.Words.SaveFormat.Epub" /> formats this option is used
-            for raster images.</para>
+            <see cref="F:Aspose.Words.SaveFormat.Jpeg" />, <see cref="F:Aspose.Words.SaveFormat.Emf" />. When the document is exported to the 
+            <see cref="F:Aspose.Words.SaveFormat.Html" />, <see cref="F:Aspose.Words.SaveFormat.Mhtml" /> and <see cref="F:Aspose.Words.SaveFormat.Epub" /> 
+            formats this option is used for raster images.</para>
       </remarks>
     </member>
     <member name="P:Aspose.Words.Saving.SaveOptions.UseHighQualityRendering">
@@ -4317,7 +5011,7 @@ For example -1 means the last item, -2 means the second before last and so on.</
             The default value is <c>false</c>.
             <para>This property is used when the document is exported to image formats: 
             <see cref="F:Aspose.Words.SaveFormat.Tiff" />, <see cref="F:Aspose.Words.SaveFormat.Png" />, <see cref="F:Aspose.Words.SaveFormat.Bmp" />, 
-            <see cref="F:Aspose.Words.SaveFormat.Jpeg" />.</para></remarks>
+            <see cref="F:Aspose.Words.SaveFormat.Jpeg" />, <see cref="F:Aspose.Words.SaveFormat.Emf" />.</para></remarks>
     </member>
     <member name="P:Aspose.Words.Saving.SaveOptions.UpdateSdtContent">
       <summary>
@@ -4372,6 +5066,11 @@ For example -1 means the last item, -2 means the second before last and so on.</
     <member name="M:Aspose.Words.Saving.PsSaveOptions.#ctor">
       <summary>
             Initializes a new instance of this class that can be used to save a document in the <see cref="F:Aspose.Words.SaveFormat.Ps" /> format.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Saving.PsSaveOptions.PageSavingCallback">
+      <summary>
+            Allows to control how separate pages are saved when a document is exported to post script format.
             </summary>
     </member>
     <member name="P:Aspose.Words.Saving.PsSaveOptions.NumeralFormat">
@@ -4720,10 +5419,21 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
             Allows to control how resources (images, fonts and css) are saved when a document is exported to fixed page Html format.
             </summary>
     </member>
+    <member name="P:Aspose.Words.Saving.HtmlFixedSaveOptions.PageSavingCallback">
+      <summary>
+            Allows to control how separate pages are saved when a document is exported to fixed page Html format.
+            </summary>
+    </member>
     <member name="P:Aspose.Words.Saving.HtmlFixedSaveOptions.Encoding">
       <summary>
             Specifies the encoding to use when exporting to HTML.
             Default value is <c>new UTF8Encoding(true)</c> (UTF-8 with BOM).
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Saving.HtmlFixedSaveOptions.ExportFormFields">
+      <summary>
+            Gets or sets indication of whether form fields are exported as interactive
+            items (as 'input' tag) rather than converted to text or graphics.
             </summary>
     </member>
     <member name="T:Aspose.Words.Saving.BookmarksOutlineLevelCollection">
@@ -4970,6 +5680,19 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
     <member name="F:Aspose.Words.Tables.TextWrapping.Default">
       <summary>
             Default value.
+            </summary>
+    </member>
+    <member name="T:Aspose.Words.RW.Doc.DocVariableNameComparer">
+      <summary>
+            Sorts variable names for binary DOC format.
+            </summary>
+      <remarks>
+            AM. According to my test Word uses very strange sort order so I prefer to move this into separate comparer.
+            </remarks>
+    </member>
+    <member name="F:Aspose.Words.RW.Doc.DocVariableNameComparer.Default">
+      <summary>
+            Do not create instances of this class. Use this instance instead.
             </summary>
     </member>
     <member name="T:Aspose.Words.SubDocument">
@@ -5412,6 +6135,64 @@ For example -1 means the last item, -2 means the second before last and so on.</
             Fits the bounding box (rectangle containing all visible elements on the page).
             </summary>
     </member>
+    <member name="T:Aspose.Words.Drawing.SignatureLine">
+      <summary>
+            Provides access to signature line properties.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.SignatureLine.Signer">
+      <summary>
+            Gets or sets suggested signer of the signature line.
+            Default value for this property is <see cref="F:System.String.Empty" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.SignatureLine.SignerTitle">
+      <summary>
+            Gets or sets suggested signer's title (for example, Manager).
+            Default value for this property is <see cref="F:System.String.Empty" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.SignatureLine.Email">
+      <summary>
+            Gets or sets suggested signer's e-mail address. 
+            Default value for this property is <see cref="F:System.String.Empty" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.SignatureLine.DefaultInstructions">
+      <summary>
+            Gets or sets a value indicating that default instructions is shown in the Sign dialog.
+            Default value for this property is <b>true</b>.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.SignatureLine.Instructions">
+      <summary>
+            Gets or sets instructions to the signer that are displayed on signing the signature line.
+            This property is ignored if <see cref="P:Aspose.Words.Drawing.SignatureLine.DefaultInstructions" /> is set.
+            Default value for this property is <see cref="F:System.String.Empty" />.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.SignatureLine.AllowComments">
+      <summary>
+            Gets or sets a value indicating that the signer can add comments in the Sign dialog.
+            Default value for this property is <b>false</b>.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.SignatureLine.ShowDate">
+      <summary>
+            Gets or sets a value indicating that sign date is shown in the signature line.
+            Default value for this property is <b>true</b>.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.SignatureLine.IsSigned">
+      <summary>
+            Indicates that signature line is signed by digital signature.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.SignatureLine.IsValid">
+      <summary>
+            Indicates that signature line is signed by digital signature and this digital signature is valid.
+            </summary>
+    </member>
     <member name="T:Aspose.Words.FileFormatInfo">
       <summary>
             Contains data returned by <see cref="T:Aspose.Words.FileFormatUtil" /> document format detection methods.
@@ -5577,6 +6358,17 @@ For example -1 means the last item, -2 means the second before last and so on.</
         <para>This property is used only when loading plain text documents.</para>
         <para> If set to true,  lists recognition algorithm allows list numbers to end with either dot or whitespace character.</para>
         <para>If this option is set to false then the list item is only recognized as such if the leading number is ending with dot "." symbol.</para>
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.LoadOptions.FontSettings">
+      <summary>
+            Allows to specify document font settings.
+            </summary>
+      <remarks>
+        <para>When loading some formats, Aspose.Words may require to resolve the fonts. For example, when loading HTML documents Aspose.Words 
+            may resolve the fonts to perform font fallback.</para>
+        <para>If set to null, default static font settings <see cref="P:Aspose.Words.Fonts.FontSettings.DefaultInstance" /> will be used.</para>
+        <para>The default value is null.</para>
       </remarks>
     </member>
     <member name="T:Aspose.Words.WarningInfo">
@@ -5767,6 +6559,11 @@ For example -1 means the last item, -2 means the second before last and so on.</
     <member name="F:Aspose.Words.WarningSource.Svm">
       <summary>
             Module that reads Svm files.
+            </summary>
+    </member>
+    <member name="F:Aspose.Words.WarningSource.MathML">
+      <summary>
+            Module that reads W3C MathML files.
             </summary>
     </member>
     <member name="T:Aspose.Words.WarningType">
@@ -7591,6 +8388,15 @@ For example -1 means the last item, -2 means the second before last and so on.</
             </summary>
       <param name="priority">Font source priority. See the <see cref="P:Aspose.Words.Fonts.FontSourceBase.Priority" /> property description for more information.</param>
     </member>
+    <member name="M:Aspose.Words.Fonts.SystemFontSource.GetSystemFontFolders">
+      <summary>
+            Returns system font folders or empty array if folders are not accessible.
+            </summary>
+      <remarks>
+            On some platforms Aspose.Words could search system fonts not only through folders but in other sources too. For example, on Windows platform
+            Aspose.Words search fonts also in the registry.
+            </remarks>
+    </member>
     <member name="P:Aspose.Words.Fonts.SystemFontSource.Type">
       <summary>
             Returns the type of the font source.
@@ -8412,6 +9218,16 @@ Accepts a visitor.
             Calls <see cref="M:Aspose.Words.DocumentVisitor.VisitOfficeMathStart(Aspose.Words.Math.OfficeMath)" />, then calls <see cref="M:Aspose.Words.Node.Accept(Aspose.Words.DocumentVisitor)" /> for all
             child nodes of the Office Math and calls <see cref="M:Aspose.Words.DocumentVisitor.VisitOfficeMathEnd(Aspose.Words.Math.OfficeMath)" /> at the end.
             </remarks>
+    </member>
+    <member name="M:Aspose.Words.Math.OfficeMath.GetMathRenderer">
+      <summary>
+            Creates and returns an object that can be used to render this equation into an image.
+            </summary>
+      <remarks>
+        <para>This method just invokes the <see cref="T:Aspose.Words.Rendering.OfficeMathRenderer" /> constructor and passes 
+            this object as a parameter.</para>
+      </remarks>
+      <returns>The renderer object for this equation.</returns>
     </member>
     <member name="P:Aspose.Words.Math.OfficeMath.NodeType">
       <summary>
@@ -9476,140 +10292,6 @@ call <see cref="M:Aspose.Words.BuildingBlocks.BuildingBlock.Accept(Aspose.Words.
         <seealso cref="T:Aspose.Words.BuildingBlocks.BuildingBlock" />
       </remarks>
     </member>
-    <member name="T:Aspose.Words.NodeCollection">
-      <summary>
-             Represents a collection of nodes of a specific type.
-             </summary>
-      <remarks>
-        <p>
-          <b>NodeCollection</b> does not own the nodes it contains, rather, is just a selection of nodes
-             of the specified type, but the nodes are stored in the tree under their respective parent nodes.</p>
-        <p>
-          <b>NodeCollection</b> supports indexed access, iteration and provides add and remove methods.</p>
-        <p>The <b>NodeCollection</b> collection is "live", i.e. changes to the children of the node object
-             that it was created from are immediately reflected in the nodes returned by the <b>NodeCollection</b>
-             properties and methods.</p>
-        <p>
-          <b>NodeCollection</b> is returned by <see cref="M:Aspose.Words.CompositeNode.GetChildNodes(Aspose.Words.NodeType,System.Boolean)" />
-             and also serves as a base class for typed node collections such as <see cref="T:Aspose.Words.SectionCollection" />,
-             <see cref="T:Aspose.Words.ParagraphCollection" /> etc.</p>
-        <p>
-          <b>NodeCollection</b> can be "flat" and contain only immediate children of the node it was created
-             from, or it can be "deep" and contain all descendant children.</p>
-      </remarks>
-    </member>
-    <member name="M:Aspose.Words.NodeCollection.Add(Aspose.Words.Node)">
-      <summary>
-            Adds a node to the end of the collection.
-            </summary>
-      <remarks>
-        <p>The node is inserted as a child into the node object from which the collection was created.</p>
-      </remarks>
-      <remarks>
-        <p>If the newChild is already in the tree, it is first removed.</p>
-        <p>If the node being inserted was created from another document, you should use 
-<see cref="M:Aspose.Words.DocumentBase.ImportNode(Aspose.Words.Node,System.Boolean,Aspose.Words.ImportFormatMode)" /> to import the node to the current document. 
-The imported node can then be inserted into the current document.</p>
-      </remarks>
-      <param name="node">The node to be added to the end of the collection.</param>
-      <exception cref="T:System.NotSupportedException">The <b>NodeCollection</b> is a "deep" collection.</exception>
-    </member>
-    <member name="M:Aspose.Words.NodeCollection.Insert(System.Int32,Aspose.Words.Node)">
-      <summary>
-            Inserts a node into the collection at the specified index.
-            </summary>
-      <remarks>
-        <p>The node is inserted as a child into the node object from which the collection was created.</p>
-        <p>If the index is equal to or greater than Count, the node is added at the end of the collection.</p>
-        <p>If the index is negative and its absolute value is greater than Count, the node is added at the end of the collection.</p>
-      </remarks>
-      <remarks>
-        <p>If the newChild is already in the tree, it is first removed.</p>
-        <p>If the node being inserted was created from another document, you should use 
-<see cref="M:Aspose.Words.DocumentBase.ImportNode(Aspose.Words.Node,System.Boolean,Aspose.Words.ImportFormatMode)" /> to import the node to the current document. 
-The imported node can then be inserted into the current document.</p>
-      </remarks>
-      <param name="index">The zero-based index of the node.
-            Negative indexes are allowed and indicate access from the back of the list.
-            For example -1 means the last node, -2 means the second before last and so on.</param>
-      <param name="node">The node to insert.</param>
-      <exception cref="T:System.NotSupportedException">The <b>NodeCollection</b> is a "deep" collection.</exception>
-    </member>
-    <member name="M:Aspose.Words.NodeCollection.Remove(Aspose.Words.Node)">
-      <summary>
-            Removes the node from the collection and from the document.
-            </summary>
-      <param name="node">The node to remove.</param>
-    </member>
-    <member name="M:Aspose.Words.NodeCollection.RemoveAt(System.Int32)">
-      <summary>
-            Removes the node at the specified index from the collection and from the document.
-            </summary>
-      <param name="index">The zero-based index of the node.
-            Negative indexes are allowed and indicate access from the back of the list.
-            For example -1 means the last node, -2 means the second before last and so on.</param>
-    </member>
-    <member name="M:Aspose.Words.NodeCollection.Clear">
-      <summary>
-            Removes all nodes from this collection and from the document.
-            </summary>
-    </member>
-    <member name="M:Aspose.Words.NodeCollection.Contains(Aspose.Words.Node)">
-      <summary>
-            Determines whether a node is in the collection.
-            </summary>
-      <remarks>
-        <p>This method performs a linear search; therefore, the average execution time is proportional to Count.</p>
-      </remarks>
-      <param name="node">The node to locate.</param>
-      <returns>True if item is found in the collection; otherwise, false.</returns>
-    </member>
-    <member name="M:Aspose.Words.NodeCollection.IndexOf(Aspose.Words.Node)">
-      <summary>
-            Returns the zero-based index of the specified node.
-            </summary>
-      <param name="node">The node to locate.</param>
-      <returns>The zero-based index of the node within the collection, if found; otherwise, -1.</returns>
-      <remarks>
-        <p>This method performs a linear search; therefore, the average execution time is proportional to Count.</p>
-      </remarks>
-    </member>
-    <member name="M:Aspose.Words.NodeCollection.ToArray">
-      <summary>
-            Copies all nodes from the collection to a new array of nodes.
-            </summary>
-      <remarks>
-        <p>You should not be adding/removing nodes while iterating over a collection 
-of nodes because it invalidates the iterator and requires refreshes for live collections.</p>
-        <p>To be able to add/remove nodes during iteration, use this method to copy 
-nodes into a fixed-size array and then iterate over the array.</p>
-      </remarks>
-      <returns>An array of nodes.</returns>
-    </member>
-    <member name="M:Aspose.Words.NodeCollection.GetEnumerator">
-      <summary>
-            Provides a simple "foreach" style iteration over the collection of nodes.
-            </summary>
-      <returns>An IEnumerator.</returns>
-    </member>
-    <member name="P:Aspose.Words.NodeCollection.Item(System.Int32)">
-      <summary>
-            Retrieves a node at the given index.
-            </summary>
-      <param name="index">An index into the collection of nodes.</param>
-      <remarks>
-        <p>The index is zero-based.</p>
-        <p>Negative indexes are allowed and indicate access from the back of the collection. 
-For example -1 means the last item, -2 means the second before last and so on.</p>
-        <p>If index is greater than or equal to the number of items in the list, this returns a null reference.</p>
-        <p>If index is negative and its absolute value is greater than the number of items in the list, this returns a null reference.</p>
-      </remarks>
-    </member>
-    <member name="P:Aspose.Words.NodeCollection.Count">
-      <summary>
-            Gets the number of nodes in the collection.
-            </summary>
-    </member>
     <member name="M:Aspose.Words.BuildingBlocks.BuildingBlockCollection.ToArray">
       <summary>
             Copies all building blocks from the collection to a new array of building blocks.
@@ -10507,6 +11189,11 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
             Allows to control how resources (images) are saved when a document is exported to SVG format.
             </summary>
     </member>
+    <member name="P:Aspose.Words.Saving.SvgSaveOptions.PageSavingCallback">
+      <summary>
+            Allows to control how separate pages are saved when a document is exported to Svg format.
+            </summary>
+    </member>
     <member name="T:Aspose.Words.Saving.SvgTextOutputMode">
       <summary>
       </summary>
@@ -10608,6 +11295,11 @@ Returns true if this object was inserted in Microsoft Word while change tracking
     <member name="P:Aspose.Words.Inline.IsDeleteRevision">
       <summary>
 Returns true if this object was deleted in Microsoft Word while change tracking was enabled.
+</summary>
+    </member>
+    <member name="P:Aspose.Words.Inline.IsFormatRevision">
+      <summary>
+Returns true if formatting of the object was changed in Microsoft Word while change tracking was enabled.
 </summary>
     </member>
     <member name="M:Aspose.Words.SpecialChar.Accept(Aspose.Words.DocumentVisitor)">
@@ -11242,6 +11934,11 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
             Allows to control how resources (images and fonts) are saved when a document is exported to fixed page Xaml format.
             </summary>
     </member>
+    <member name="P:Aspose.Words.Saving.XamlFixedSaveOptions.PageSavingCallback">
+      <summary>
+            Allows to control how separate pages are saved when a document is exported to fixed page Xaml format.
+            </summary>
+    </member>
     <member name="P:Aspose.Words.Saving.XamlFixedSaveOptions.MetafileRenderingOptions">
       <summary>
             Allows to specify metafile rendering options.
@@ -11853,6 +12550,16 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
             performed. So this feature is inactive by default.</p>
       </remarks>
     </member>
+    <member name="P:Aspose.Words.Saving.HtmlSaveOptions.ExportPageMargins">
+      <summary>
+            Specifies whether page margins is exported to HTML, MHTML or EPUB.
+            Default is <c>false</c>.
+            </summary>
+      <remarks>
+            Aspose.Words does not show area of page margins by default. 
+            If any elements are completely or partially clipped by the document edge the displayed area can be extended with this option.
+            </remarks>
+    </member>
     <member name="P:Aspose.Words.Saving.HtmlSaveOptions.ExportRelativeFontSize">
       <summary>
             Specifies whether font sizes should be output in relative units when saving to HTML, MHTML or EPUB.
@@ -12412,6 +13119,14 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
       </remarks>
       <param name="visitor">The visitor that will visit the node.</param>
       <returns>False if the visitor requested the enumeration to stop.</returns>
+    </member>
+    <member name="M:Aspose.Words.Fields.FormField.RemoveField">
+      <summary>
+            Removes the complete form field, not just the form field special character.
+            </summary>
+      <remarks>
+            If there is a bookmark associated with the form field, the bookmark is not removed.
+            </remarks>
     </member>
     <member name="M:Aspose.Words.Fields.FormField.SetTextInputValue(System.Object)">
       <summary>
@@ -13581,6 +14296,11 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
             <para>This property is used when the document is exported to fixed page formats.</para><para>If <see cref="P:Aspose.Words.Saving.PdfSaveOptions.Compliance" /> is set to <see cref="F:Aspose.Words.Saving.PdfCompliance.PdfA1a" /> or <see cref="F:Aspose.Words.Saving.PdfCompliance.PdfA1b" />, 
             property always returns <see cref="F:Aspose.Words.Saving.DmlEffectsRenderingMode.None" />.</para></remarks>
     </member>
+    <member name="P:Aspose.Words.Saving.PdfSaveOptions.PageSavingCallback">
+      <summary>
+            Allows to control how separate pages are saved when a document is exported to Pdf format.
+            </summary>
+    </member>
     <member name="T:Aspose.Words.Saving.RtfSaveOptions">
       <summary>
             Can be used to specify additional options when saving a document into the <see cref="F:Aspose.Words.SaveFormat.Rtf" /> format.
@@ -13658,6 +14378,11 @@ Default is 0.
 Gets or sets the number of pages to save.
 Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the document will be rendered.
 </summary>
+    </member>
+    <member name="P:Aspose.Words.Saving.SwfSaveOptions.PageSavingCallback">
+      <summary>
+            Allows to control how separate pages are saved when a document is exported to Swf format.
+            </summary>
     </member>
     <member name="P:Aspose.Words.Saving.SwfSaveOptions.Compressed">
       <summary>
@@ -14036,6 +14761,11 @@ Default is <see cref="F:System.Int32.MaxValue" /> which means all pages of the d
       <summary>
             Initializes a new instance of this class that can be used to save a document 
             in the <see cref="F:Aspose.Words.SaveFormat.Xps" /> or <see cref="F:Aspose.Words.SaveFormat.OpenXps" /> format.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Saving.XpsSaveOptions.PageSavingCallback">
+      <summary>
+            Allows to control how separate pages are saved when a document is exported to Xps format.
             </summary>
     </member>
     <member name="P:Aspose.Words.Saving.XpsSaveOptions.SaveFormat">
@@ -15927,10 +16657,20 @@ Accepts a visitor.
         <p>
           <b>UpdateWordCount</b> recalculates and updates Characters, Words and Paragraphs
             properties in the <see cref="P:Aspose.Words.Document.BuiltInDocumentProperties" /> collection of the <b>Document</b>.</p>
-        <p>Note that <b>UpdateWordCount</b> does not update number of lines and pages properties.</p>
+        <p>Note that <b>UpdateWordCount</b> does not update number of lines and pages properties.
+            Use the <see cref="M:Aspose.Words.Document.UpdateWordCount" /> overload and pass True value as a parameter to do that.</p>
         <p>When you use an evaluation version, the evaluation watermark will also be included 
             in the word count.</p>
       </remarks>
+    </member>
+    <member name="M:Aspose.Words.Document.UpdateWordCount(System.Boolean)">
+      <summary>
+            Updates word count properties of the document, optionally updates <see cref="P:Aspose.Words.Properties.BuiltInDocumentProperties.Lines" /> property.
+            </summary>
+      <remarks>
+            This method will rebuild page layout of the document.
+            </remarks>
+      <param name="updateLinesCount">True if number of lines in the document shall be calculated.</param>
     </member>
     <member name="M:Aspose.Words.Document.UpdateTableLayout">
       <summary>
@@ -15977,6 +16717,14 @@ and automatically updates all fields in the document.</para>
         <para>This method does not update fields that are related to the page layout algorithms (e.g. PAGE, PAGES, PAGEREF).
 The page layout-related fields are updated when you render a document or call <see cref="M:Aspose.Words.Document.UpdatePageLayout" />.</para>
         <para>To update fields in a specific part of the document use <see cref="M:Aspose.Words.Range.UpdateFields" />.</para>
+      </remarks>
+    </member>
+    <member name="M:Aspose.Words.Document.InvalidateFieldTypes">
+      <summary>
+            Invalidates field types of fields in the whole document.
+            </summary>
+      <remarks>
+        <para>To invalidate field types in a specific part of the document use <see cref="M:Aspose.Words.Range.InvalidateFieldTypes" />.</para>
       </remarks>
     </member>
     <member name="M:Aspose.Words.Document.JoinRunsWithSameFormatting">
@@ -16265,7 +17013,7 @@ The page layout-related fields are updated when you render a document or call <s
     </member>
     <member name="P:Aspose.Words.Document.CompatibilityOptions">
       <summary>
-            Provides document compatibility options (that is, the user preferences entered on the <b>Compatibility</b>
+            Provides access to document compatibility options (that is, the user preferences entered on the <b>Compatibility</b>
             tab of the <b>Options</b> dialog in Word).
             </summary>
     </member>
@@ -16280,6 +17028,11 @@ The page layout-related fields are updated when you render a document or call <s
             for this document.</para>
         <para>This object is never null.</para>
       </remarks>
+    </member>
+    <member name="P:Aspose.Words.Document.HyphenationOptions">
+      <summary>
+            Provides access to document hyphenation options.
+            </summary>
     </member>
     <member name="P:Aspose.Words.Document.HasRevisions">
       <summary>
@@ -16390,6 +17143,16 @@ The page layout-related fields are updated when you render a document or call <s
             into a file or stream because saving or converting will produce a document that is different from the 
             original and the original digital signatures will no longer be valid.</para>
         <para>This collection is never null. If the document is not signed, it will contain zero elements.</para>
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.Document.FontSettings">
+      <summary>
+            Gets or sets document font settings.
+            </summary>
+      <remarks>
+        <para>This property allows to specify font settings per document. If set to null, default static font settings
+            <see cref="P:Aspose.Words.Fonts.FontSettings.DefaultInstance" /> will be used.</para>
+        <para>The default value is null.</para>
       </remarks>
     </member>
     <member name="P:Aspose.Words.Document.PageCount">
@@ -17049,9 +17812,20 @@ The page layout-related fields are updated when you render a document or call <s
     </member>
     <member name="M:Aspose.Words.DocumentBuilder.InsertOleObject(System.String,System.Boolean,System.Boolean,System.Drawing.Image)">
       <summary>
-            Inserts an embedded or linked OLE object from a file into the document.
+            Inserts an embedded or linked OLE object from a file into the document. Detects OLE object type using file extension. 
             </summary>
       <param name="fileName">Full path to the file.</param>
+      <param name="isLinked">If true then linked OLE object is inserted otherwise embedded OLE object is inserted.</param>
+      <param name="asIcon">Specifies either Iconic or Normal mode of OLE object being inserted.</param>
+      <param name="presentation">Image presentation of OLE object. If value is null Aspose.Words will use one of the predefined images.</param>
+      <returns>Shape node containing Ole object and inserted at the current Builder position.</returns>
+    </member>
+    <member name="M:Aspose.Words.DocumentBuilder.InsertOleObject(System.String,System.String,System.Boolean,System.Boolean,System.Drawing.Image)">
+      <summary>
+            Inserts an embedded or linked OLE object from a file into the document. Detects OLE object type using given progID parameter.
+            </summary>
+      <param name="fileName">Full path to the file.</param>
+      <param name="progId">ProgId of OLE object.</param>
       <param name="isLinked">If true then linked OLE object is inserted otherwise embedded OLE object is inserted.</param>
       <param name="asIcon">Specifies either Iconic or Normal mode of OLE object being inserted.</param>
       <param name="presentation">Image presentation of OLE object. If value is null Aspose.Words will use one of the predefined images.</param>
@@ -17112,6 +17886,29 @@ The page layout-related fields are updated when you render a document or call <s
       <param name="width">The width of the image in points. Can be a negative value to request 100% scale.</param>
       <param name="height">The height if the image in points. Can be a negative value to request 100% scale.</param>
       <returns>The image node that was just inserted.</returns>
+      <remarks>
+        <p>You can change the image size, location, positioning method and other settings using the 
+<see cref="T:Aspose.Words.Drawing.Shape" /> object returned by this method.</p>
+      </remarks>
+    </member>
+    <member name="M:Aspose.Words.DocumentBuilder.InsertSignatureLine(Aspose.Words.SignatureLineOptions)">
+      <summary>
+            Inserts a signature line at the current position.
+            </summary>
+      <param name="signatureLineOptions">The object that stores parameters of creating signature line.</param>
+      <returns>The signature line node that was just inserted.</returns>
+    </member>
+    <member name="M:Aspose.Words.DocumentBuilder.InsertSignatureLine(Aspose.Words.SignatureLineOptions,Aspose.Words.Drawing.RelativeHorizontalPosition,System.Double,Aspose.Words.Drawing.RelativeVerticalPosition,System.Double,Aspose.Words.Drawing.WrapType)">
+      <summary>
+            Inserts a signature line at the specified position.
+            </summary>
+      <param name="signatureLineOptions">The object that stores parameters of creating signature line.</param>
+      <param name="horzPos">Specifies where the distance to the signature line is measured from.</param>
+      <param name="left">Distance in points from the origin to the left side of the signature line.</param>
+      <param name="vertPos">Specifies where the distance to the signature line measured from.</param>
+      <param name="top">Distance in points from the origin to the top side of the signature line.</param>
+      <param name="wrapType">Specifies how to wrap text around the signature line.</param>
+      <returns>The signature line node that was just inserted.</returns>
       <remarks>
         <p>You can change the image size, location, positioning method and other settings using the 
 <see cref="T:Aspose.Words.Drawing.Shape" /> object returned by this method.</p>
@@ -17721,6 +18518,12 @@ The page layout-related fields are updated when you render a document or call <s
       <summary>
             Gets or sets the character set for the font.
             </summary>
+      <dev>
+            Such charset code is replaced by IANA name of character set in ISO/IEC 29500.
+            We may not know charset codes for some IANA charset names. Also there may be unknown charset codes.
+            For example AW test documents contain the undocumented 0x4E and 0x50 codes. 
+            So, now we store the both: charset codes and charset IANA names to be able to write charset as it was read.
+            </dev>
     </member>
     <member name="P:Aspose.Words.Fonts.FontInfo.Panose">
       <summary>
@@ -17772,7 +18575,7 @@ The page layout-related fields are updated when you render a document or call <s
             Microsoft Word 97 - 2007 Template.
             </summary>
     </member>
-    <member name="F:Aspose.Words.LoadFormat.DocPreWord97">
+    <member name="F:Aspose.Words.LoadFormat.DocPreWord60">
       <summary>
             The document is in the Word 6 or Word 95 format.
             Aspose.Words does not currently support loading such documents.
@@ -19109,6 +19912,11 @@ The page layout-related fields are updated when you render a document or call <s
             Converts a value from the local coordinate space into the coordinate space of the parent shape.
             </summary>
     </member>
+    <member name="M:Aspose.Words.Drawing.ShapeBase.AdjustWithEffects(System.Drawing.RectangleF)">
+      <summary>
+            Adds to the source rectangle values of the effect extent and returns the final rectangle.
+            </summary>
+    </member>
     <member name="P:Aspose.Words.Drawing.ShapeBase.ScreenTip">
       <summary>
             Defines the text displayed when the mouse pointer moves over the shape. 
@@ -19146,6 +19954,15 @@ The page layout-related fields are updated when you render a document or call <s
             </summary>
       <remarks>
         <p>The default value is an empty string.</p>
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.Drawing.ShapeBase.Title">
+      <summary>
+            Gets or sets the title (caption) of the current shape object.
+            </summary>
+      <remarks>
+        <para>Default is empty string.</para>
+        <para>Cannot be null, but can be an empty string.</para>
       </remarks>
     </member>
     <member name="P:Aspose.Words.Drawing.ShapeBase.Name">
@@ -19211,6 +20028,15 @@ Returns true if this object was deleted in Microsoft Word while change tracking 
         <p>This property affects behavior of the shape's anchor in Microsoft Word.
             When the anchor is not locked, moving the shape in Microsoft Word can move
             the shape's anchor too.</p>
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.Drawing.ShapeBase.AspectRatioLocked">
+      <summary>
+            Specifies whether the shape's aspect ratio is locked.
+            </summary>
+      <remarks>
+        <p>The default value is <b>false</b>.</p>
+        <p>Has effect for top level shapes only.</p>
       </remarks>
     </member>
     <member name="P:Aspose.Words.Drawing.ShapeBase.AllowOverlap">
@@ -20092,6 +20918,11 @@ stretched to fit the shape.</p>
             Gets the file extension suggested for the current embedded object if you want to save it into a file.
             </summary>
     </member>
+    <member name="P:Aspose.Words.Drawing.OleFormat.SuggestedFileName">
+      <summary>
+            Gets the file name suggested for the current embedded object if you want to save it into a file.
+            </summary>
+    </member>
     <member name="P:Aspose.Words.Drawing.OleFormat.ProgId">
       <summary>
             Gets or sets the ProgID of the OLE object.
@@ -20157,6 +20988,11 @@ stretched to fit the shape.</p>
     <member name="P:Aspose.Words.Drawing.OleFormat.Clsid">
       <summary>
             Gets the CLSID of the OLE object.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.Drawing.OleFormat.OleControl">
+      <summary>
+            Gets <see cref="P:Aspose.Words.Drawing.OleFormat.OleControl" /> objects if this OLE object is an ActiveX control. Otherwise this property is null.
             </summary>
     </member>
     <member name="T:Aspose.Words.Drawing.RelativeHorizontalPosition">
@@ -20459,6 +21295,13 @@ false to clone only the node itself.</param>
             Gets the last paragraph in the shape. 
             </summary>
     </member>
+    <member name="P:Aspose.Words.Drawing.Shape.SignatureLine">
+      <summary>
+            Gets <see cref="P:Aspose.Words.Drawing.Shape.SignatureLine" /> object if the shape is a signature line. Returns <b>null</b> otherwise.
+            </summary>
+      <remarks>You can insert new SignatureLines into the document using <see cref="M:Aspose.Words.DocumentBuilder.InsertSignatureLine(Aspose.Words.SignatureLineOptions)" /> and 
+            <seealso cref="M:Aspose.Words.DocumentBuilder.InsertSignatureLine(Aspose.Words.SignatureLineOptions,Aspose.Words.Drawing.RelativeHorizontalPosition,System.Double,Aspose.Words.Drawing.RelativeVerticalPosition,System.Double,Aspose.Words.Drawing.WrapType)" /></remarks>
+    </member>
     <member name="P:Aspose.Words.Drawing.Shape.HasChart">
       <summary>
             Returns true if this Shape has a <see cref="P:Aspose.Words.Drawing.Shape.Chart" />.
@@ -20516,16 +21359,24 @@ false to clone only the node itself.</param>
     </member>
     <member name="T:Aspose.Words.Fonts.FontSettings">
       <summary>
-            This class provides static methods that allow to specify the location of TrueType fonts
-            that Aspose.Words will use when rendering documents to PDF, XPS, printing, imaging or 
-            embedding fonts into EPUB and other document formats that support embedded fonts.
+            Specifies font settings for a document.
             </summary>
       <remarks>
-        <para>Aspose.Words loads fonts and caches them in a static cache (e.g. shared between rendering of different documents).
-            While setting the new location for fonts is safe at any time from any thread, it is recommended that you do not
-            change the location of fonts while some documents might be in in the process of rendering. It is recommended that
-            you set the location of fonts during program startup before rendering any documents.</para>
+        <para>Aspose.Words uses font settings to resolve the fonts in the document. Fonts are resolved mostly when building document layout 
+            or rendering to fixed page formats. But when loading some formats, Aspose.Words also may require to resolve the fonts. For example, when 
+            loading HTML documents Aspose.Words may resolve the fonts to perform font fallback. So it is recommended that you set the font settings in 
+            <see cref="T:Aspose.Words.LoadOptions" /> when loading the document. Or at least before building the layout or rendering the document to the fixed-page format.</para>
+        <para>By default all documents uses single static font settings instance. It could be accessed by 
+            <see cref="P:Aspose.Words.Fonts.FontSettings.DefaultInstance" /> property.</para>
+        <para>Changing font settings is safe at any time from any thread. But it is recommended that you do not change the font settings while 
+            processing some documents which uses this settings. This can lead to the fact that the same font will be resolved differently 
+            in different parts of the document.</para>
       </remarks>
+    </member>
+    <member name="M:Aspose.Words.Fonts.FontSettings.#ctor">
+      <summary>
+            Creates new instance with default settings.
+            </summary>
     </member>
     <member name="M:Aspose.Words.Fonts.FontSettings.SetFontsFolder(System.String,System.Boolean)">
       <summary>
@@ -20577,8 +21428,6 @@ false to clone only the node itself.</param>
             Returns array containing alternative font names to be used if original font is not presented in system.
             </summary>
       <param name="originalFontName">Original font name.</param>
-      <returns>
-      </returns>
     </member>
     <member name="M:Aspose.Words.Fonts.FontSettings.SetFontSubstitutes(System.String,System.String[])">
       <summary>
@@ -20603,6 +21452,14 @@ false to clone only the node itself.</param>
         <para>The default value is 'Times New Roman'.</para>
       </remarks>
     </member>
+    <member name="P:Aspose.Words.Fonts.FontSettings.DefaultInstance">
+      <summary>
+            Static default font settings.
+            </summary>
+      <remarks>
+            This instance is used by default in a document unless <see cref="P:Aspose.Words.Document.FontSettings" /> is specified.
+            </remarks>
+    </member>
     <member name="T:Aspose.Words.Rendering.ShapeRenderer">
       <summary>
             Provides methods to render an individual <see cref="T:Aspose.Words.Drawing.Shape" /> or <see cref="T:Aspose.Words.Drawing.GroupShape" /> 
@@ -20615,86 +21472,53 @@ false to clone only the node itself.</param>
             </summary>
       <param name="shape">The DrawinML shape object that you want to render.</param>
     </member>
-    <member name="M:Aspose.Words.Rendering.ShapeRenderer.GetSizeInPixels(System.Single,System.Single)">
+    <member name="T:Aspose.Words.Drawing.Ole.Forms2OleControl">
       <summary>
-            Calculates the size of the shape in pixels for a specified zoom factor and resolution.
+            Represents Microsoft Forms 2.0 OLE control.
             </summary>
-      <remarks>
-        <para>This method converts <see cref="P:Aspose.Words.Rendering.ShapeRenderer.SizeInPoints" /> into size in pixels and it is useful
-            when you want to create a bitmap for rendering the shape neatly onto the bitmap.</para>
-      </remarks>
-      <param name="scale">The zoom factor (1.0 is 100%).</param>
-      <param name="dpi">The resolution to convert from points to pixels (dots per inch).</param>
-      <returns>The size of the shape in pixels.</returns>
     </member>
-    <member name="M:Aspose.Words.Rendering.ShapeRenderer.GetOpaqueRectangleInPixels(System.Single,System.Single)">
+    <member name="P:Aspose.Words.Drawing.Ole.Forms2OleControl.Caption">
       <summary>
-            Calculates the opaque rectangle of the shape in pixels for a specified zoom factor and resolution.
+            Gets Caption property of control. Default value is an empty string.
             </summary>
-      <remarks>
-        <para>This method converts <see cref="P:Aspose.Words.Rendering.ShapeRenderer.OpaqueBoundsInPoints" /> into rectangle in pixels and it is useful
-            when you want to create a bitmap for rendering the shape with only opaque part of the shape.</para>
-      </remarks>
-      <param name="scale">The zoom factor (1.0 is 100%).</param>
-      <param name="dpi">The resolution to convert from points to pixels (dots per inch).</param>
-      <returns>The opaque rectangle of the shape in pixels.</returns>
     </member>
-    <member name="M:Aspose.Words.Rendering.ShapeRenderer.RenderToScale(System.Drawing.Graphics,System.Single,System.Single,System.Single)">
+    <member name="P:Aspose.Words.Drawing.Ole.Forms2OleControl.Value">
       <summary>
-            Renders the shape into a <see cref="T:System.Drawing.Graphics" />
-             object to a specified scale.
+            Gets underlying Value property which often represents control state.
+            For example checked option button has '1' value while unchecked has '0'.
+            Default value is an empty string.
             </summary>
-      <param name="graphics">The object where to render to.</param>
-      <param name="x">The X coordinate (in world units) of the top left corner of the rendered shape.</param>
-      <param name="y">The Y coordinate (in world units) of the top left corner of the rendered shape.</param>
-      <param name="scale">The scale for rendering the shape (1.0 is 100%).</param>
-      <returns>The width and height (in world units) of the rendered shape.</returns>
     </member>
-    <member name="M:Aspose.Words.Rendering.ShapeRenderer.RenderToSize(System.Drawing.Graphics,System.Single,System.Single,System.Single,System.Single)">
+    <member name="P:Aspose.Words.Drawing.Ole.Forms2OleControl.Enabled">
       <summary>
-            Renders the shape into a <see cref="T:System.Drawing.Graphics" />
-             object to a specified size.
+            Returns true if control is in enabled state.
             </summary>
-      <param name="graphics">The object where to render to.</param>
-      <param name="x">The X coordinate (in world units) of the top left corner of the rendered shape.</param>
-      <param name="y">The Y coordinate (in world units) of the top left corner of the rendered shape.</param>
-      <param name="width">The maximum width (in world units) that can be occupied by the rendered shape.</param>
-      <param name="height">The maximum height (in world units) that can be occupied by the rendered shape.</param>
-      <returns>The scale that was automatically calculated for the rendered shape to fit the specified size.</returns>
     </member>
-    <member name="M:Aspose.Words.Rendering.ShapeRenderer.Save(System.String,Aspose.Words.Saving.ImageSaveOptions)">
-      <overloads>Renders the shape and saves into an image.</overloads>
+    <member name="P:Aspose.Words.Drawing.Ole.Forms2OleControl.ChildNodes">
       <summary>
-            Renders the shape into an image and saves into a file.
+            Gets collection of immediate child controls.
             </summary>
-      <param name="fileName">The name for the image file. If a file with the specified name already exists, the existing file is overwritten.</param>
-      <param name="saveOptions">Specifies the options that control how the shape is rendered and saved. Can be null.</param>
+      <remarks>Returns <b>null</b> if this control can not have children.</remarks>
     </member>
-    <member name="M:Aspose.Words.Rendering.ShapeRenderer.Save(System.IO.Stream,Aspose.Words.Saving.ImageSaveOptions)">
+    <member name="P:Aspose.Words.Drawing.Ole.Forms2OleControl.Type">
       <summary>
-            Renders the shape into an image and saves into a stream.
+            Gets type of Forms 2.0 control.
             </summary>
-      <param name="stream">The stream where to save the image of the shape.</param>
-      <param name="saveOptions">Specifies the options that control how the shape is rendered and saved. Can be null.
-            If this is null, the image will be saved in the PNG format.</param>
     </member>
-    <member name="P:Aspose.Words.Rendering.ShapeRenderer.SizeInPoints">
+    <member name="T:Aspose.Words.Drawing.Ole.Forms2OleControlCollection">
       <summary>
-            Gets the actual size of the shape in points.
+            Represents collection of <see cref="T:Aspose.Words.Drawing.Ole.Forms2OleControl" /> objects.
             </summary>
-      <remarks>
-        <para>This property returns the size of the actual (as rendered on the page) bounding box of the shape.
-            The size takes into account shape rotation (if any).</para>
-      </remarks>
     </member>
-    <member name="P:Aspose.Words.Rendering.ShapeRenderer.OpaqueBoundsInPoints">
+    <member name="P:Aspose.Words.Drawing.Ole.Forms2OleControlCollection.Item(System.Int32)">
       <summary>
-            Gets the opaque bounds of the shape in points.
+            Gets <see cref="T:Aspose.Words.Drawing.Ole.Forms2OleControl" /> object at specified index.
             </summary>
-      <remarks>
-        <para>This property returns the opaque (i.e. transparent parts of the shape are ignored) bounding box of the shape.
-            The bounds takes the shape rotation into account.</para>
-      </remarks>
+    </member>
+    <member name="P:Aspose.Words.Drawing.Ole.Forms2OleControlCollection.Count">
+      <summary>
+            Gets count of objects in the collection.
+            </summary>
     </member>
     <member name="T:Aspose.Words.Markup.MarkupLevel">
       <summary>
@@ -24471,6 +25295,39 @@ of the source node is created.</p>
         <p>Includes "mustache" field names if <see cref="P:Aspose.Words.MailMerging.MailMerge.UseNonMergeFields" /> is <b>true</b>.</p>
       </remarks>
     </member>
+    <member name="M:Aspose.Words.MailMerging.MailMerge.GetFieldNamesForRegion(System.String)">
+      <overloads>Get mail merge field names from the region.</overloads>
+      <summary>
+            Returns a collection of mail merge field names available in the region.
+            </summary>
+      <remarks>
+        <p>Returns full merge field names including optional prefix. Does not eliminate duplicate field names.</p>
+        <p>If document contains multiple regions with the same name the very first region is processed.</p>
+        <p>A new string array is created on every call.</p>
+      </remarks>
+      <param name="regionName">Region name (case-insensitive).</param>
+    </member>
+    <member name="M:Aspose.Words.MailMerging.MailMerge.GetFieldNamesForRegion(System.String,System.Int32)">
+      <summary>
+            Returns a collection of mail merge field names available in the region.
+            </summary>
+      <remarks>
+        <p>Returns full merge field names including optional prefix. Does not eliminate duplicate field names.</p>
+        <p>If document contains multiple regions with the same name the Nth region (zero-based) is processed.</p>
+        <p>A new string array is created on every call.</p>
+      </remarks>
+      <param name="regionName">Region name (case-insensitive).</param>
+      <param name="regionIndex">Region index (zero-based).</param>
+    </member>
+    <member name="M:Aspose.Words.MailMerging.MailMerge.GetRegionsHierarchy">
+      <summary>
+            Returns a full hierarchy of regions (with fields) available in the document.
+            </summary>
+      <remarks>
+        <p>Hierarchy is returned in the form of the <see cref="T:Aspose.Words.MailMerging.MailMergeRegionInfo" /> class.</p>
+      </remarks>
+      <returns>Regions' hierarchy.</returns>
+    </member>
     <member name="M:Aspose.Words.MailMerging.MailMerge.DeleteFields">
       <summary>
              Removes mail merge related fields from the document.
@@ -24537,6 +25394,15 @@ of the source node is created.</p>
              "{{fieldName}}". These are not fields, but just text tags.</p>
       </remarks>
     </member>
+    <member name="P:Aspose.Words.MailMerging.MailMerge.PreserveUnusedTags">
+      <summary>
+            Gets or sets a value indicating whether the unused "mustache" tags should be preserved.
+            </summary>
+      <remarks>
+            The default value is <b>false</b>.
+            </remarks>
+      <seealso cref="P:Aspose.Words.MailMerging.MailMerge.UseNonMergeFields" />
+    </member>
     <member name="P:Aspose.Words.MailMerging.MailMerge.MergeDuplicateRegions">
       <summary>
             Gets or sets a value indicating whether all of the document mail merge regions with the name of a data source
@@ -24571,9 +25437,14 @@ of the source node is created.</p>
             Occurs during mail merge when a mail merge field is encountered in the document.
             </summary>
     </member>
-    <member name="P:Aspose.Words.MailMerging.MailMerge.TrimWhiteSpaces">
+    <member name="P:Aspose.Words.MailMerging.MailMerge.MailMergeCallback">
       <summary>
-            Gets or sets a value indicating whether trailing and leading white-spaces are trimmed from mail merge values.
+            Allows to handle particular events during mail merge.
+            </summary>
+    </member>
+    <member name="P:Aspose.Words.MailMerging.MailMerge.TrimWhitespaces">
+      <summary>
+            Gets or sets a value indicating whether trailing and leading whitespaces are trimmed from mail merge values.
             </summary>
       <remarks>
             The default value is <b>true</b>.
@@ -25231,7 +26102,7 @@ Accepts a visitor.
             Represents an estimate of the number of lines in the document.
             </summary>
       <remarks>
-        <para>Aspose.Words does not update this property.</para>
+        <para>Aspose.Words updates this property when you call <see cref="M:Aspose.Words.Document.UpdateWordCount(System.Boolean)" />.</para>
       </remarks>
     </member>
     <member name="P:Aspose.Words.Properties.BuiltInDocumentProperties.LinksUpToDate">
@@ -29788,6 +30659,11 @@ Returns true if this object was inserted in Microsoft Word while change tracking
 Returns true if this object was deleted in Microsoft Word while change tracking was enabled.
 </summary>
     </member>
+    <member name="P:Aspose.Words.Paragraph.IsFormatRevision">
+      <summary>
+Returns true if formatting of the object was changed in Microsoft Word while change tracking was enabled.
+</summary>
+    </member>
     <member name="P:Aspose.Words.Paragraph.IsListItem">
       <summary>
             True when the paragraph is an item in a bulleted or numbered list.
@@ -30168,6 +31044,14 @@ and automatically updates all fields in the document.</para>
 The page layout-related fields are updated when you render a document or call <see cref="M:Aspose.Words.Document.UpdatePageLayout" />.</para>
         <para>To update fields in the whole document use <see cref="M:Aspose.Words.Document.UpdateFields" />.</para>
       </remarks>
+    </member>
+    <member name="M:Aspose.Words.Range.InvalidateFieldTypes">
+      <summary>
+            Invalidates field types of fields in this range.
+            </summary>
+      <remarks>
+            To invalidate field types in the whole document use <see cref="M:Aspose.Words.Document.InvalidateFieldTypes" />.
+            </remarks>
     </member>
     <member name="M:Aspose.Words.Range.ToDocument">
       <summary>
@@ -30847,11 +31731,15 @@ For example -1 means the last item, -2 means the second before last and so on.</
       <summary>
             Initializes a new instance of this class that can be used to save rendered images in the
             <see cref="F:Aspose.Words.SaveFormat.Tiff" />, <see cref="F:Aspose.Words.SaveFormat.Png" />, <see cref="F:Aspose.Words.SaveFormat.Bmp" />,
-            <see cref="F:Aspose.Words.SaveFormat.Emf" /> or <see cref="F:Aspose.Words.SaveFormat.Jpeg" /> format.
+            <see cref="F:Aspose.Words.SaveFormat.Emf" />, <see cref="F:Aspose.Words.SaveFormat.Jpeg" /> or <see cref="F:Aspose.Words.SaveFormat.Svg" /> format.
+            <see cref="F:Aspose.Words.SaveFormat.Png" />, <see cref="F:Aspose.Words.SaveFormat.Bmp" />, <see cref="F:Aspose.Words.SaveFormat.Jpeg" />
+            or <see cref="F:Aspose.Words.SaveFormat.Svg" />  format.
             </summary>
       <param name="saveFormat">Can be 
-            <see cref="F:Aspose.Words.SaveFormat.Tiff" />, <see cref="F:Aspose.Words.SaveFormat.Png" />,
-            <see cref="F:Aspose.Words.SaveFormat.Bmp" />, <see cref="F:Aspose.Words.SaveFormat.Emf" /> or <see cref="F:Aspose.Words.SaveFormat.Jpeg" />.
+            <see cref="F:Aspose.Words.SaveFormat.Tiff" />, <see cref="F:Aspose.Words.SaveFormat.Png" />, <see cref="F:Aspose.Words.SaveFormat.Bmp" />, 
+            <see cref="F:Aspose.Words.SaveFormat.Emf" />, <see cref="F:Aspose.Words.SaveFormat.Jpeg" /> or <see cref="F:Aspose.Words.SaveFormat.Svg" />.
+            <see cref="F:Aspose.Words.SaveFormat.Png" />, <see cref="F:Aspose.Words.SaveFormat.Bmp" />, <see cref="F:Aspose.Words.SaveFormat.Jpeg" />
+            or <see cref="F:Aspose.Words.SaveFormat.Svg" />.
             </param>
     </member>
     <member name="M:Aspose.Words.Saving.ImageSaveOptions.Clone">
@@ -30863,8 +31751,8 @@ For example -1 means the last item, -2 means the second before last and so on.</
       <summary>
             Specifies the format in which the rendered document pages or shapes will be saved if this save options object is used.
             Can be 
-            <see cref="F:Aspose.Words.SaveFormat.Tiff" />, <see cref="F:Aspose.Words.SaveFormat.Png" />,
-            <see cref="F:Aspose.Words.SaveFormat.Bmp" />, <see cref="F:Aspose.Words.SaveFormat.Emf" /> or <see cref="F:Aspose.Words.SaveFormat.Jpeg" />.
+            <see cref="F:Aspose.Words.SaveFormat.Tiff" />, <see cref="F:Aspose.Words.SaveFormat.Png" />, <see cref="F:Aspose.Words.SaveFormat.Bmp" />, 
+            <see cref="F:Aspose.Words.SaveFormat.Emf" />, <see cref="F:Aspose.Words.SaveFormat.Jpeg" /> or <see cref="F:Aspose.Words.SaveFormat.Svg" />.
             </summary>
     </member>
     <member name="P:Aspose.Words.Saving.ImageSaveOptions.PageIndex">
@@ -30884,6 +31772,11 @@ For example -1 means the last item, -2 means the second before last and so on.</
       <remarks>
         <para>This property has effect only when rendering document pages. This property is ignored when rendering shapes to images.</para>
       </remarks>
+    </member>
+    <member name="P:Aspose.Words.Saving.ImageSaveOptions.PageSavingCallback">
+      <summary>
+            Allows to control how separate pages are saved when a document is exported to image format.
+            </summary>
     </member>
     <member name="P:Aspose.Words.Saving.ImageSaveOptions.PaperColor">
       <summary>
@@ -31000,6 +31893,19 @@ For example -1 means the last item, -2 means the second before last and so on.</
             </summary>
       <remarks>
         <para>The default value is ImageBinarizationMethod.Threshold.</para>
+      </remarks>
+    </member>
+    <member name="P:Aspose.Words.Saving.ImageSaveOptions.UseGdiEmfRenderer">
+      <summary>
+            Gets or sets a value determining whether to use GDI+ or Aspose.Words metafile renderer when saving to EMF.
+            </summary>
+      <remarks>
+        <para>If set to <c>true</c> GDI+ metafile renderer is used. I.e. content is written to GDI+ graphics 
+            object and saved to metafile.</para>
+        <para>If set to <c>false</c> Aspose.Words metafile renderer is used. I.e. content is written directly 
+            to the metafile format with Aspose.Words.</para>
+        <para>The default value is <c>true</c>.</para>
+        <para>Has effect only when saving to EMF.</para>
       </remarks>
     </member>
     <member name="T:Aspose.Words.Rendering.NamespaceDoc">
