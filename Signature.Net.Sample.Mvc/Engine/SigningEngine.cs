@@ -14,7 +14,7 @@ namespace Signature.Net.Sample.Mvc.Engine
 {
     internal class SigningEngine
     {
-        protected internal string SignDocument(string rootPath,
+        protected internal string SignDocumentWithText(string rootPath,
                                   string fileName,
                                   string signatureText,
                                   int pageNumber,
@@ -50,7 +50,7 @@ namespace Signature.Net.Sample.Mvc.Engine
             switch (fileNameExtension)
             {
                 case "pdf":
-                    signOptions = new PDFSignTextOptions(signatureText);
+                    signOptions = new PdfSignTextOptions(signatureText);
                     break;
 
                 case "doc":
@@ -85,5 +85,80 @@ namespace Signature.Net.Sample.Mvc.Engine
             string outputFilePath = handler.Sign<string>(fileName, signOptions, saveOptions);
             return outputFilePath;
         }
+
+
+        protected internal string SignDocumentWithImage(string rootPath,
+                                  string fileName,
+                                  Stream imageStream,
+                                  int pageNumber,
+                                  int left,
+                                  int top,
+                                  int width,
+                                  int height,
+                                  int signatureColumnNum, int signatureRowNum)
+        {
+            string storagePath = rootPath;
+            string outputPath = Path.Combine(rootPath, @"Output");
+            string imagesPath = Path.Combine(rootPath, @"Images");
+
+            // set up a configuration
+            SignatureConfig config = new SignatureConfig()
+            {
+                StoragePath = storagePath,
+                OutputPath = outputPath,
+                ImagesPath = imagesPath
+            };
+
+            // instantiating the handler
+            SignatureHandler handler = new SignatureHandler(config);
+
+            // Set a license if you have one
+            handler.SetLicense(@"d:\temp\SignatureLicense\GroupDocs.Signature3.lic");
+
+            // setup PDF image signature options
+            SignImageOptions signOptions = null;
+            string fileNameExtension = Path.GetExtension(fileName).TrimStart('.');
+            fileNameExtension = fileNameExtension.ToLower();
+            int pageWidth = 0, pageHeight = 0;
+            switch (fileNameExtension)
+            {
+                case "pdf":
+                    signOptions = new PdfSignImageOptions(imageStream);
+
+                    break;
+
+                case "doc":
+                case "docx":
+                case "rtf":
+                    signOptions = new WordsSignImageOptions(imageStream);
+                    break;
+
+                case "xls":
+                case "xlsx":
+                    signOptions = new CellsSignImageOptions(imageStream)
+                    {
+                        ColumnNumber = signatureColumnNum,
+                        RowNumber = signatureRowNum
+                    };
+                    break;
+
+                case "ppt":
+                case "pptx":
+                    signOptions = new SlidesSignImageOptions(imageStream);
+                    break;
+            }
+            signOptions.DocumentPageNumber = pageNumber;
+            signOptions.Left = left;
+            signOptions.Top = top;
+            signOptions.Width = width;
+            signOptions.Height = height;
+            signOptions.SignAllPages = false;
+
+            GroupDocs.Signature.Options.SaveOptions saveOptions = new GroupDocs.Signature.Options.SaveOptions(OutputType.String);
+            // sign the document
+            string outputFilePath = handler.Sign<string>(fileName, signOptions, saveOptions);
+            return outputFilePath;
+        }
+
     }
 }

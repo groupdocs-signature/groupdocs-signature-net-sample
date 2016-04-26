@@ -235,8 +235,6 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     SizeF slideSize = powerPointDocument.SlideSize.Size;
                     pageWidth = (int)slideSize.Width;
                     pageHeight = (int)slideSize.Height;
-                    //pageWidth = width;
-                    //pageHeight = (int)((width / slideSize.Width) * slideSize.Height);
                     for (int i = 0; i < pageDescs.Length; i++)
                     {
                         pageDescs[i] = new PageDescription()
@@ -421,18 +419,28 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 return new EmptyResult();
             SignatureField field = fields[0];
             string data = field.Data;
-            Regex removeUnclosedLinkTagRegex = new Regex(@"<link[^>]*>");
-            string svgData = removeUnclosedLinkTagRegex.Replace(data, String.Empty);
-            XDocument root = XDocument.Parse(svgData);
             string signatureText = String.Empty;
-            IEnumerable<XElement> textElements;
-            textElements = root.Descendants("{http://www.w3.org/2000/svg}text");
-            foreach (var textElement in textElements)
+            byte[] imageBytes = null;
+            const string dataUrlPrefix = "data:image/png;base64,";
+            if (data.StartsWith(dataUrlPrefix))
             {
-                signatureText += textElement.Value;
+                string base64Data = data.Substring(dataUrlPrefix.Length);
+                imageBytes = Convert.FromBase64String(base64Data);
             }
+            else
+            {
+                Regex removeUnclosedLinkTagRegex = new Regex(@"<link[^>]*>");
+                string svgData = removeUnclosedLinkTagRegex.Replace(data, String.Empty);
+                XDocument root = XDocument.Parse(svgData);
+                IEnumerable<XElement> textElements;
+                textElements = root.Descendants("{http://www.w3.org/2000/svg}text");
+                foreach (var textElement in textElements)
+                {
+                    signatureText += textElement.Value;
+                }
 
-            // request:
+            }
+            // request structure:
             //{ "documentId":"","name":"a b","waterMarkText":"","waterMarkImage":"","fields":[{"fieldType":1,"data":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewbox=\"0 0 233 82\" preserveaspectratio=\"none\"><text font-family=\"Tangerine\" font-size=\"60px\" fill=\"#0036D9\" y=\"50%\" x=\"50%\" dy=\"0.3em\" text-anchor=\"middle\">Anonymous</text><defs><link href=\"http://fonts.googleapis.com/css?family=Tangerine\" type=\"text/css\" rel=\"stylesheet\" xmlns=\"http://www.w3.org/1999/xhtml\"><style type=\"text/css\">@import url(http://fonts.googleapis.com/css?family=Tangerine)</style></defs></svg>","locations":[{"page":1,"locationX":0.4,"locationY":0.3,"locationWidth":150,"locationHeight":50,"fontName":null,"fontSize":null,"fontColor":null,"fontBold":null,"fontItalic":null,"fontUnderline":null,"alignment":0,"id":"ff4dd6a4a44ecd682a4be3a19a801e6f"}],"id":"1c9b463ac3c1e9ebaf51e34ea352de3a"}],"documentGuid":"candy.pdf","recipientGuid":"71d1f3ef88a5d7fe32f4c46588a69887","email":"a@b.com"}
 
             string path = documentGuid;
@@ -468,6 +476,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     SizeF rect = page.SizeInPoints;
                     pageWidth = (int)rect.Width;
                     pageHeight = (int)rect.Height;
+                    pageNumber = location.Page;
                     break;
 
                 case "xls":
@@ -513,16 +522,43 @@ namespace Signature.Net.Sample.Mvc.Controllers
 
             string rootPath = Server.MapPath("~/App_Data");
 
-            string outputFilePath = new SigningEngine().SignDocument(rootPath,
-                documentGuid,
-                signatureText,
-                pageNumber,
-                (int)(pageWidth * location.LocationX),
-                (int)(pageHeight * location.LocationY),
-                signatureWidth,
-                signatureHeight,
-                signatureColumnNum, signatureRowNum);
+            SigningEngine signingEngine = new SigningEngine();
+            string outputFilePath;
 
+            MemoryStream imageStream = null;
+            try
+            {
+                if (imageBytes == null)
+                {
+                    outputFilePath = signingEngine.SignDocumentWithText(rootPath,
+                        documentGuid,
+                        signatureText,
+                        pageNumber,
+                        (int) (pageWidth*location.LocationX),
+                        (int) (pageHeight*location.LocationY),
+                        signatureWidth,
+                        signatureHeight,
+                        signatureColumnNum, signatureRowNum);
+                }
+                else
+                {
+                    imageStream = new MemoryStream(imageBytes);
+                    outputFilePath = signingEngine.SignDocumentWithImage(rootPath,
+                        documentGuid,
+                        imageStream,
+                        pageNumber,
+                        (int)(pageWidth * location.LocationX),
+                        (int)(pageHeight * location.LocationY),
+                        signatureWidth,
+                        signatureHeight,
+                        signatureColumnNum, signatureRowNum);
+                }
+            }
+            finally
+            {
+                if (imageStream != null)
+                    imageStream.Dispose();
+            }
             string relativeOutputFileName = Path.Combine("Output", Path.GetFileName(outputFilePath));
             var resultData = new
             {
