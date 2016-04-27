@@ -27,6 +27,16 @@ namespace Signature.Net.Sample.Mvc.Controllers
     {
         private const string AppDataVirtualPath = "~/App_Data/";
 
+        private string[] _slidestExtensions = {"ppt", "pps", "pptx"};
+
+        private enum DocumentType
+        {
+            Pdf,
+            Words,
+            Slides,
+            Cells
+        };
+
         [HttpPost]
         public ActionResult PublicGetDocument(string documentGuid, string recipientGuid)
         {
@@ -128,9 +138,10 @@ namespace Signature.Net.Sample.Mvc.Controllers
             int maxPageHeight = 0, widthForMaxHeight = 0;
             int pageWidth, pageHeight;
             bool isFirstPass = true;
-            switch (fileNameExtension)
+            DocumentType documentType = GetDocumentType(fileNameExtension);
+            switch (documentType)
             {
-                case "pdf":
+                case DocumentType.Pdf:
                     Aspose.Pdf.Document document = new Document(fullPathToDocument);
                     pageCount = document.Pages.Count;
                     const int asposePdfTrialPagesLimit = 4;
@@ -157,9 +168,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     }
                     break;
 
-                case "doc":
-                case "docx":
-                case "rtf":
+                case DocumentType.Words:
                     Aspose.Words.Document wordsDocument = new Aspose.Words.Document(fullPathToDocument);
                     pageCount = wordsDocument.PageCount;
                     pageDescs = new PageDescription[pageCount];
@@ -186,8 +195,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     }
                     break;
 
-                case "xls":
-                case "xlsx":
+                case DocumentType.Cells:
                     Workbook excelDocument = new Workbook(fullPathToDocument);
                     pageCount = excelDocument.Worksheets.Count;
 
@@ -226,8 +234,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     pageCount = pageDescs.Length;
                     break;
 
-                case "ppt":
-                case "pptx":
+                case DocumentType.Slides:
                     Presentation powerPointDocument = new Presentation(fullPathToDocument);
                     pageCount = powerPointDocument.Slides.Count;
 
@@ -315,9 +322,10 @@ namespace Signature.Net.Sample.Mvc.Controllers
             fileNameExtension = fileNameExtension.ToLower();
             int pageCount;
             const string mimeType = "image/jpeg";
-            switch (fileNameExtension)
+            DocumentType documentType = GetDocumentType(fileNameExtension);
+            switch (documentType)
             {
-                case "pdf":
+                case DocumentType.Pdf:
                     Aspose.Pdf.Document document = new Document(fullPathToDocument);
                     JpegDevice jpegDevice = new JpegDevice(quality);
                     pageCount = document.Pages.Count;
@@ -332,9 +340,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     else
                         return new EmptyResult();
 
-                case "doc":
-                case "docx":
-                case "rtf":
+                case DocumentType.Words:
                     Aspose.Words.Document wordsDocument = new Aspose.Words.Document(fullPathToDocument);
                     pageCount = wordsDocument.PageCount;
                     if (pageIndex < pageCount)
@@ -356,7 +362,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     else
                         return new EmptyResult();
 
-                case "xls":
+                case DocumentType.Cells:
                     Workbook excelDocument = new Workbook(fullPathToDocument);
                     pageCount = excelDocument.Worksheets.Count;
                     if (pageIndex >= pageCount)
@@ -376,8 +382,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                         }
                     }
 
-                case "ppt":
-                case "pptx":
+                case DocumentType.Slides:
                     Presentation powerPointDocument = new Presentation(fullPathToDocument);
                     pageCount = powerPointDocument.Slides.Count;
                     if (pageIndex >= pageCount)
@@ -456,9 +461,10 @@ namespace Signature.Net.Sample.Mvc.Controllers
             int signatureWidth = (int)(location.LocationWidth / scaleForSizes);
             int signatureHeight = (int)(location.LocationHeight / scaleForSizes);
             int pageNumber = location.Page;
-            switch (fileNameExtension)
+            DocumentType documentType = GetDocumentType(fileNameExtension);
+            switch (documentType)
             {
-                case "pdf":
+                case DocumentType.Pdf:
                     using (Aspose.Pdf.Document document = new Document(fullPathToDocument))
                     {
                         Rectangle pageRect = document.Pages[pageNumber].Rect;
@@ -467,9 +473,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     }
                     break;
 
-                case "doc":
-                case "docx":
-                case "rtf":
+                case DocumentType.Words:
                     Aspose.Words.Document wordsDocument = new Aspose.Words.Document(fullPathToDocument);
                     pageNumber = location.Page - 1;
                     PageInfo page = wordsDocument.GetPageInfo(pageNumber);
@@ -479,8 +483,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     pageNumber = location.Page;
                     break;
 
-                case "xls":
-                case "xlsx":
+                case DocumentType.Cells:
                     Workbook excelDocument = new Workbook(fullPathToDocument);
                     pageNumber = location.Page - 1;
                     Worksheet sheet = excelDocument.Worksheets[pageNumber];
@@ -510,13 +513,12 @@ namespace Signature.Net.Sample.Mvc.Controllers
                     }
                     break;
 
-                case "ppt":
-                case "pptx":
+                case DocumentType.Slides:
                     Presentation powerPointDocument = new Presentation(fullPathToDocument);
-                    pageNumber = location.Page - 1;
                     SizeF slideSize = powerPointDocument.SlideSize.Size;
                     pageWidth = (int)slideSize.Width;
                     pageHeight = (int)slideSize.Height;
+                    pageNumber = location.Page;
                     break;
             }
 
@@ -625,7 +627,33 @@ namespace Signature.Net.Sample.Mvc.Controllers
             string result = string.Format("{0}{1}", applicationHost, inputUrl);
             return result;
         }
-        
+
+        private DocumentType GetDocumentType(string fileNameExtension)
+        {
+            switch (fileNameExtension)
+            {
+                case "pdf":
+                    return DocumentType.Pdf;
+
+                case "doc":
+                case "docx":
+                case "rtf":
+                    return DocumentType.Words;
+
+                case "xls":
+                case "xlsx":
+                    return DocumentType.Cells;
+
+                case "ppt":
+                case "pps":
+                case "pptx":
+                    return DocumentType.Slides;
+
+                default:
+                    throw new ArgumentException("Unknown document type");
+            }
+        }
+
         #endregion
     }
 }
