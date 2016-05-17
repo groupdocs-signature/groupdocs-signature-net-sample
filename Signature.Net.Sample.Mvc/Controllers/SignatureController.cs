@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Web;
@@ -434,8 +435,22 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 string svgData = removeUnclosedLinkTagRegex.Replace(data, String.Empty);
                 XDocument root = XDocument.Parse(svgData);
                 IEnumerable<XElement> textElements;
+                IEnumerable<XElement> pathElements = root.Descendants("{http://www.w3.org/2000/svg}path");
+                if (pathElements.Count() > 0)
+                { // a drawn image
+                    foreach (XElement pathElement in pathElements)
+                    {
+                        string drawingInstructionsString = pathElement.Attribute("d").Value;
+                        string[] drawingInstructions = drawingInstructionsString.Split(',');
+                        foreach (string drawingInstruction in drawingInstructions)
+                        {
+                        }
+                    }
+
+                }
+
                 textElements = root.Descendants("{http://www.w3.org/2000/svg}text");
-                foreach (var textElement in textElements)
+                foreach (XElement textElement in textElements)
                 {
                     signatureText += textElement.Value;
                 }
