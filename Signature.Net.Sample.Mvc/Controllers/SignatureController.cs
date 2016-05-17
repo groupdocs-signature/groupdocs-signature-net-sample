@@ -26,16 +26,12 @@ namespace Signature.Net.Sample.Mvc.Controllers
     public class SignatureController : Controller
     {
         private const string AppDataVirtualPath = "~/App_Data/";
+        private IViewingEngine _viewingEngine;
 
-        private string[] _slidestExtensions = {"ppt", "pps", "pptx"};
-
-        private enum DocumentType
+        public SignatureController()
         {
-            Pdf,
-            Words,
-            Slides,
-            Cells
-        };
+            _viewingEngine = new ViewingEngine();
+        }
 
         [HttpPost]
         public ActionResult PublicGetDocument(string documentGuid, string recipientGuid)
@@ -138,7 +134,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             int maxPageHeight = 0, widthForMaxHeight = 0;
             int pageWidth, pageHeight;
             bool isFirstPass = true;
-            DocumentType documentType = GetDocumentType(fileNameExtension);
+            DocumentType documentType = _viewingEngine.GetDocumentType(fileNameExtension);
             switch (documentType)
             {
                 case DocumentType.Pdf:
@@ -322,7 +318,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             fileNameExtension = fileNameExtension.ToLower();
             int pageCount;
             const string mimeType = "image/jpeg";
-            DocumentType documentType = GetDocumentType(fileNameExtension);
+            DocumentType documentType = _viewingEngine.GetDocumentType(fileNameExtension);
             switch (documentType)
             {
                 case DocumentType.Pdf:
@@ -390,10 +386,10 @@ namespace Signature.Net.Sample.Mvc.Controllers
 
                     ISlide slide = powerPointDocument.Slides[pageIndex];
                     SizeF slideSize = powerPointDocument.SlideSize.Size;
-                    ViewingEngine viewingEngine = new ViewingEngine();
+                    
                     using (System.Drawing.Image image = slide.GetThumbnail(new Size((int)slideSize.Width, (int)slideSize.Height)))
                     {
-                        using (System.Drawing.Image resizedImage = viewingEngine.ResizeImage(image, width))
+                        using (System.Drawing.Image resizedImage = _viewingEngine.ResizeImage(image, width))
                         {
                             using (MemoryStream outputStream = new MemoryStream())
                             {
@@ -461,7 +457,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             int signatureWidth = (int)(location.LocationWidth / scaleForSizes);
             int signatureHeight = (int)(location.LocationHeight / scaleForSizes);
             int pageNumber = location.Page;
-            DocumentType documentType = GetDocumentType(fileNameExtension);
+            DocumentType documentType = _viewingEngine.GetDocumentType(fileNameExtension);
             switch (documentType)
             {
                 case DocumentType.Pdf:
@@ -627,33 +623,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             string result = string.Format("{0}{1}", applicationHost, inputUrl);
             return result;
         }
-
-        private DocumentType GetDocumentType(string fileNameExtension)
-        {
-            switch (fileNameExtension)
-            {
-                case "pdf":
-                    return DocumentType.Pdf;
-
-                case "doc":
-                case "docx":
-                case "rtf":
-                    return DocumentType.Words;
-
-                case "xls":
-                case "xlsx":
-                    return DocumentType.Cells;
-
-                case "ppt":
-                case "pps":
-                case "pptx":
-                    return DocumentType.Slides;
-
-                default:
-                    throw new ArgumentException("Unknown document type");
-            }
-        }
-
+        
         #endregion
     }
 }

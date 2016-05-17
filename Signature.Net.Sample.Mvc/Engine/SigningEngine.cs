@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
+﻿using System.IO;
 
 using GroupDocs.Signature.Config;
 using GroupDocs.Signature.Handler;
 using GroupDocs.Signature.Options;
+using GroupDocs.Signature;
 
 namespace Signature.Net.Sample.Mvc.Engine
 {
@@ -40,7 +35,8 @@ namespace Signature.Net.Sample.Mvc.Engine
             SignatureHandler handler = new SignatureHandler(config);
 
             // Set a license if you have one
-            handler.SetLicense(@"d:\temp\SignatureLicense\GroupDocs.Signature3.lic");
+            License license = new License();
+            license.SetLicense(@"GroupDocs.Signature3.lic");
 
             // setup PDF image signature options
             SignTextOptions signOptions = null;
@@ -113,7 +109,8 @@ namespace Signature.Net.Sample.Mvc.Engine
             SignatureHandler handler = new SignatureHandler(config);
 
             // Set a license if you have one
-            handler.SetLicense(@"d:\temp\SignatureLicense\GroupDocs.Signature3.lic");
+            License license = new License();
+            license.SetLicense(@"GroupDocs.Signature3.lic");
 
             // setup PDF image signature options
             SignImageOptions signOptions = null;
