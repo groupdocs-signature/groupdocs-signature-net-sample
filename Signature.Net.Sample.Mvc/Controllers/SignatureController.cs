@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -433,28 +434,18 @@ namespace Signature.Net.Sample.Mvc.Controllers
             {
                 Regex removeUnclosedLinkTagRegex = new Regex(@"<link[^>]*>");
                 string svgData = removeUnclosedLinkTagRegex.Replace(data, String.Empty);
-                XDocument root = XDocument.Parse(svgData);
                 IEnumerable<XElement> textElements;
-                IEnumerable<XElement> pathElements = root.Descendants("{http://www.w3.org/2000/svg}path");
-                if (pathElements.Count() > 0)
-                { // a drawn image
-                    foreach (XElement pathElement in pathElements)
-                    {
-                        string drawingInstructionsString = pathElement.Attribute("d").Value;
-                        string[] drawingInstructions = drawingInstructionsString.Split(',');
-                        foreach (string drawingInstruction in drawingInstructions)
-                        {
-                        }
-                    }
+                new SvgRender().DrawSvgImage(svgData);
 
-                }
-
+                XDocument root = XDocument.Parse(svgData);
                 textElements = root.Descendants("{http://www.w3.org/2000/svg}text");
-                foreach (XElement textElement in textElements)
+                if (textElements.Count() > 0)
                 {
-                    signatureText += textElement.Value;
+                    foreach (XElement textElement in textElements)
+                    {
+                        signatureText += textElement.Value;
+                    }
                 }
-
             }
             // request structure:
             //{ "documentId":"","name":"a b","waterMarkText":"","waterMarkImage":"","fields":[{"fieldType":1,"data":"<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewbox=\"0 0 233 82\" preserveaspectratio=\"none\"><text font-family=\"Tangerine\" font-size=\"60px\" fill=\"#0036D9\" y=\"50%\" x=\"50%\" dy=\"0.3em\" text-anchor=\"middle\">Anonymous</text><defs><link href=\"http://fonts.googleapis.com/css?family=Tangerine\" type=\"text/css\" rel=\"stylesheet\" xmlns=\"http://www.w3.org/1999/xhtml\"><style type=\"text/css\">@import url(http://fonts.googleapis.com/css?family=Tangerine)</style></defs></svg>","locations":[{"page":1,"locationX":0.4,"locationY":0.3,"locationWidth":150,"locationHeight":50,"fontName":null,"fontSize":null,"fontColor":null,"fontBold":null,"fontItalic":null,"fontUnderline":null,"alignment":0,"id":"ff4dd6a4a44ecd682a4be3a19a801e6f"}],"id":"1c9b463ac3c1e9ebaf51e34ea352de3a"}],"documentGuid":"candy.pdf","recipientGuid":"71d1f3ef88a5d7fe32f4c46588a69887","email":"a@b.com"}

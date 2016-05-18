@@ -130,6 +130,7 @@
     <Compile Include="Controllers\SignatureController.cs" />
     <Compile Include="Engine\CellDrawFindingNearest.cs" />
     <Compile Include="Engine\SigningEngine.cs" />
+    <Compile Include="Engine\SvgRender.cs" />
     <Compile Include="Engine\ViewingEngine.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
