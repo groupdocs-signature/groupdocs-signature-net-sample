@@ -13,14 +13,14 @@ namespace Signature.Net.Sample.Mvc.Engine
 {
     public class SvgRender
     {
-        public byte[] DrawSvgImage(string svgData)
+        public byte[] DrawSvgImage(string svgData, double signatureWidth, double signatureHeight)
         {
             byte[] outputImageBytes = null;
             XDocument root = XDocument.Parse(svgData);
             IEnumerable<XElement> pathElements = root.Descendants("{http://www.w3.org/2000/svg}path");
             if (pathElements.Count() > 0)
             { // a drawn image
-                using (Image image = new Bitmap(500, 500))
+                using (Image image = new Bitmap((int)signatureWidth, (int)signatureHeight))
                 {
                     using (Graphics graphics = Graphics.FromImage(image))
                     {

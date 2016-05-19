@@ -423,6 +423,11 @@ namespace Signature.Net.Sample.Mvc.Controllers
             SignatureField field = fields[0];
             string data = field.Data;
             string signatureText = String.Empty;
+            SignatureField.Location location = field.Locations[0];
+            const double scaleForSizes = 2.083;
+            int signatureWidth = (int)(location.LocationWidth / scaleForSizes);
+            int signatureHeight = (int)(location.LocationHeight / scaleForSizes);
+
             byte[] imageBytes = null;
             const string dataUrlPrefix = "data:image/png;base64,";
             if (data.StartsWith(dataUrlPrefix))
@@ -435,7 +440,10 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 Regex removeUnclosedLinkTagRegex = new Regex(@"<link[^>]*>");
                 string svgData = removeUnclosedLinkTagRegex.Replace(data, String.Empty);
                 IEnumerable<XElement> textElements;
-                imageBytes = new SvgRender().DrawSvgImage(svgData);
+
+                
+
+                imageBytes = new SvgRender().DrawSvgImage(svgData, signatureWidth, signatureHeight);
 
                 XDocument root = XDocument.Parse(svgData);
                 textElements = root.Descendants("{http://www.w3.org/2000/svg}text");
@@ -458,10 +466,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             fileNameExtension = fileNameExtension.ToLower();
             int pageWidth = 0, pageHeight = 0;
             int signatureColumnNum = 0, signatureRowNum = 0;
-            SignatureField.Location location = field.Locations[0];
-            const double scaleForSizes = 2.083;
-            int signatureWidth = (int)(location.LocationWidth / scaleForSizes);
-            int signatureHeight = (int)(location.LocationHeight / scaleForSizes);
+            
             int pageNumber = location.Page;
             DocumentType documentType = _viewingEngine.GetDocumentType(fileNameExtension);
             switch (documentType)
