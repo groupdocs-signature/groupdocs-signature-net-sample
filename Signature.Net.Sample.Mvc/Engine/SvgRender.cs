@@ -13,9 +13,9 @@ namespace Signature.Net.Sample.Mvc.Engine
 {
     public class SvgRender
     {
-        public Stream DrawSvgImage(string svgData)
+        public byte[] DrawSvgImage(string svgData)
         {
-            MemoryStream outputImageStream = null;
+            byte[] outputImageBytes = null;
             XDocument root = XDocument.Parse(svgData);
             IEnumerable<XElement> pathElements = root.Descendants("{http://www.w3.org/2000/svg}path");
             if (pathElements.Count() > 0)
@@ -75,11 +75,14 @@ namespace Signature.Net.Sample.Mvc.Engine
                         }
                     }
 
-                    outputImageStream = new MemoryStream();
-                    image.Save(outputImageStream, ImageFormat.Png);
+                    using (MemoryStream outputImageStream = new MemoryStream())
+                    {
+                        image.Save(outputImageStream, ImageFormat.Png);
+                        outputImageBytes = outputImageStream.ToArray();
+                    }
                 }
             }
-            return outputImageStream;
+            return outputImageBytes;
         }
     }
 }

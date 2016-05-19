@@ -435,7 +435,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 Regex removeUnclosedLinkTagRegex = new Regex(@"<link[^>]*>");
                 string svgData = removeUnclosedLinkTagRegex.Replace(data, String.Empty);
                 IEnumerable<XElement> textElements;
-                new SvgRender().DrawSvgImage(svgData);
+                imageBytes = new SvgRender().DrawSvgImage(svgData);
 
                 XDocument root = XDocument.Parse(svgData);
                 textElements = root.Descendants("{http://www.w3.org/2000/svg}text");
