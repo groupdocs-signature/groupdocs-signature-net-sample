@@ -26,6 +26,8 @@ namespace Signature.Net.Sample.Mvc.Engine
                     {
                         foreach (XElement pathElement in pathElements)
                         {
+                            string pathColor = pathElement.Attribute("fill").Value;
+                            Color color = System.Drawing.ColorTranslator.FromHtml(pathColor);
                             string drawingInstructionsString = pathElement.Attribute("d").Value;
                             Regex instructionRegex = new Regex(@"([CLM])([^CLM]*)[CLM$]");
                             var matches = instructionRegex.Matches(drawingInstructionsString);
@@ -53,7 +55,7 @@ namespace Signature.Net.Sample.Mvc.Engine
                                         controlPoint2Y = Convert.ToDouble(coordinates[3], CultureInfo.InvariantCulture);
                                         endX = Convert.ToDouble(coordinates[4], CultureInfo.InvariantCulture);
                                         endY = Convert.ToDouble(coordinates[5], CultureInfo.InvariantCulture);
-                                        graphics.DrawBezier(new Pen(Brushes.Black),
+                                        graphics.DrawBezier(new Pen(color),
                                             (float)startX, (float)startY,
                                             (float)controlPoint1X, (float)controlPoint1Y,
                                             (float)controlPoint2X, (float)controlPoint2Y,

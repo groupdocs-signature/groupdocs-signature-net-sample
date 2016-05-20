@@ -7,7 +7,7 @@ using GroupDocs.Signature;
 
 namespace Signature.Net.Sample.Mvc.Engine
 {
-    internal class SigningEngine
+    internal class SigningEngine : ViewingEngine
     {
         protected internal string SignDocumentWithText(string rootPath,
                                   string fileName,
@@ -35,28 +35,25 @@ namespace Signature.Net.Sample.Mvc.Engine
             SignatureHandler handler = new SignatureHandler(config);
 
             // Set a license if you have one
-            License license = new License();
-            license.SetLicense(@"GroupDocs.Signature3.lic");
+            SetLicense();
 
             // setup PDF image signature options
             SignTextOptions signOptions = null;
             string fileNameExtension = Path.GetExtension(fileName).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
             int pageWidth = 0, pageHeight = 0;
-            switch (fileNameExtension)
+            DocumentType fileType = GetDocumentType(fileNameExtension);
+            switch (fileType)
             {
-                case "pdf":
+                case DocumentType.Pdf:
                     signOptions = new PdfSignTextOptions(signatureText);
                     break;
 
-                case "doc":
-                case "docx":
-                case "rtf":
+                case DocumentType.Words:
                     signOptions = new WordsSignTextOptions(signatureText);
                     break;
 
-                case "xls":
-                case "xlsx":
+                case DocumentType.Cells:
                     signOptions = new CellsSignTextOptions(signatureText)
                     {
                         ColumnNumber = signatureColumnNum,
@@ -64,8 +61,7 @@ namespace Signature.Net.Sample.Mvc.Engine
                     };
                     break;
 
-                case "ppt":
-                case "pptx":
+                case DocumentType.Slides:
                     signOptions = new SlidesSignTextOptions(signatureText);
                     break;
             }
@@ -109,29 +105,25 @@ namespace Signature.Net.Sample.Mvc.Engine
             SignatureHandler handler = new SignatureHandler(config);
 
             // Set a license if you have one
-            License license = new License();
-            license.SetLicense(@"GroupDocs.Signature3.lic");
+            SetLicense();
 
             // setup PDF image signature options
             SignImageOptions signOptions = null;
             string fileNameExtension = Path.GetExtension(fileName).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
             int pageWidth = 0, pageHeight = 0;
-            switch (fileNameExtension)
+            DocumentType fileType = GetDocumentType(fileNameExtension);
+            switch (fileType)
             {
-                case "pdf":
+                case DocumentType.Pdf:
                     signOptions = new PdfSignImageOptions(imageStream);
-
                     break;
 
-                case "doc":
-                case "docx":
-                case "rtf":
+                case DocumentType.Words:
                     signOptions = new WordsSignImageOptions(imageStream);
                     break;
 
-                case "xls":
-                case "xlsx":
+                case DocumentType.Cells:
                     signOptions = new CellsSignImageOptions(imageStream)
                     {
                         ColumnNumber = signatureColumnNum,
@@ -139,8 +131,7 @@ namespace Signature.Net.Sample.Mvc.Engine
                     };
                     break;
 
-                case "ppt":
-                case "pptx":
+                case DocumentType.Slides:
                     signOptions = new SlidesSignImageOptions(imageStream);
                     break;
             }
@@ -157,5 +148,10 @@ namespace Signature.Net.Sample.Mvc.Engine
             return outputFilePath;
         }
 
+        private void SetLicense()
+        {
+            License license = new License();
+            license.SetLicense(@"d:\temp\SignatureLicense\GroupDocs.Signature3.lic");
+        }
     }
 }

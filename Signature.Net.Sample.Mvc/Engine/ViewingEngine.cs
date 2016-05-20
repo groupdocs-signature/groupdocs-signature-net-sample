@@ -8,7 +8,7 @@ namespace Signature.Net.Sample.Mvc.Engine
     internal interface IViewingEngine
     {
         DocumentType GetDocumentType(string fileNameExtension);
-        System.Drawing.Image ResizeImage(System.Drawing.Image sourceImage, int resultWidth);
+        Image ResizeImage(Image sourceImage, int resultWidth);
     }
 
     public enum DocumentType
@@ -31,10 +31,16 @@ namespace Signature.Net.Sample.Mvc.Engine
                 case "doc":
                 case "docx":
                 case "rtf":
+                case "docm":
+                case "dotm":
+                case "dotx":
                     return DocumentType.Words;
 
                 case "xls":
+                case "csv":
                 case "xlsx":
+                case "xlsm":
+                case "xlsb":
                     return DocumentType.Cells;
 
                 case "ppt":
@@ -47,14 +53,13 @@ namespace Signature.Net.Sample.Mvc.Engine
             }
         }
 
-        public System.Drawing.Image ResizeImage(System.Drawing.Image sourceImage,
-            int resultWidth)
+        public Image ResizeImage(Image sourceImage, int resultWidth)
         {
             int resultHeight = (int)(resultWidth / (double)sourceImage.Width * sourceImage.Height);
             Bitmap resultImage = new Bitmap(resultWidth, resultHeight, PixelFormat.Format32bppArgb);
             using (Graphics graphics = Graphics.FromImage(resultImage))
             {
-                graphics.Clear(System.Drawing.Color.White);
+                graphics.Clear(Color.White);
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.DrawImage(sourceImage, 0, 0, resultWidth, resultHeight);
             }
