@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -28,11 +27,14 @@ namespace Signature.Net.Sample.Mvc.Controllers
     public class SignatureController : Controller
     {
         private const string AppDataVirtualPath = "~/App_Data/";
-        private IViewingEngine _viewingEngine;
+        private readonly IViewingEngine _viewingEngine;
+        private readonly ISvgRenderer _svgRenderer;
 
-        public SignatureController()
+        public SignatureController(IViewingEngine viewingEngine,
+                                   ISvgRenderer svgRenderer)
         {
-            _viewingEngine = new ViewingEngine();
+            _viewingEngine = viewingEngine;
+            _svgRenderer = svgRenderer;
         }
 
         [HttpPost]
@@ -127,7 +129,6 @@ namespace Signature.Net.Sample.Mvc.Controllers
         {
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
-            string fileType = fileNameExtension.Substring(0, 1).ToUpper() + fileNameExtension.Substring(1);
 
             string appDataPath = Server.MapPath(AppDataVirtualPath);
             string fullPathToDocument = Path.Combine(appDataPath, path);
@@ -441,9 +442,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
                 string svgData = removeUnclosedLinkTagRegex.Replace(data, String.Empty);
                 IEnumerable<XElement> textElements;
 
-                
-
-                imageBytes = new SvgRender().DrawSvgImage(svgData, signatureWidth, signatureHeight);
+                imageBytes = _svgRenderer.DrawSvgImage(svgData, signatureWidth, signatureHeight);
 
                 XDocument root = XDocument.Parse(svgData);
                 textElements = root.Descendants("{http://www.w3.org/2000/svg}text");

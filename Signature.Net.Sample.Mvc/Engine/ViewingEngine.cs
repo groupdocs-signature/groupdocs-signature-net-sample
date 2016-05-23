@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 
 namespace Signature.Net.Sample.Mvc.Engine
 {
-    internal interface IViewingEngine
+    public interface IViewingEngine
     {
         DocumentType GetDocumentType(string fileNameExtension);
         Image ResizeImage(Image sourceImage, int resultWidth);
@@ -19,7 +19,7 @@ namespace Signature.Net.Sample.Mvc.Engine
         Cells
     };
 
-    internal class ViewingEngine : IViewingEngine
+    public class ViewingEngine : IViewingEngine
     {
         public DocumentType GetDocumentType(string fileNameExtension)
         {

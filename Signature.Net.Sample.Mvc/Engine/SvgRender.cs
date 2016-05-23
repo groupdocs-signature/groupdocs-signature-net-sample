@@ -11,7 +11,13 @@ using System.Xml.Linq;
 
 namespace Signature.Net.Sample.Mvc.Engine
 {
-    public class SvgRender
+    public interface ISvgRenderer
+    {
+        byte[] DrawSvgImage(string svgData, double signatureWidth, double signatureHeight);
+    }
+
+
+    public class SvgRenderer: ISvgRenderer
     {
         public byte[] DrawSvgImage(string svgData, double signatureWidth, double signatureHeight)
         {
