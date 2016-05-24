@@ -1,29 +1,10 @@
 ﻿<div style="background-color: silver;">
     <div id="groupdocs-signature" style="height: 800px; width: 50%; overflow: hidden; position: relative;"></div>
-
-    @*<div id="groupdocs-signature1" style="height: 800px; width: 50%; overflow: hidden; position: relative;"></div>*@
-
 </div>
-
-@*@(Html.Signature("#groupdocs-signature")
-    //.DocumentGuid("sample.pdf")
-    .DocumentGuid("candy.pdf")
-    .RecipientGuid("456")
-)*@
-
-@*@(Html.Signature("#groupdocs-signature")
-    .DocumentGuid(@Model.DocumentGuid1)
-    .RecipientGuid(@Model.RecipientGuid1)
-)*@
-
-@*@(Html.Signature("#groupdocs-signature1")
-    .DocumentGuid(@Model.DocumentGuid2)
-    .RecipientGuid(@Model.RecipientGuid2)
-)*@
 
 <script type='text/javascript'>
     $(function () { $('#groupdocs-signature').groupdocsSignature({
-            documentGuid: 'Storage\\candy.pdf',
+            documentGuid: 'Storage\\GroupDocs_Demo.rtf',
             recipientGuid: '71d1f3ef88a5d7fe32f4c46588a69887',
             hostUrl: '',
             showHeader: true,

@@ -12,6 +12,5 @@ namespace MVCDemo.Controllers
         {
             return View();
         }
-        
     }
 }
