@@ -21,6 +21,10 @@ namespace Signature.Net.Sample.Mvc.Engine
     {
         public byte[] DrawSvgImage(string svgData, double signatureWidth, double signatureHeight)
         {
+            double viewBoxWidth = 264;
+            double viewBoxHeight = 88;
+            double widthRatio = signatureWidth / viewBoxWidth;
+            double heightRatio = signatureHeight / viewBoxHeight;
             byte[] outputImageBytes = null;
             XDocument root = XDocument.Parse(svgData);
             IEnumerable<XElement> pathElements = root.Descendants("{http://www.w3.org/2000/svg}path");
@@ -50,17 +54,17 @@ namespace Signature.Net.Sample.Mvc.Engine
                                 switch (firstCharacter)
                                 {
                                     case 'M':
-                                        startX = Convert.ToDouble(coordinates[0], CultureInfo.InvariantCulture);
-                                        startY = Convert.ToDouble(coordinates[1], CultureInfo.InvariantCulture);
+                                        startX = Convert.ToDouble(coordinates[0], CultureInfo.InvariantCulture) * widthRatio;
+                                        startY = Convert.ToDouble(coordinates[1], CultureInfo.InvariantCulture) * heightRatio;
                                         break;
 
                                     case 'C':
-                                        controlPoint1X = Convert.ToSingle(coordinates[0], CultureInfo.InvariantCulture);
-                                        controlPoint1Y = Convert.ToDouble(coordinates[1], CultureInfo.InvariantCulture);
-                                        controlPoint2X = Convert.ToDouble(coordinates[2], CultureInfo.InvariantCulture);
-                                        controlPoint2Y = Convert.ToDouble(coordinates[3], CultureInfo.InvariantCulture);
-                                        endX = Convert.ToDouble(coordinates[4], CultureInfo.InvariantCulture);
-                                        endY = Convert.ToDouble(coordinates[5], CultureInfo.InvariantCulture);
+                                        controlPoint1X = Convert.ToSingle(coordinates[0], CultureInfo.InvariantCulture) * widthRatio;
+                                        controlPoint1Y = Convert.ToDouble(coordinates[1], CultureInfo.InvariantCulture) * heightRatio;
+                                        controlPoint2X = Convert.ToDouble(coordinates[2], CultureInfo.InvariantCulture) * widthRatio;
+                                        controlPoint2Y = Convert.ToDouble(coordinates[3], CultureInfo.InvariantCulture) * heightRatio; ;
+                                        endX = Convert.ToDouble(coordinates[4], CultureInfo.InvariantCulture) * widthRatio;
+                                        endY = Convert.ToDouble(coordinates[5], CultureInfo.InvariantCulture) * heightRatio;
                                         graphics.DrawBezier(new Pen(color),
                                             (float)startX, (float)startY,
                                             (float)controlPoint1X, (float)controlPoint1Y,
@@ -72,8 +76,8 @@ namespace Signature.Net.Sample.Mvc.Engine
                                         break;
 
                                     case 'L':
-                                        endX = Convert.ToDouble(coordinates[0], CultureInfo.InvariantCulture);
-                                        endY = Convert.ToDouble(coordinates[1], CultureInfo.InvariantCulture);
+                                        endX = Convert.ToDouble(coordinates[0], CultureInfo.InvariantCulture) * widthRatio;
+                                        endY = Convert.ToDouble(coordinates[1], CultureInfo.InvariantCulture) * heightRatio; ;
                                         graphics.DrawLine(new Pen(Brushes.Black), (float)startX, (float)startY, (float)endX, (float)endY);
                                         startX = endX;
                                         startY = endY;
