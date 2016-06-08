@@ -182,10 +182,21 @@ namespace Signature.Net.Sample.Mvc.Controllers
             if (fields == null || fields.Length == 0)
                 return new EmptyResult();
             string appDataPath = Server.MapPath(AppDataVirtualPath);
-            var resultData = _signingEngine.SignDocument(appDataPath, documentGuid, 
-                documentId, name, fields);
+
+            UrlHelper urlHelper = new UrlHelper(Request.RequestContext);
+            Func<string, string> urlCreator = (filePath) => urlHelper.Action("GetSignedDocument", "Signature", new { path = filePath});
+            object resultData = _signingEngine.SignDocument(appDataPath, documentGuid, 
+                documentId, name, fields, urlCreator);
 
             return Json(resultData);
+        }
+
+
+        public ActionResult GetSignedDocument(string path)
+        {
+            string appDataPath = Server.MapPath(AppDataVirtualPath);
+            string documentPath = Path.Combine(appDataPath, path);
+            return File(documentPath, "application/octet-stream", Path.GetFileName(path));
         }
 
         #region Private methods

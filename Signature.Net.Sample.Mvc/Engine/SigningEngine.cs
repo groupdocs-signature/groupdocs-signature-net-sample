@@ -24,7 +24,8 @@ namespace Signature.Net.Sample.Mvc.Engine
             string documentGuid,
             string documentId,
             string name,
-            SignatureField[] fields);
+            SignatureField[] fields,
+            Func<string, string> urlCreator);
     }
 
     public class SigningEngine : ViewingEngine, ISigningEngine
@@ -41,7 +42,8 @@ namespace Signature.Net.Sample.Mvc.Engine
             string documentGuid,
             string documentId,
             string name,
-            SignatureField[] fields)
+            SignatureField[] fields,
+            Func<string, string> urlCreator)
         {
             if (fields == null || fields.Length == 0)
                 return null;
@@ -188,6 +190,7 @@ namespace Signature.Net.Sample.Mvc.Engine
                     imageStream.Dispose();
             }
             string relativeOutputFileName = Path.Combine("Output", Path.GetFileName(outputFilePath));
+
             var resultData = new
             {
                 status = "Ok",
@@ -198,6 +201,7 @@ namespace Signature.Net.Sample.Mvc.Engine
                         guid = relativeOutputFileName,
                         name = relativeOutputFileName,
                         signedName = relativeOutputFileName,
+                        signedDocumentUrl = urlCreator(relativeOutputFileName),
                         signedFromAll = true,
                         recipients = new[]
                         {
@@ -287,6 +291,7 @@ namespace Signature.Net.Sample.Mvc.Engine
             // sign the document
             string outputFilePath = handler.Sign<string>(fileName, signOptions, saveOptions);
             return outputFilePath;
+
         }
 
 
