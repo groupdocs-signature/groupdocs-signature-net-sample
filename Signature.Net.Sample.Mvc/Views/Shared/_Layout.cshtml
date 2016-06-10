@@ -19,6 +19,8 @@
 <body>
     <script type='text/javascript' src='Public/Scripts/Libs/jquery-1.7.1.min.js'></script>
     <script type='text/javascript' src='Public/Scripts/Libs/jquery-ui-1.8.18.min.js'></script>
+    <script type='text/javascript' src='Public/Scripts/Libs/jquery.text-overflow.js'></script>
+    
     <script type='text/javascript' src="Public/Scripts/Signature.all.js"></script>
     <script type='text/javascript'>
         var gdSignaturePrefix ='gd-signature';
@@ -58,8 +60,17 @@
         var signatureColor = '#0036D9';
         var gdSignatureHostUrl = '';
     </script>
-    <script type='text/javascript' src='Public/Scripts/Libs/require.js'></script>
-    <script type='text/javascript' src="Public/Scripts/DocViewer.all.js"></script>
+    <script type='text/javascript' src='~/Public/Scripts/Libs/require.js'></script>
+    @*<script type='text/javascript' src="Public/Scripts/DocViewer.all.js"></script>*@
+    <script type='text/javascript' src="~/Public/Scripts/DocViewer.all.part1.js"></script>
+    <script type='text/javascript' src="~/Public/Scripts/installableSignature.js"></script>
+    
+    <script type="text/javascript" src="@Url.Content("~/Public/Scripts/fileOpenDialogViewModel.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Public/Scripts/jGroupdocs.FileOpenDialog.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Public/Scripts/jGroupdocs.Explorer.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Public/Scripts/jSaaspose.Uploader.js")"></script>
+
+    <script type='text/javascript' src="~/Public/Scripts/DocViewer.all.part2.js"></script>
 
     @RenderBody()
     @RenderSection("scripts", false)
