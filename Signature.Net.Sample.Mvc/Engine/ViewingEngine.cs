@@ -28,7 +28,7 @@ namespace Signature.Net.Sample.Mvc.Engine
             string path,
             int quality, int width);
 
-        byte[] GetDocumentPageImage(string appDataPath, string path, int width, int quality, int pageIndex);
+        byte[] GetDocumentPageImage(string appDataPath, string path, int? width, int? quality, int pageIndex);
     }
 
     public enum DocumentType
@@ -41,6 +41,7 @@ namespace Signature.Net.Sample.Mvc.Engine
 
     public class ViewingEngine : IViewingEngine
     {
+        private const int DefaultQuality = 90;
         public DocumentType GetDocumentType(string fileNameExtension)
         {
             switch (fileNameExtension)
@@ -107,7 +108,7 @@ namespace Signature.Net.Sample.Mvc.Engine
             {
                 case DocumentType.Pdf:
                     Aspose.Pdf.Document document = new Aspose.Pdf.Document(fullPathToDocument);
-                    documentDescription.pageCount = document.Pages.Count;
+                    pageCount = document.Pages.Count;
                     const int asposePdfTrialPagesLimit = 4;
                     if (pageCount > asposePdfTrialPagesLimit)
                         pageCount = asposePdfTrialPagesLimit;
@@ -230,7 +231,7 @@ namespace Signature.Net.Sample.Mvc.Engine
         }
 
 
-        public byte[] GetDocumentPageImage(string appDataPath, string path, int width, int quality, int pageIndex)
+        public byte[] GetDocumentPageImage(string appDataPath, string path, int? width, int? quality, int pageIndex)
         {
             string fullPathToDocument = Path.Combine(appDataPath, path);
 
@@ -243,7 +244,7 @@ namespace Signature.Net.Sample.Mvc.Engine
             {
                 case DocumentType.Pdf:
                     Aspose.Pdf.Document document = new Aspose.Pdf.Document(fullPathToDocument);
-                    JpegDevice jpegDevice = new JpegDevice(quality);
+                    JpegDevice jpegDevice = new JpegDevice(quality ?? DefaultQuality);
                     pageCount = document.Pages.Count;
                     if (pageIndex < pageCount)
                     {
@@ -268,7 +269,7 @@ namespace Signature.Net.Sample.Mvc.Engine
                                 {
                                     PageIndex = pageIndex,
                                     PageCount = 1,
-                                    JpegQuality = quality
+                                    JpegQuality = quality ?? DefaultQuality
                                 };
 
                             wordsDocument.Save(outputStream, saveOptions);
@@ -309,7 +310,7 @@ namespace Signature.Net.Sample.Mvc.Engine
 
                     using (System.Drawing.Image image = slide.GetThumbnail(new Size((int)slideSize.Width, (int)slideSize.Height)))
                     {
-                        using (System.Drawing.Image resizedImage = ResizeImage(image, width))
+                        using (System.Drawing.Image resizedImage = ResizeImage(image, width ?? image.Width))
                         {
                             using (MemoryStream outputStream = new MemoryStream())
                             {

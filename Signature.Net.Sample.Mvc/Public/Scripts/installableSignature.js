@@ -147,6 +147,199 @@
                 self._hideFileOpenDialog();
             });
             //}
+            
+            //var docViewerJquery = viewerMainWrapper.find(".document_viewer .doc_viewer");
+            //var viewerWidget = docViewerJquery.data("ui-docViewer"); // jQueryUI 1.9+
+            //if (!viewerWidget)
+            //    viewerWidget = docViewerJquery.data("docViewer"); // jQueryUI 1.8
+            //var viewerViewModel = viewerWidget("getViewModel");
+            var viewerViewModel = window.groupdocs.adapter;
+            var viewerAdapter = { docViewerViewModel: viewerViewModel };
+
+            groupdocsViewerWrapper.find(".btnOpen").click(function () {
+                self._showFileOpenDialog();
+            });
+
+            groupdocsViewerWrapper.find(".file_browser_content").bind('fileSelected', function (e, metadata) {
+                self._hideFileOpenDialog();
+                self.fileDisplayName = viewerAdapter.docViewerViewModel.fileDisplayName = "";
+                var filePath = metadata.path;
+                self.signDoc.setDocumentPath(filePath);
+                //viewerAdapter.docViewerViewModel.loadDocument(filePath);
+                self.signDoc.loadDocument(filePath);
+            });
+
+            var docViewerJquery = viewerMainWrapper.find(".document_viewer");
+            docViewerJquery.bind('onDocumentLoadComplete', function (e, data) {
+                self.documentLoadCompleteHandler(data, groupdocsViewerWrapper, viewerMainWrapper);
+            });
+
+            docViewerJquery.bind('onDocumentLoaded', function (e, data) {
+                self.documentLoadedHandler(data, groupdocsViewerWrapper, viewerMainWrapper);
+            });
+        },
+        
+        sign: function (recipientGuid) {
+            this._addHtml();
+            this.options.recipientGuid = recipientGuid;
+            this.signDoc.init($(this.element), this.options);
+        },
+
+        documentLoadedHandler: function (data, groupdocsViewerWrapper, viewerMainWrapper) {
+            this.printFrameLoaded = false;
+            var bodyElement = $("body");
+            var printFrameName = "printFrame" + this.viewerId;
+            var printFrame = bodyElement.children("div.groupdocsPrintFrame[name='" + printFrameName + "'],div.groupdocsPrintFrameDeactivated[name='" + printFrameName + "']");
+            if (printFrame.length == 0) {
+                //var frameWidth = 500, frameHeight = 500;
+                //printFrame = $("<iframe name='groupdocsPrintFrame' src='about:blank' style='width:" + frameWidth +
+                //               "px;height:" + frameHeight + "px'></iframe>");
+                printFrame = $("<div class='groupdocsPrintFrameDeactivated'></div>");
+                printFrame.attr("name", printFrameName);
+                //printFrame.appendTo(this.groupdocsViewerWrapper);
+                printFrame.appendTo(bodyElement);
+            }
+            else
+                printFrame.empty();
+
+            this.printImageElements.length = 0;
+            var pageCount = data.page_count;
+            this.pageImageCount = pageCount;
+
+            if (!data.lic && pageCount > 3)
+                pageCount = 3;
+
+            var imgElement;
+            for (var pageNum = 0; pageNum < pageCount; pageNum++) {
+                imgElement = $("<img/>").appendTo(printFrame);
+                this.printImageElements.push(imgElement);
+            }
+
+            if (!data.lic && groupdocsViewerWrapper.find(".licBanner").length == 0) {
+                viewerMainWrapper.addClass("viewer_mainwrapper_trial");
+                //viewerMainWrapper.css("top", "94px");
+
+                this.licElement = $("<div/>");
+                this.licElement.addClass("banner_trial");
+                if (!this.showHeader)
+                    this.licElement.css("top", "0");
+
+                var unlicensedMessage = this._getLocalizedString("This viewer has been created using an unlicensed version of ", "UnlicensedViewer");
+                this.licElement.html(unlicensedMessage + " <a href='http://groupdocs.com' target='_blank'>GroupDocs</a> Viewer for .NET ");
+                this.licElement.appendTo(groupdocsViewerWrapper);
+
+                if (!this.showHeader)
+                    viewerMainWrapper.css("top", this.licElement.height() + "px");
+                this.resizeHandler();
+            }
+        },
+
+        documentLoadCompleteHandler: function (data, groupdocsViewerWrapper, viewerMainWrapper) {
+            var self = this;
+            this.downloadUrl = data.url;
+            this.pdfDownloadUrl = data.pdfDownloadUrl;
+            this.pdfPrintUrl = data.pdfPrintUrl;
+            this.documentPath = data.guid;
+            var downloadButton = groupdocsViewerWrapper.find(".btn_download");
+            var printButton = groupdocsViewerWrapper.find(".print_button");
+            downloadButton.unbind();
+            printButton.unbind();
+            //var printFrame = this.groupdocsViewerWrapper.find("iframe[name=groupdocsPrintFrame]");
+            //printFrame.remove();
+
+            var onlyFireEventsInClickHandlerFlag;
+            if (this.downloadButtonMode === 1) {
+                onlyFireEventsInClickHandlerFlag = false;
+            } else {
+                var finalDownloadUrl;
+                if (this.downloadPdfFile && (typeof this.pdfDownloadUrl !== "undefined")) {
+                    finalDownloadUrl = this.pdfDownloadUrl;
+                } else {
+                    finalDownloadUrl = this.downloadUrl;
+                }
+
+                downloadButton.attr('href', finalDownloadUrl);
+                var targetValue;
+                switch (this.downloadButtonMode) {
+                    case 2:
+                        targetValue = '_self';
+                        break;
+                    case 3:
+                        targetValue = '_blank';
+                        break;
+                    default:
+                        targetValue = '_self';
+                        break;
+                }
+                downloadButton.attr('target', targetValue);
+                onlyFireEventsInClickHandlerFlag = true;
+            }
+
+            downloadButton.bind({
+                click: function () {
+                    self._downloadDocument(onlyFireEventsInClickHandlerFlag);
+                    return onlyFireEventsInClickHandlerFlag;
+                }
+            });
+
+
+            //var printFrameLoaded = false;
+            printButton.bind({
+                click: function () {
+                    self._printDocument();
+                    return false;
+                }
+            });
+        },
+
+        _showFileOpenDialog: function () {
+            var self = this;
+            this.fileOpenDialogWrapper.addClass("in");
+            this.fileOpenDialogWrapper.show();
+
+            this.backdrop = $('<div class="modal-backdrop fade" />').appendTo(this.groupdocsViewerWrapper),
+            this.backdrop.click(function () {
+                self._hideFileOpenDialog();
+            });
+            this.backdrop.addClass("in");
+        },
+
+        _hideFileOpenDialog: function () {
+            this.backdrop.removeClass("in");
+            this.backdrop.remove();
+            this.fileOpenDialogWrapper.hide();
+        },
+
+
+        _downloadDocument: function (onlyFireEvents) {
+            this.element.trigger("onGDViewerDownloadButtonClick");
+            this.element.trigger("downloadButtonClick.groupdocs");
+            if (onlyFireEvents) {
+                return false;
+            }
+            var downloadUrl = this.downloadUrl;
+            if (this.downloadPdfFile && (typeof this.pdfDownloadUrl !== "undefined")) {
+                downloadUrl = this.pdfDownloadUrl;
+            }
+
+            if (this.showDownloadErrorsInPopup) {
+                $.fileDownload(downloadUrl, {
+                    //preparingMessageHtml: "Requesting server, please wait...",
+                    //failMessageHtml: "There was a problem with your download, please try again."
+                    failCallback: function (responseHtml, url) {
+                        window.jGDError(responseHtml, 2, this.filePath);
+                    },
+                    cookieName: self.jqueryFileDownloadCookieName,
+                    containerElement: this.groupdocsViewerWrapper
+                });
+            }
+            else {
+                window.location.href = downloadUrl;
+            }
+            return false;
         }
     });
+
+    
+
 });

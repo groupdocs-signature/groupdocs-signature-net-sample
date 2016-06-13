@@ -4,6 +4,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
+using Groupdocs.Web.UI.Core;
+using Groupdocs.Web.UI.DataTransferObjects;
 using Signature.Net.Sample.Mvc.Models;
 using Signature.Net.Sample.Mvc.Engine;
 
@@ -12,14 +14,16 @@ namespace Signature.Net.Sample.Mvc.Controllers
     public class SignatureController : Controller
     {
         private const string AppDataVirtualPath = "~/App_Data/";
+        //private const string StorageVirtualPath = "~/App_Data/Storage";
         private readonly ISigningEngine _signingEngine;
-        private readonly ISvgRenderer _svgRenderer;
+        private readonly ICoreHandler _coreHandler;
 
         public SignatureController(ISigningEngine signingEngine,
-                                   ISvgRenderer svgRenderer)
+                                   ISvgRenderer svgRenderer,
+                                   ICoreHandler coreHandler)
         {
             _signingEngine = signingEngine;
-            _svgRenderer = svgRenderer;
+            _coreHandler = coreHandler;
         }
 
         [HttpPost]
@@ -145,9 +149,11 @@ namespace Signature.Net.Sample.Mvc.Controllers
                                          string dimension,
                                          int firstPage,
                                          int pageCount,
-                                         int quality)
+                                         int? quality)
         {
-            int width = Int32.Parse(dimension.Substring(0, dimension.Length - 1));
+            int? width = null;
+            if (!String.IsNullOrEmpty(dimension))
+                width = Int32.Parse(dimension.Substring(0, dimension.Length - 1));
             string[] pageImageUrls = GetImageUrls(path, 0, pageCount, width, quality);
             var result = new {imageUrls = pageImageUrls, success = true };
             return Json(result);
@@ -164,7 +170,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             return File(Server.MapPath("~/gd-signature/signature2/resource/stamp.png"), "image/png");
         }
 
-        public ActionResult GetDocumentPageImage(string path, int width, int quality, int pageIndex)
+        public ActionResult GetDocumentPageImage(string path, int? width, int? quality, int pageIndex)
         {
             string appDataPath = Server.MapPath(AppDataVirtualPath);
             byte[] fileBytes = _signingEngine.GetDocumentPageImage(appDataPath, path, width, quality, pageIndex);
@@ -199,6 +205,16 @@ namespace Signature.Net.Sample.Mvc.Controllers
             return File(documentPath, "application/octet-stream", Path.GetFileName(path));
         }
 
+
+        [HttpPost]
+        public ActionResult LoadFileBrowserTreeData(LoadFileBrowserTreeDataParameters parameters)
+        {
+            object data = _coreHandler.LoadFileBrowserTreeData(parameters);
+            if (data == null)
+                return new EmptyResult();
+
+            return Json(data);
+        }
         #region Private methods
 
         private string[] GetImageUrls(string path, int startingPageNumber, int pageCount, int? pageWidth, int? quality)

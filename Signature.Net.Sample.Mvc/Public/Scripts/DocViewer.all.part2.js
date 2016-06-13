@@ -7029,7 +7029,7 @@ define('core/vm/vm.document.prepare',
                             documentGuid: documentId(),
                             
                         },
-                        doneCallback: function(fieldsResult) {
+                        doneCallback: function (fieldsResult) {
                             if (fieldsResult.length > 0) {
                                 $.each(fieldsResult, function() {
                                     var item = this;
@@ -7300,6 +7300,10 @@ define('core/vm/vm.document.sign',
                         },
                         doneCallback: function (fieldsResult) {
                             if (fieldsResult.length > 0) {
+                                // Added for Signature 3
+                                fields.removeAll();
+                                // end
+
                                 $.each(fieldsResult, function () {
                                     var item = this;
                                     var validators = {};
@@ -14746,6 +14750,7 @@ define("signDocument",
             var viewerOptions = {};
             var viewer;
             var vmDocumentSign = vm.documentSign(), vmSignaturePad = vm.signaturePad(), vmError = vm.error(), vmEnterName = vm.enterName();
+
             var signButton, signButtonContainer;
             var timer;
             var initUi = function() {
@@ -14784,6 +14789,8 @@ define("signDocument",
 
                     vmDocumentSign.isPublic(isPublic);
                     binder.bind($(viewerContainer).find("#viewer_mainwrapper"));
+
+                    // Added for Signature 3
                     if (!window.groupdocs)
                         window.groupdocs = {};
                     var adapter = viewer.adapter(isPublic ? 'embed' : null).docViewerViewModel;
@@ -15082,6 +15089,35 @@ define("signDocument",
                     initViewModels();
                     bindViewModels();
                 },
+
+                // Added for Signature 3
+                setDocumentPath = function(path) {
+                    vmDocumentSign.documentGuid(path);
+                },
+                // end
+
+                loadDocument = function (path) {
+                    vmDocumentSign.getSignatureDocument(viewerOptions.documentGuid, viewerOptions.recipientGuid, function (doc) {
+                        if (!doc.signedFromAll) {
+                            if (doc.recipient.signed) {
+                                vmError.errorText("Please wait all recipients to sign");
+                                vmError.isVisible(true);
+                            }
+                            $(viewerContainer).find("button.sign_document").show();
+                            if (doc.recipient.firstName == '' && doc.recipient.lastName == '')
+                                vmSignaturePad.signatureText("Anonymous");
+                            else
+                                vmSignaturePad.signatureText(doc.recipient.firstName + ' ' + doc.recipient.lastName);
+                            //adapter.loadDocument(doc.name);
+                            window.groupdocs.adapter.loadDocument(path);
+                        } else {
+                            $(viewerContainer).find("button.sign_document").hide();
+                            //adapter.loadDocument(doc.signedName);
+                            window.groupdocs.adapter.loadDocument(path);
+                        }
+                    });
+                },
+
                 // AcroJS calc field function
                 AFSimple_Calculate = function (operator, items) {
                     var fields = ko.utils.arrayFilter(vmDocumentSign.fields(), function (field) {
@@ -15123,7 +15159,9 @@ define("signDocument",
                 }
 
             return {
-                init: init
+                init: init,
+                setDocumentPath: setDocumentPath,
+                loadDocument: loadDocument
             };
         }
 

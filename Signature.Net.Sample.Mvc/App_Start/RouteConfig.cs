@@ -15,6 +15,12 @@ namespace Signature.Net.Sample.Mvc
 
             routes.MapRoute(
                 name: null,
+                url: "gd-signature/signature2/document-viewer/{action}",
+                defaults: new { controller = "Signature" }
+            );
+
+            routes.MapRoute(
+                name: null,
                 url: "gd-signature/signature2/resource/{action}",
                 defaults: new { controller = "Signature" }
             );
