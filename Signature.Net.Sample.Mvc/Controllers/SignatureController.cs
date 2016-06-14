@@ -122,13 +122,15 @@ namespace Signature.Net.Sample.Mvc.Controllers
             DocumentDescription documentDescription = _signingEngine.GetPageDescriptions(appDataPath, path, quality, width);
             int pageCount = documentDescription.pages.Count;
             string[] pageImageUrls = GetImageUrls(path, 0, pageCount, width, quality);
+            UrlHelper urlHelper = new UrlHelper(Request.RequestContext);
+            string documentDownloadUrl = urlHelper.Action("GetDocument", "Signature", new { path });
             string documentDescriptionJs = new JavaScriptSerializer().Serialize(documentDescription);
             var result = new
             {
                 path,
                 docType = "Pdf",
                 fileType = fileNameExtension,
-                url = (string)null,
+                url = documentDownloadUrl,
                 pdfDownloadUrl = (string)null,
                 name = path,
                 imageUrls= pageImageUrls,
@@ -190,7 +192,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             string appDataPath = Server.MapPath(AppDataVirtualPath);
 
             UrlHelper urlHelper = new UrlHelper(Request.RequestContext);
-            Func<string, string> urlCreator = (filePath) => urlHelper.Action("GetSignedDocument", "Signature", new { path = filePath});
+            Func<string, string> urlCreator = (filePath) => urlHelper.Action("GetDocument", "Signature", new { path = filePath});
             object resultData = _signingEngine.SignDocument(appDataPath, documentGuid, 
                 documentId, name, fields, urlCreator);
 
@@ -198,7 +200,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
         }
 
 
-        public ActionResult GetSignedDocument(string path)
+        public ActionResult GetDocument(string path)
         {
             string appDataPath = Server.MapPath(AppDataVirtualPath);
             string documentPath = Path.Combine(appDataPath, path);

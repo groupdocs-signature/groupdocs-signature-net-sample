@@ -100,6 +100,7 @@
 
         // the constructor
         _create: function (options) {
+            this._model = new groupdocsViewerModel(options);
             var self = this;
             require(['signDocument'], function (signDocument) {
                 self._addHtml();
@@ -277,7 +278,7 @@
 
             downloadButton.bind({
                 click: function () {
-                    self._downloadDocument(onlyFireEventsInClickHandlerFlag);
+                    self._downloadDocument(false);
                     return onlyFireEventsInClickHandlerFlag;
                 }
             });
@@ -337,9 +338,226 @@
                 window.location.href = downloadUrl;
             }
             return false;
+        },
+
+        _printDocument: function () {
+            this.element.trigger("printButtonClick.groupdocs", this.usePdfPrinting);
+            var self = this;
+            var message, title;
+            if (this.usePdfPrinting) {
+                message = this._getLocalizedString("Printing", "Printing");
+                title = this._getLocalizedString("Printing", "Printing");
+                this._showMessageDialogPdf(message, title);
+                var printWindow = window.open(this.pdfPrintUrl);
+
+                var closeMessageDialog = function () {
+                    self._hideMessageDialogPdf();
+                };
+
+                if (this.browserIsChrome)
+                    printWindow.onload = closeMessageDialog;
+                else
+                    window.setTimeout(closeMessageDialog, 1000);
+            }
+            else {
+                var ua = navigator.userAgent.toLowerCase();
+                var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+                if (isAndroid)
+                    alert("You seem to use an Android device. Your browser does not support the JavaScript print function.");
+
+                var fileDisplayName = "";
+                if (this.fileDisplayName)
+                    fileDisplayName = this.fileDisplayName;
+
+                function printFromIframe() {
+                    printFrame[0].contentWindow.focus();
+                    printFrame[0].contentWindow.print();
+                }
+                var useHtmlContentBasedPrinting = this.useHtmlBasedEngine && !this.useImageBasedPrinting;
+                var bodyElement = $("body");
+                var printFrameName = "printFrame" + this.viewerId;
+                var printFrame = bodyElement.children("div.groupdocsPrintFrame[name='" + printFrameName + "'],div.groupdocsPrintFrameDeactivated[name='" + printFrameName + "']");
+                var otherPrintFrames = bodyElement.children("div.groupdocsPrintFrame,div.groupdocsPrintFrameDeactivated").not(printFrame);
+                otherPrintFrames.removeClass("groupdocsPrintFrame");
+                otherPrintFrames.addClass("groupdocsPrintFrameDeactivated");
+                printFrame.removeClass("groupdocsPrintFrameDeactivated");
+                printFrame.addClass("groupdocsPrintFrame");
+
+                var watermarkText = null, watermarkColor = null;
+                var watermarkPosition = this.watermarkPosition, watermarkWidth = null;
+                if (this.printWithWatermark) {
+                    watermarkText = this.watermarkText;
+                    watermarkColor = this.watermarkColor;
+                    watermarkWidth = this.watermarkWidth;
+                }
+
+                if (printFrame.length == 0) {
+                    printFrame = $("<div class='groupdocsPrintFrame'></div>");
+                    printFrame.attr("name", printFrameName);
+                    printFrame.appendTo(bodyElement);
+                }
+
+                if (this.printFrameLoaded) {
+                    window.print();
+                }
+                else {
+                    message = this._getLocalizedString("Getting a printable version of the document",
+                                                           "GettingPrintableVersionOfDocument");
+                    title = this._getLocalizedString("Printing", "Printing");
+
+                    this._showMessageDialog(message, title, 0);
+                    this._model.getPrintableHtml(this.documentPath, useHtmlContentBasedPrinting, fileDisplayName,
+                        this.pageImageCount,
+                        this.quality, this.supportTextSelection,
+                        watermarkText, watermarkColor,
+                        watermarkPosition, watermarkWidth,
+                        this.ignoreDocumentAbsence,
+                        this.instanceIdToken,
+                        function (responseData) {
+                            self._hideMessageDialog();
+                            var pageImageUrl;
+                            var pageCount = responseData.length;
+                            var prepMessage = self._getLocalizedString("Preparing the pages", "PreparingPages");
+                            prepMessage += ": ";
+                            var pagesLoaded = 0;
+                            self._showMessageDialog(prepMessage + pagesLoaded + "/" + pageCount, title, 0);
+                            var pageNum;
+                            var numberOfPagesInScreenDocument = self.printImageElements.length;
+                            for (pageNum = numberOfPagesInScreenDocument; pageNum < pageCount; pageNum++) {
+                                var imageElementWithoutUrl;
+                                imageElementWithoutUrl = $("<img/>").appendTo(printFrame);
+                                self.printImageElements.push(imageElementWithoutUrl);
+                            }
+
+                            for (pageNum = 0; pageNum < self.printImageElements.length; pageNum++) {
+                                var imageElement;
+
+                                function pageImageLoadHandler() {
+                                    pagesLoaded++;
+                                    self._updateMessageDialog(prepMessage + pagesLoaded + "/" + pageCount, title, pagesLoaded / pageCount * 100.);
+                                    if (pagesLoaded >= pageCount) {
+                                        self._hideMessageDialog();
+                                        window.print();
+                                        self.printFrameLoaded = true;
+                                    }
+                                }
+
+                                pageImageUrl = responseData[pageNum];
+                                imageElement = self.printImageElements[pageNum];
+                                imageElement.load(pageImageLoadHandler).attr("src", pageImageUrl); //.appendTo(printFrame);
+                            }
+                        },
+                        function (error) {
+                            self._hideMessageDialog();
+                            //jGDError(error);
+                        },
+                        this.locale);
+                }
+            }
+            return false;
+        },
+
+        _showMessageDialog: function (message, title, progress) {
+            var dialogElement = this._updateMessageDialog(message, title, progress);
+            dialogElement.show();
+        },
+
+        _updateMessageDialog: function (message, title, progress) {
+            var dialogElement = this.groupdocsViewerWrapper.find("[name='messageDialog']");
+            var messageElement = dialogElement.find(".modal_dialog_content p[name='message']");
+            messageElement.text(message);
+
+            var headerElement = dialogElement.find(".modal_dialog_header");
+            var alwaysVisibleTitleElement = headerElement.find("span[name='alwaysVisibleTitle']");
+            alwaysVisibleTitleElement.text(title);
+
+            var progressBarElement = dialogElement.find(".progress");
+            if (typeof progress != "undefined") {
+                var progressString = Math.round(progress) + "%";
+                progressBarElement.css("width", progressString);
+                var visibleWhenMinimizedTitle = headerElement.find("span[name='visibleWhenMinimizedTitle']");
+                visibleWhenMinimizedTitle.text(progressString);
+            }
+            return dialogElement;
+        },
+
+        _hideMessageDialog: function () {
+            var dialogElement = this.groupdocsViewerWrapper.find("[name='messageDialog']");
+            dialogElement.hide();
+        },
+
+        // Printing message without progress bar for UsePdfPrinting(true) option
+
+        _showMessageDialogPdf: function (message, title) {
+            var dialogElement = this._updateMessageDialogPdf(message, title);
+            dialogElement.show();
+        },
+
+        _updateMessageDialogPdf: function (message, title) {
+            var dialogElement = this.groupdocsViewerWrapper.find("[name='messageDialogPdf']");
+            var messageElement = dialogElement.find(".modal_dialog_content p[name='message']");
+            messageElement.text(message);
+
+            var headerElement = dialogElement.find(".modal_dialog_header");
+            var alwaysVisibleTitleElement = headerElement.find("span[name='alwaysVisibleTitlePdf']");
+            alwaysVisibleTitleElement.text(title);
+
+            return dialogElement;
+        },
+
+        _hideMessageDialogPdf: function () {
+            var dialogElement = this.groupdocsViewerWrapper.find("[name='messageDialogPdf']");
+            dialogElement.hide();
+        },
+
+        _getLocalizedString: function (defaultValue, localizationKey) {
+            var result = defaultValue;
+            if (this.localizedStrings) {
+                var localizationTextValue = this.localizedStrings[localizationKey];
+                if (localizationTextValue)
+                    result = localizationTextValue;
+            }
+            return result;
         }
     });
 
-    
+    var groupdocsViewerModel = function (options) {
+        $.extend(this, options);
+        this._init();
+    };
+
+    $.extend(groupdocsViewerModel.prototype, {
+        _portalService: null,
+        _init: function () {
+            this._portalService = Container.Resolve("PortalService");
+        },
+
+        getPrintableHtml: function (documentPath, useHtmlBasedEngine, fileDisplayName,
+                                    imageCount,
+                                    quality, supportTextSelection,
+                                    watermarkText, watermarkColor,
+                                    watermarkPosition, watermarkWidth,
+                                    ignoreDocumentAbsence,
+                                    instanceIdToken,
+                                    callback, errorCallback, locale) {
+
+            this._portalService.getImageUrlsAsync(
+                                              null, null, documentPath, /*width*/null, null, 0, /*imageCount*/imageCount, quality, supportTextSelection, /*this.fileVersion*/null,
+                                              watermarkText, watermarkColor, watermarkPosition, watermarkWidth,
+                                              ignoreDocumentAbsence,
+                                              useHtmlBasedEngine, /*supportPageRotation*/false,
+                function (response) {
+                    callback.apply(this, [response.data.imageUrls]);
+                },
+                function (error) {
+                    errorCallback.apply(this, [error]);
+                },
+                instanceIdToken,
+                locale
+            );
+        }
+    });
+
+
 
 });
