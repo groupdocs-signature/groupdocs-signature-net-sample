@@ -367,7 +367,7 @@ namespace Signature.Net.Sample.Mvc.Engine
         private void SetLicense()
         {
             License license = new License();
-            license.SetLicense(@"d:\temp\SignatureLicense\GroupDocs.Signature3.lic");
+            license.SetLicense(@"GroupDocs.Signature3.lic");
         }
     }
 }
