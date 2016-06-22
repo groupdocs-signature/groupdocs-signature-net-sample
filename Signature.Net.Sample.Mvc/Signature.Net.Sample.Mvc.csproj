@@ -186,6 +186,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Engine\CellDrawFindingNearest.cs" />
+    <Compile Include="Engine\Licensing.cs" />
     <Compile Include="Engine\SigningEngine.cs" />
     <Compile Include="Engine\SvgRender.cs" />
     <Compile Include="Engine\ViewingEngine.cs" />

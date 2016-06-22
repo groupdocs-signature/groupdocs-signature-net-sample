@@ -12,7 +12,6 @@ using Aspose.Words.Rendering;
 using GroupDocs.Signature.Config;
 using GroupDocs.Signature.Handler;
 using GroupDocs.Signature.Options;
-using License = GroupDocs.Signature.License;
 using Signature.Net.Sample.Mvc.Models;
 
 namespace Signature.Net.Sample.Mvc.Engine
@@ -31,10 +30,13 @@ namespace Signature.Net.Sample.Mvc.Engine
     public class SigningEngine : ViewingEngine, ISigningEngine
     {
         private readonly ISvgRenderer _svgRenderer;
+        private readonly ILicensing _licensing;
 
-        public SigningEngine(ISvgRenderer svgRenderer)
+        public SigningEngine(ISvgRenderer svgRenderer,
+            ILicensing licensing)
         {
             _svgRenderer = svgRenderer;
+            _licensing = licensing;
         }
 
         public object SignDocument(
@@ -250,7 +252,7 @@ namespace Signature.Net.Sample.Mvc.Engine
             SignatureHandler handler = new SignatureHandler(config);
 
             // Set a license if you have one
-            SetLicense();
+            _licensing.ApplyLicense();
 
             // setup PDF image signature options
             SignTextOptions signOptions = null;
@@ -321,7 +323,7 @@ namespace Signature.Net.Sample.Mvc.Engine
             SignatureHandler handler = new SignatureHandler(config);
 
             // Set a license if you have one
-            SetLicense();
+            _licensing.ApplyLicense();
 
             // setup PDF image signature options
             SignImageOptions signOptions = null;
@@ -362,12 +364,6 @@ namespace Signature.Net.Sample.Mvc.Engine
             // sign the document
             string outputFilePath = handler.Sign<string>(fileName, signOptions, saveOptions);
             return outputFilePath;
-        }
-
-        private void SetLicense()
-        {
-            License license = new License();
-            license.SetLicense(@"GroupDocs.Signature3.lic");
         }
     }
 }

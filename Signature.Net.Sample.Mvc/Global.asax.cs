@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
+using GroupDocs.Signature;
+using Signature.Net.Sample.Mvc.Engine;
 
 namespace Signature.Net.Sample.Mvc
 {
@@ -12,6 +14,9 @@ namespace Signature.Net.Sample.Mvc
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            Licensing licensing = new Licensing();
+            licensing.ApplyLicense();
+
         }
     }
 }

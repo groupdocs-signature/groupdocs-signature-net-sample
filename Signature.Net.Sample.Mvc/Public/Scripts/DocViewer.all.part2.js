@@ -14909,12 +14909,18 @@ define("signDocument",
                             field.data(signature.signatureImageUrl());
                             return false;
                         });
-                        $(viewerContainer).find(".signature-dialog").delegate(".typed-signature", "click", function () {
-                            var fontName = ko.contextFor(this).$data;
+                        // Added for Signature 3
+                        $(viewerContainer).find(".signature-dialog").delegate(".typed-signature,.applyTypedSignature", "click", function () {
+                            // Added for Signature 3
+                            //var fontName = ko.contextFor(this).$data;
                             var $this = $(this);
-                            var fontSize = $this.find('span').css('font-size');
-                            var w = Math.floor($this.width());
-                            var h = Math.floor($this.height());
+                            //var fontSize = $this.find('span').css('font-size');
+                            var fontName = "Times New Roman";
+                            var fontSize = "57px";
+                            //var w = Math.floor($this.width());
+                            //var h = Math.floor($this.height());
+                            var w = 215;
+                            var h = 82;
                             var signature;
                             if (vmSignaturePad.vectorPad())
                                 signature = vmSignaturePad.createSvgFromTypedSignature(fontName, fontSize, w, h);

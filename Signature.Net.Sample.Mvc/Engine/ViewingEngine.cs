@@ -110,7 +110,7 @@ namespace Signature.Net.Sample.Mvc.Engine
                     Aspose.Pdf.Document document = new Aspose.Pdf.Document(fullPathToDocument);
                     pageCount = document.Pages.Count;
                     const int asposePdfTrialPagesLimit = 4;
-                    if (pageCount > asposePdfTrialPagesLimit)
+                    if (!Aspose.Pdf.Document.IsLicensed && pageCount > asposePdfTrialPagesLimit)
                         pageCount = asposePdfTrialPagesLimit;
                     pageDescs = new PageDescription[pageCount];
                     for (int i = 0; i < pageDescs.Length; i++)

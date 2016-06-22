@@ -77,7 +77,8 @@
         <div id="signatureType" class="tab-pane active" data-bind="attr: { id: 'signatureType' + padIndex()}, visible: showTypeItTab">
             <div class="modal-body">
                 <input class="signature-name-input placeholder" id="signatureName" type="text" name="name" maxlength="40" placeholder="Type your signature" data-bind="value: signatureText, valueUpdate: ['keyup']">
-                <div data-bind="visible: !fontsLoading()" class="signature-carousel-container">
+                <!-- Added for Signature 3-->
+                <div data-bind="visible: false && !fontsLoading()" class="signature-carousel-container">
                     <!-- ko if: !expanded() -->
                     <div style="margin: 10px 0 0;" data-bind="signaturesCarousel: {}">
                         <div style="margin: 10px 0 0;" class="signature-carousel">
@@ -105,7 +106,8 @@
                     </div>
                     <!-- /ko -->
                 </div>
-                <div class="fonts-loader" data-bind="visible: fontsLoading">
+                <!-- Added for Signature 3-->
+                <div class="fonts-loader" data-bind="visible: false && fontsLoading">
                     <p>
                         <span class="progresspin"></span>
                         <span>Loading fonts...</span>
@@ -113,13 +115,14 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="signature-add-label" style="padding-bottom: 11px;padding-right:5px; float: left; padding-top:5px;" data-bind="visible: showSaveButton">
+                <div class="signature-add-label" style="padding-bottom: 11px; padding-right: 5px; float: left; padding-top: 5px;" data-bind="visible: showSaveButton">
                     <span data-bind="css: { checked: saveToMySignatures(), unchecked: !saveToMySignatures() }, click: function () { saveToMySignatures(saveToMySignatures() == false); }" class="checkbox checked" style="margin-top: 0;">
                         <input type="checkbox" data-bind="checked: saveToMySignatures" class="checkbox">
                     </span>
                     Add to "My Signatures"
                 </div>
-                <div data-bind="visible: vectorPad" style="float: left;">
+                <!-- Added for Signature 3 -->
+                <div data-bind="visible: vectorPad() && !showTypeItTab()" style="float: left;">
                     <!-- ko if: $root.signatureColors().length==4 -->
                     <!-- ko foreach:{data: $root.signatureColors, as: 'cl'} -->
                     <div class="manage_color" title="Select pen color for signature" data-bind="click: function () { $parent.activeSignatureColor(cl); }, css: { active: $parent.activeSignatureColor() == cl }, style: { backgroundColor: cl }"></div>
@@ -145,6 +148,10 @@
                         </div>
                     </div>
                     <!-- /ko -->
+                </div>
+                <div style="float: right;">
+                    <a title="Cancel signature" class="text_btn" data-bind="click: hide" style="cursor: pointer;">Cancel</a>
+                    <a class="red_button applyTypedSignature" title="Add signature" style="cursor: pointer;">Apply</a>
                 </div>
             </div>
         </div>
@@ -225,7 +232,8 @@
         </div>
         <div id="signatureMy" class="tab-pane" data-bind="visible: showSelectTab, attr: { id: 'signatureMy' + padIndex()}">
             <div class="modal-body">
-                <div data-bind="visible: !fontsLoading()" class="signature-carousel-container">
+                <!-- Added for Signature 3-->
+                <div data-bind="visible: false && !fontsLoading()" class="signature-carousel-container">
                     <!-- ko if: !expanded() -->
                     <div style="margin: 10px 0 0;" data-bind="signaturesCarousel: {}">
                         <div style="margin: 10px 0 0;" class="signature-carousel">
