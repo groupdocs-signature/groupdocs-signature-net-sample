@@ -49,27 +49,8 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Aspose.Cells, Version=8.1.1.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+    <Reference Include="GroupDocs.Signature, Version=3.0.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\Aspose.Cells.dll</HintPath>
-    </Reference>
-    <Reference Include="Aspose.Imaging, Version=3.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\Aspose.Imaging.dll</HintPath>
-    </Reference>
-    <Reference Include="Aspose.Pdf, Version=11.0.0.0, Culture=neutral, PublicKeyToken=6947866647e416ec, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\Aspose.Pdf.dll</HintPath>
-    </Reference>
-    <Reference Include="Aspose.Slides, Version=15.10.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\Aspose.Slides.dll</HintPath>
-    </Reference>
-    <Reference Include="Aspose.Words, Version=16.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\Aspose.Words.dll</HintPath>
-    </Reference>
-    <Reference Include="GroupDocs.Signature">
       <HintPath>Dependencies\GroupDocs.Signature.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -185,17 +166,12 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
-    <Compile Include="Engine\CellDrawFindingNearest.cs" />
     <Compile Include="Engine\Licensing.cs" />
     <Compile Include="Engine\SigningEngine.cs" />
     <Compile Include="Engine\SvgRender.cs" />
-    <Compile Include="Engine\ViewingEngine.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DocumentDescription.cs" />
-    <Compile Include="Models\PageDescription.cs" />
-    <Compile Include="Models\SignatureField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

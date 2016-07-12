@@ -5,10 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Aspose.Cells;
-using Aspose.Cells.Rendering;
-using Aspose.Slides;
-using Aspose.Words.Rendering;
 using GroupDocs.Signature.Config;
 using GroupDocs.Signature.Handler;
 using GroupDocs.Signature.Options;
@@ -94,67 +90,13 @@ namespace Signature.Net.Sample.Mvc.Engine
             int signatureColumnNum = 0, signatureRowNum = 0;
 
             int pageNumber = location.Page;
-            DocumentType documentType = GetDocumentType(fileNameExtension);
-            switch (documentType)
-            {
-                case DocumentType.Pdf:
-                    using (Aspose.Pdf.Document document = new Aspose.Pdf.Document(fullPathToDocument))
-                    {
-                        Aspose.Pdf.Rectangle pageRect = document.Pages[pageNumber].Rect;
-                        pageWidth = (int)pageRect.Width;
-                        pageHeight = (int)pageRect.Height;
-                    }
-                    break;
-
-                case DocumentType.Words:
-                    Aspose.Words.Document wordsDocument = new Aspose.Words.Document(fullPathToDocument);
-                    pageNumber = location.Page - 1;
-                    PageInfo page = wordsDocument.GetPageInfo(pageNumber);
-                    SizeF rect = page.SizeInPoints;
-                    pageWidth = (int)rect.Width;
-                    pageHeight = (int)rect.Height;
-                    pageNumber = location.Page;
-                    break;
-
-                case DocumentType.Cells:
-                    Workbook excelDocument = new Workbook(fullPathToDocument);
-                    pageNumber = location.Page - 1;
-                    Worksheet sheet = excelDocument.Worksheets[pageNumber];
-                    ImageOrPrintOptions imgOptions = new ImageOrPrintOptions();
-                    imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
-                    imgOptions.OnePagePerSheet = true;
-                    pageNumber = location.Page;
-
-                    CellDrawFindingNearest cellsDrawFindingNearest = new CellDrawFindingNearest();
-                    imgOptions.DrawObjectEventHandler = cellsDrawFindingNearest;
-                    SheetRender sheetRenderer = new SheetRender(sheet, imgOptions);
-
-                    if (sheetRenderer.PageCount > 0)
-                    {
-                        Size pageSize = sheetRenderer.GetPageSize(0);
-                        pageWidth = pageSize.Width;
-                        pageHeight = pageSize.Height;
-                        int absoluteLocationLeft = (int)(pageWidth * location.LocationX);
-                        int absoluteLocationTop = (int)(pageHeight * location.LocationY);
-                        cellsDrawFindingNearest.SetPositions(absoluteLocationLeft, absoluteLocationTop);
-                        using (MemoryStream tempStream = new MemoryStream())
-                        {
-                            sheetRenderer.ToImage(0, tempStream);
-                        }
-                        signatureColumnNum = cellsDrawFindingNearest.Column;
-                        signatureRowNum = cellsDrawFindingNearest.Row;
-                    }
-                    break;
-
-                case DocumentType.Slides:
-                    Presentation powerPointDocument = new Presentation(fullPathToDocument);
-                    SizeF slideSize = powerPointDocument.SlideSize.Size;
-                    pageWidth = (int)slideSize.Width;
-                    pageHeight = (int)slideSize.Height;
-                    pageNumber = location.Page;
-                    break;
-            }
             
+            System.Drawing.Size size = GetPageSize(fullPathToDocument, location.Page,
+                location.LocationX, location.LocationY,
+                ref signatureColumnNum, ref signatureRowNum);
+
+            pageWidth = size.Width;
+            pageHeight = size.Height;
             string outputFilePath;
 
             MemoryStream imageStream = null;
