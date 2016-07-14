@@ -6,23 +6,24 @@ using System.Web.Routing;
 using System.Web.Script.Serialization;
 using Groupdocs.Web.UI.Core;
 using Groupdocs.Web.UI.DataTransferObjects;
+using GroupDocs.Signature.Domain;
 using Signature.Net.Sample.Mvc.Models;
 using Signature.Net.Sample.Mvc.Engine;
+using Signature.Net.Sample.Mvc.Infrastructure;
 
 namespace Signature.Net.Sample.Mvc.Controllers
 {
     public class SignatureController : Controller
     {
         private const string AppDataVirtualPath = "~/App_Data/";
-        //private const string StorageVirtualPath = "~/App_Data/Storage";
-        private readonly ISigningEngine _signingEngine;
+        private readonly SigningEngine _signingEngine;
         private readonly ICoreHandler _coreHandler;
 
         public SignatureController(ISigningEngine signingEngine,
                                    ISvgRenderer svgRenderer,
                                    ICoreHandler coreHandler)
         {
-            _signingEngine = signingEngine;
+            _signingEngine = (SigningEngine)signingEngine;
             _coreHandler = coreHandler;
         }
 
@@ -119,12 +120,13 @@ namespace Signature.Net.Sample.Mvc.Controllers
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
             string appDataPath = Server.MapPath(AppDataVirtualPath);
-            DocumentDescription documentDescription = _signingEngine.GetPageDescriptions(appDataPath, path, quality, width);
-            int pageCount = documentDescription.pages.Count;
+            DocumentDescription documentDescription = _signingEngine.GetPageDescriptions(Path.Combine(appDataPath, path));
+            int pageCount = documentDescription.Pages.Count;
             string[] pageImageUrls = GetImageUrls(path, 0, pageCount, width, quality);
             UrlHelper urlHelper = new UrlHelper(Request.RequestContext);
             string documentDownloadUrl = urlHelper.Action("GetDocument", "Signature", new { path });
-            string documentDescriptionJs = new JavaScriptSerializer().Serialize(documentDescription);
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+            string documentDescriptionJs = LowerCaseJsonSerializer.SerializeObject(documentDescription);
             var result = new
             {
                 path,
@@ -175,7 +177,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
         public ActionResult GetDocumentPageImage(string path, int? width, int? quality, int pageIndex)
         {
             string appDataPath = Server.MapPath(AppDataVirtualPath);
-            byte[] fileBytes = _signingEngine.GetDocumentPageImage(appDataPath, path, width, quality, pageIndex);
+            byte[] fileBytes = _signingEngine.GetDocumentPageImage(Path.Combine(appDataPath, path), width, quality, pageIndex);
             if (fileBytes == null)
                 return new EmptyResult();
             else

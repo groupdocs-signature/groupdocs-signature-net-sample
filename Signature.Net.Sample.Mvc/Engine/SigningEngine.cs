@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using GroupDocs.Signature.Config;
+using GroupDocs.Signature.Domain;
+using GroupDocs.Signature.Engine;
 using GroupDocs.Signature.Handler;
 using GroupDocs.Signature.Options;
 using Signature.Net.Sample.Mvc.Models;
 
 namespace Signature.Net.Sample.Mvc.Engine
 {
-    public interface ISigningEngine : IViewingEngine
+    public interface ISigningEngine
     {
         object SignDocument(
             string appDataPath,
@@ -201,18 +203,18 @@ namespace Signature.Net.Sample.Mvc.Engine
             string fileNameExtension = Path.GetExtension(fileName).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
             int pageWidth = 0, pageHeight = 0;
-            DocumentType fileType = GetDocumentType(fileNameExtension);
+            DocumentViewType fileType = GetDocumentType(fileNameExtension);
             switch (fileType)
             {
-                case DocumentType.Pdf:
+                case DocumentViewType.Pdf:
                     signOptions = new PdfSignTextOptions(signatureText);
                     break;
 
-                case DocumentType.Words:
+                case DocumentViewType.Words:
                     signOptions = new WordsSignTextOptions(signatureText);
                     break;
 
-                case DocumentType.Cells:
+                case DocumentViewType.Cells:
                     signOptions = new CellsSignTextOptions(signatureText)
                     {
                         ColumnNumber = signatureColumnNum,
@@ -220,7 +222,7 @@ namespace Signature.Net.Sample.Mvc.Engine
                     };
                     break;
 
-                case DocumentType.Slides:
+                case DocumentViewType.Slides:
                     signOptions = new SlidesSignTextOptions(signatureText);
                     break;
             }
@@ -272,18 +274,18 @@ namespace Signature.Net.Sample.Mvc.Engine
             string fileNameExtension = Path.GetExtension(fileName).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
             int pageWidth = 0, pageHeight = 0;
-            DocumentType fileType = GetDocumentType(fileNameExtension);
+            DocumentViewType fileType = GetDocumentType(fileNameExtension);
             switch (fileType)
             {
-                case DocumentType.Pdf:
+                case DocumentViewType.Pdf:
                     signOptions = new PdfSignImageOptions(imageStream);
                     break;
 
-                case DocumentType.Words:
+                case DocumentViewType.Words:
                     signOptions = new WordsSignImageOptions(imageStream);
                     break;
 
-                case DocumentType.Cells:
+                case DocumentViewType.Cells:
                     signOptions = new CellsSignImageOptions(imageStream)
                     {
                         ColumnNumber = signatureColumnNum,
@@ -291,7 +293,7 @@ namespace Signature.Net.Sample.Mvc.Engine
                     };
                     break;
 
-                case DocumentType.Slides:
+                case DocumentViewType.Slides:
                     signOptions = new SlidesSignImageOptions(imageStream);
                     break;
             }
@@ -306,6 +308,38 @@ namespace Signature.Net.Sample.Mvc.Engine
             // sign the document
             string outputFilePath = handler.Sign<string>(fileName, signOptions, saveOptions);
             return outputFilePath;
+        }
+
+        private DocumentViewType GetDocumentType(string fileNameExtension)
+        {
+            switch (fileNameExtension)
+            {
+                case "pdf":
+                    return DocumentViewType.Pdf;
+
+                case "doc":
+                case "docx":
+                case "rtf":
+                case "docm":
+                case "dotm":
+                case "dotx":
+                    return DocumentViewType.Words;
+
+                case "xls":
+                case "csv":
+                case "xlsx":
+                case "xlsm":
+                case "xlsb":
+                    return DocumentViewType.Cells;
+
+                case "ppt":
+                case "pps":
+                case "pptx":
+                    return DocumentViewType.Slides;
+
+                default:
+                    throw new ArgumentException("Unknown document type");
+            }
         }
     }
 }
