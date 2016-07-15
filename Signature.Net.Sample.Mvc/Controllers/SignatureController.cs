@@ -7,6 +7,7 @@ using System.Web.Script.Serialization;
 using Groupdocs.Web.UI.Core;
 using Groupdocs.Web.UI.DataTransferObjects;
 using GroupDocs.Signature.Domain;
+using GroupDocs.Signature.Handler;
 using Signature.Net.Sample.Mvc.Models;
 using Signature.Net.Sample.Mvc.Engine;
 using Signature.Net.Sample.Mvc.Infrastructure;
@@ -120,7 +121,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
             string fileNameExtension = Path.GetExtension(path).TrimStart('.');
             fileNameExtension = fileNameExtension.ToLower();
             string appDataPath = Server.MapPath(AppDataVirtualPath);
-            DocumentDescription documentDescription = _signingEngine.GetPageDescriptions(Path.Combine(appDataPath, path));
+            DocumentDescription documentDescription = SignatureHandler.GetPageDescriptions(Path.Combine(appDataPath, path));
             int pageCount = documentDescription.Pages.Count;
             string[] pageImageUrls = GetImageUrls(path, 0, pageCount, width, quality);
             UrlHelper urlHelper = new UrlHelper(Request.RequestContext);
@@ -177,7 +178,7 @@ namespace Signature.Net.Sample.Mvc.Controllers
         public ActionResult GetDocumentPageImage(string path, int? width, int? quality, int pageIndex)
         {
             string appDataPath = Server.MapPath(AppDataVirtualPath);
-            byte[] fileBytes = _signingEngine.GetDocumentPageImage(Path.Combine(appDataPath, path), width, quality, pageIndex);
+            byte[] fileBytes = SignatureHandler.GetDocumentPageImage(Path.Combine(appDataPath, path), width, quality, pageIndex);
             if (fileBytes == null)
                 return new EmptyResult();
             else

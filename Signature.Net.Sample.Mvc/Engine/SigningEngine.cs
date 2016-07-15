@@ -25,7 +25,7 @@ namespace Signature.Net.Sample.Mvc.Engine
             Func<string, string> urlCreator);
     }
 
-    public class SigningEngine : ViewingEngine, ISigningEngine
+    public class SigningEngine : SignatureHandler, ISigningEngine
     {
         private readonly ISvgRenderer _svgRenderer;
         private readonly ILicensing _licensing;
