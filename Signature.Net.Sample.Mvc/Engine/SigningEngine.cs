@@ -93,10 +93,12 @@ namespace Signature.Net.Sample.Mvc.Engine
 
             int pageNumber = location.Page;
             
+            PositionInCellsDocument positionInCellsDocument = new PositionInCellsDocument();
             System.Drawing.Size size = GetPageSize(fullPathToDocument, location.Page,
                 location.LocationX, location.LocationY,
-                ref signatureColumnNum, ref signatureRowNum);
-
+                positionInCellsDocument);
+            signatureColumnNum = positionInCellsDocument.ColumnNumber;
+            signatureRowNum = positionInCellsDocument.RowNumber;
             pageWidth = size.Width;
             pageHeight = size.Height;
             string outputFilePath;
